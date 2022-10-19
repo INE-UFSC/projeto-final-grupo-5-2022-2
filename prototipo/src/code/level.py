@@ -28,10 +28,9 @@ class Level:
                 elif col == 'p':
                     self.player = Player((x, y), [self.visible_sprites], self.obstacle_sprites, self.create_attack)
 
-    def create_attack(self):
+    def create_attack(self, pos):
         # centralizar a bola de fogo no player
         sprite = pygame.image.load('../graphics/test/fireball.png').convert_alpha()
-        pos = (self.player.rect.centerx - (sprite.get_rect().width // 2), self.player.rect.centery - (sprite.get_rect().height // 2))
         # calcular direção do projétil
         mouse_pos = pygame.mouse.get_pos()
         angle = math.atan2(self.player.rect.centery - mouse_pos[1], self.player.rect.centerx - mouse_pos[0])
