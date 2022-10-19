@@ -12,18 +12,21 @@ class Entity(pygame.sprite.Sprite):
             self.direction = self.direction.normalize()
 
         self.hitbox.x += self.direction.x * speed
-        self.collision('horizontal')
+        collided = False or self.collision('horizontal')
         self.hitbox.y += self.direction.y * speed
-        self.collision('vertical')
+        collided = collided or self.collision('vertical')
         # manter a hitbox nos pés da entidade
         self.rect.centerx = self.hitbox.centerx
         self.rect.bottom = self.hitbox.bottom
+        return not collided
 
     def collision(self, direction):
+        collided = False
         # colisão horizontal
         if direction == 'horizontal':
             for sprite in self.obstacle_sprites:
                 if sprite.hitbox.colliderect(self.hitbox):
+                    collided = True
                     if self.direction.x > 0:
                         self.hitbox.right = sprite.hitbox.left
                     if self.direction.x < 0:
@@ -32,7 +35,9 @@ class Entity(pygame.sprite.Sprite):
         elif direction == 'vertical':
             for sprite in self.obstacle_sprites:
                 if sprite.hitbox.colliderect(self.hitbox):
+                    collided = True
                     if self.direction.y > 0:
                         self.hitbox.bottom = sprite.hitbox.top
                     if self.direction.y < 0:
                         self.hitbox.top = sprite.hitbox.bottom
+        return collided
