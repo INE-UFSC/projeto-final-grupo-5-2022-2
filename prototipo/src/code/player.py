@@ -46,7 +46,7 @@ class Player(Entity):
 
         # ataque
         if mouse[0] and self.can_attack:
-            self.create_attack((self.staff.rect.centerx - self.staff.rect.width // 2, self.staff.rect.y + 15))
+            self.create_attack((self.staff.rect.x, self.staff.rect.y + 15))
             self.can_attack = False
             self.attack_time = pygame.time.get_ticks()
 
@@ -79,5 +79,5 @@ class Staff(pygame.sprite.Sprite):
         angle = math.atan2(self.player.rect.centery - mouse_pos[1], self.player.rect.centerx - mouse_pos[0])
         sin = -math.sin(angle)
         cos = -math.cos(angle)
-        offset = (dist / 64) ** 1 / 2
+        offset = (dist / 16) ** 1 / 2
         self.rect.center = self.original_rect.center + pygame.Vector2(cos * offset, sin * offset)
