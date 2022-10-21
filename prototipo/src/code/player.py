@@ -2,7 +2,7 @@ import math
 
 import pygame
 
-from damage_area import EnemyDamageArea
+from attack import FireballAttack
 from entity import Entity
 
 
@@ -18,24 +18,10 @@ class Player(Entity):
         self.obstacle_sprites = obstacle_sprites
 
         # ataques
-        self.attack_groups = attack_groups
-        # ataque básico
-        self.attack_cooldown = 900
-        self.can_attack = True
-        self.attack_time = 0
+        self.attacks = {'fireball': FireballAttack(self, attack_groups, obstacle_sprites)}
 
-        # cajado
+        # cajado (somente o sprite)
         self.staff = Staff(groups, self)
-
-    def create_attack(self):
-        pos = (self.staff.rect.x, self.staff.rect.y + 15)
-        sprite = pygame.image.load('../graphics/test/fireball.png').convert_alpha()
-        # calcular direção do projétil
-        mouse_pos = pygame.mouse.get_pos()
-        angle = math.atan2(pos[1] - mouse_pos[1], pos[0] - mouse_pos[0])
-        direction = pygame.math.Vector2(-math.cos(angle), -math.sin(angle))
-        # criar o projétil
-        EnemyDamageArea(pos, self.attack_groups, self.obstacle_sprites, speed=40, direction=direction, surface=sprite)
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -57,16 +43,12 @@ class Player(Entity):
             self.direction.x = 0
 
         # ataque
-        if mouse[0] and self.can_attack:
-            self.create_attack()
-            self.can_attack = False
-            self.attack_time = pygame.time.get_ticks()
+        if mouse[0]:
+            self.attacks['fireball'].use()
 
     def cooldowns(self):
-        current_time = pygame.time.get_ticks()
-
-        if not self.can_attack and current_time - self.attack_time >= self.attack_cooldown:
-            self.can_attack = True
+        for attack in self.attacks:
+            self.attacks[attack].check_cooldown()
 
     def update(self):
         self.input()
