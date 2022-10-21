@@ -14,6 +14,8 @@ class Player(Entity):
         self.rect = self.image.get_rect(topleft=pos)
         self.hitbox = self.rect.inflate(0, -26)
 
+        self.health = 3
+        self.exp = 0
         self.speed = 5
 
         self.obstacle_sprites = obstacle_sprites
@@ -46,9 +48,9 @@ class Player(Entity):
             self.direction.x = 0
 
         # ataque
-        if keys[pygame.K_1]:
+        if keys[pygame.K_1] and len(self.attacks) >= 1:
             self.selected_attack = 1
-        elif keys[pygame.K_2]:
+        elif keys[pygame.K_2] and len(self.attacks) >= 2:
             self.selected_attack = 2
 
         if mouse[0]:
@@ -58,7 +60,7 @@ class Player(Entity):
                 if self.selected_attack != 1:
                     self.attacks[0].block()  # para o jogador não atirar uma bola de fogo imediatamente após um especial
 
-            self.selected_attack = 1 # retornar após qualquer ataque para o básico
+            self.selected_attack = 1  # retornar após qualquer ataque para o básico
 
     def cooldowns(self):
         for attack in self.attacks:

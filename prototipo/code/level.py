@@ -1,5 +1,6 @@
 import pygame
 
+from ui import UI
 from player import Player
 from settings import *
 from tile import Tile
@@ -15,6 +16,8 @@ class Level:
         # criar o mapa
         self.create_map()
 
+        self.ui = UI()
+
     def create_map(self):
         for row_index, row in enumerate(WORLD_MAP):
             for col_index, col in enumerate(row):
@@ -29,6 +32,7 @@ class Level:
     def run(self):
         self.visible_sprites.custom_draw()
         self.visible_sprites.update()
+        self.ui.display(self.player)
 
 
 class YSortCameraGroup(pygame.sprite.Group):

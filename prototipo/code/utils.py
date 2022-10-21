@@ -1,7 +1,6 @@
-from importlib.resources import path
-import os
-from settings import *
 import pygame
+
+from settings import *
 
 
 def load_sprite(file):
