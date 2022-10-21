@@ -2,7 +2,7 @@ import math
 
 import pygame
 
-from attack import FireballAttack
+from attack import FireballAttack, LineAttack
 from entity import Entity
 from utils import load_sprite
 
@@ -19,7 +19,9 @@ class Player(Entity):
         self.obstacle_sprites = obstacle_sprites
 
         # ataques
-        self.attacks = {'fireball': FireballAttack(self, attack_groups, obstacle_sprites)}
+        self.selected_attack = 1
+        self.attacks = [FireballAttack(self, attack_groups, obstacle_sprites),
+                        LineAttack(self, attack_groups, obstacle_sprites)]
 
         # cajado (somente o sprite)
         self.staff = Staff(groups, self)
@@ -45,11 +47,16 @@ class Player(Entity):
 
         # ataque
         if mouse[0]:
-            self.attacks['fireball'].use()
+            self.attacks[self.selected_attack - 1].use()
+
+        if keys[pygame.K_1]:
+            self.selected_attack = 1
+        elif keys[pygame.K_2]:
+            self.selected_attack = 2
 
     def cooldowns(self):
         for attack in self.attacks:
-            self.attacks[attack].check_cooldown()
+            attack.check_cooldown()
 
     def update(self):
         self.input()

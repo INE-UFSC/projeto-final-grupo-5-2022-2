@@ -13,7 +13,7 @@ class DamageArea(Entity, ABC):
 
 class EnemyDamageArea(DamageArea):
     def __init__(self, pos, groups, obstacle_sprites, speed=0, direction=pygame.math.Vector2(),
-                 surface=pygame.Surface((TILESIZE, TILESIZE))):
+                 surface=pygame.Surface((TILESIZE, TILESIZE)), destroy_time=6000):
         super().__init__(groups)
         self.image = surface
         self.rect = self.image.get_rect(topleft=pos)
@@ -22,6 +22,9 @@ class EnemyDamageArea(DamageArea):
         self.speed = speed
         self.direction = direction
         self.obstacle_sprites = obstacle_sprites
+
+        self.creation_time = pygame.time.get_ticks()
+        self.destroy_time = destroy_time
 
     # sobreescrever a colisão para colidir com a hitbox menor das paredes
     def collision(self, direction):
@@ -52,6 +55,11 @@ class EnemyDamageArea(DamageArea):
             if not moved:
                 # projétil colidiu com algum obstáculo
                 self.kill()
+
+        # destruir após um tempo
+        current_time = pygame.time.get_ticks()
+        if current_time - self.creation_time >= self.destroy_time:
+            self.kill()
 
 
 class PlayerDamageArea(DamageArea):
