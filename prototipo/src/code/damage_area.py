@@ -23,6 +23,29 @@ class EnemyDamageArea(DamageArea):
         self.direction = direction
         self.obstacle_sprites = obstacle_sprites
 
+    # sobreescrever a colisão para colidir com a hitbox menor das paredes
+    def collision(self, direction):
+        collided = False
+        # colisão horizontal
+        if direction == 'horizontal':
+            for sprite in self.obstacle_sprites:
+                if sprite.smaller_hitbox.colliderect(self.hitbox):
+                    collided = True
+                    if self.direction.x > 0:
+                        self.hitbox.right = sprite.smaller_hitbox.left
+                    if self.direction.x < 0:
+                        self.hitbox.left = sprite.smaller_hitbox.right
+        # colisão vertical
+        elif direction == 'vertical':
+            for sprite in self.obstacle_sprites:
+                if sprite.smaller_hitbox.colliderect(self.hitbox):
+                    collided = True
+                    if self.direction.y > 0:
+                        self.hitbox.bottom = sprite.smaller_hitbox.top
+                    if self.direction.y < 0:
+                        self.hitbox.top = sprite.smaller_hitbox.bottom
+        return collided
+
     def update(self):
         if self.speed != 0:
             moved = self.move(self.speed)

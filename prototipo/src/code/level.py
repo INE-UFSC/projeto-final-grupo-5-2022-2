@@ -28,16 +28,16 @@ class Level:
                 elif col == 'p':
                     self.player = Player((x, y), [self.visible_sprites], self.obstacle_sprites, self.create_attack)
 
+    # TODO: talvez dava pra passar os grupos pro player pra ele mesmo criar o damage area
     def create_attack(self, pos):
-        # centralizar a bola de fogo no player
         sprite = pygame.image.load('../graphics/test/fireball.png').convert_alpha()
         # calcular direção do projétil
         mouse_pos = pygame.mouse.get_pos()
-        angle = math.atan2(self.player.rect.centery - mouse_pos[1], self.player.rect.centerx - mouse_pos[0])
+        angle = math.atan2(pos[1] - mouse_pos[1], pos[0] - mouse_pos[0])
         direction = pygame.math.Vector2(-math.cos(angle), -math.sin(angle))
         # criar o projétil
         EnemyDamageArea(pos, [self.visible_sprites, self.attack_sprites], self.obstacle_sprites,
-                        speed=10, direction=direction,
+                        speed=40, direction=direction,
                         surface=sprite)
 
     def run(self):

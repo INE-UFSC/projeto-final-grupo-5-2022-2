@@ -12,7 +12,7 @@ class Entity(pygame.sprite.Sprite):
             self.direction = self.direction.normalize()
 
         self.hitbox.x += self.direction.x * speed
-        collided = False or self.collision('horizontal')
+        collided = self.collision('horizontal')
         self.hitbox.y += self.direction.y * speed
         collided = self.collision('vertical') or collided
         # manter a hitbox nos pés da entidade

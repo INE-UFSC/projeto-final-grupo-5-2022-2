@@ -17,7 +17,7 @@ class Player(Entity):
         self.obstacle_sprites = obstacle_sprites
 
         # ataque básico
-        self.attack_cooldown = 180
+        self.attack_cooldown = 900
         self.can_attack = True
         self.attack_time = 0
         self.create_attack = create_attack
@@ -79,5 +79,5 @@ class Staff(pygame.sprite.Sprite):
         angle = math.atan2(self.player.rect.centery - mouse_pos[1], self.player.rect.centerx - mouse_pos[0])
         sin = -math.sin(angle)
         cos = -math.cos(angle)
-        offset = (dist / 16) ** 1 / 2
+        offset = (dist // 32) ** 1 / 2
         self.rect.center = self.original_rect.center + pygame.Vector2(cos * offset, sin * offset)
