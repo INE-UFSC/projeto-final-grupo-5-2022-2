@@ -2,11 +2,12 @@ import math
 
 import pygame
 
+from damage_area import EnemyDamageArea
 from entity import Entity
 
 
 class Player(Entity):
-    def __init__(self, pos, groups, obstacle_sprites, create_attack):
+    def __init__(self, pos, groups, attack_groups, obstacle_sprites):
         super().__init__(groups)
         self.image = pygame.image.load('../graphics/test/player.png').convert_alpha()
         self.rect = self.image.get_rect(topleft=pos)
@@ -16,14 +17,25 @@ class Player(Entity):
 
         self.obstacle_sprites = obstacle_sprites
 
+        # ataques
+        self.attack_groups = attack_groups
         # ataque básico
         self.attack_cooldown = 900
         self.can_attack = True
         self.attack_time = 0
-        self.create_attack = create_attack
 
         # cajado
         self.staff = Staff(groups, self)
+
+    def create_attack(self):
+        pos = (self.staff.rect.x, self.staff.rect.y + 15)
+        sprite = pygame.image.load('../graphics/test/fireball.png').convert_alpha()
+        # calcular direção do projétil
+        mouse_pos = pygame.mouse.get_pos()
+        angle = math.atan2(pos[1] - mouse_pos[1], pos[0] - mouse_pos[0])
+        direction = pygame.math.Vector2(-math.cos(angle), -math.sin(angle))
+        # criar o projétil
+        EnemyDamageArea(pos, self.attack_groups, self.obstacle_sprites, speed=40, direction=direction, surface=sprite)
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -46,7 +58,7 @@ class Player(Entity):
 
         # ataque
         if mouse[0] and self.can_attack:
-            self.create_attack((self.staff.rect.x, self.staff.rect.y + 15))
+            self.create_attack()
             self.can_attack = False
             self.attack_time = pygame.time.get_ticks()
 
