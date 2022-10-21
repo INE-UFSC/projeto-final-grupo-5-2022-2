@@ -46,13 +46,19 @@ class Player(Entity):
             self.direction.x = 0
 
         # ataque
-        if mouse[0]:
-            self.attacks[self.selected_attack - 1].use()
-
         if keys[pygame.K_1]:
             self.selected_attack = 1
         elif keys[pygame.K_2]:
             self.selected_attack = 2
+
+        if mouse[0]:
+            if self.attacks[self.selected_attack - 1].can_attack:
+                self.attacks[self.selected_attack - 1].use()
+
+                if self.selected_attack != 1:
+                    self.attacks[0].block()  # para o jogador não atirar uma bola de fogo imediatamente após um especial
+
+            self.selected_attack = 1 # retornar após qualquer ataque para o básico
 
     def cooldowns(self):
         for attack in self.attacks:

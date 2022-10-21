@@ -20,8 +20,11 @@ class Attack(ABC):
     def use(self):
         if self.can_attack:
             self.create()
-            self.can_attack = False
-            self.attack_time = pygame.time.get_ticks()
+            self.block()
+
+    def block(self):
+        self.can_attack = False
+        self.attack_time = pygame.time.get_ticks()
 
     def check_cooldown(self):
         current_time = pygame.time.get_ticks()
