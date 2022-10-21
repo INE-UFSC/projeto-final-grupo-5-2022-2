@@ -4,12 +4,13 @@ import pygame
 
 from attack import FireballAttack
 from entity import Entity
+from utils import load_sprite
 
 
 class Player(Entity):
     def __init__(self, pos, groups, attack_groups, obstacle_sprites):
         super().__init__(groups)
-        self.image = pygame.image.load('../graphics/test/player.png').convert_alpha()
+        self.image = load_sprite('/test/player.png')
         self.rect = self.image.get_rect(topleft=pos)
         self.hitbox = self.rect.inflate(0, -26)
 
@@ -60,7 +61,7 @@ class Staff(pygame.sprite.Sprite):
     def __init__(self, groups, player):
         super().__init__(groups)
         self.player = player
-        self.image = pygame.image.load('../graphics/test/staff.png').convert_alpha()
+        self.image = load_sprite('/test/staff.png')
         self.rect = self.image.get_rect(topleft=self.player.rect.center)
         self.original_rect = self.rect
 
