@@ -22,8 +22,8 @@ class Player(Entity):
 
         # ataques
         self.selected_attack = 1
-        self.attacks = [FireballAttack(self, attack_groups, obstacle_sprites),
-                        LineAttack(self, attack_groups, obstacle_sprites)]
+        self.attacks = [FireballAttack(attack_groups, obstacle_sprites),
+                        LineAttack(attack_groups, obstacle_sprites)]
 
         # cajado (somente o sprite)
         self.staff = Staff(groups, self)
@@ -55,7 +55,7 @@ class Player(Entity):
 
         if mouse[0]:
             if self.attacks[self.selected_attack - 1].can_attack:
-                self.attacks[self.selected_attack - 1].use()
+                self.attacks[self.selected_attack - 1].use(self)
 
                 if self.selected_attack != 1:
                     self.attacks[0].block()  # para o jogador não atirar uma bola de fogo imediatamente após um especial

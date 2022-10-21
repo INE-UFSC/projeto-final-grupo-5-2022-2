@@ -8,8 +8,7 @@ from utils import load_sprite
 
 
 class Attack(ABC):
-    def __init__(self, player, attack_groups, obstacle_sprites, cooldown=0):
-        self.player = player
+    def __init__(self, attack_groups, obstacle_sprites, cooldown=0):
         self.attack_groups = attack_groups
         self.obstacle_sprites = obstacle_sprites
 
@@ -17,9 +16,9 @@ class Attack(ABC):
         self.can_attack = True
         self.attack_time = 0
 
-    def use(self):
+    def use(self, player):
         if self.can_attack:
-            self.create()
+            self.create(player)
             self.block()
 
     def block(self):
@@ -32,16 +31,16 @@ class Attack(ABC):
             self.can_attack = True
 
     @abstractmethod
-    def create(self):
+    def create(self, player):
         pass
 
 
 class FireballAttack(Attack):
-    def __init__(self, attack_groups, player, obstacle_sprites):
-        super().__init__(attack_groups, player, obstacle_sprites, cooldown=900)
+    def __init__(self, attack_groups, obstacle_sprites):
+        super().__init__(attack_groups, obstacle_sprites, cooldown=900)
 
-    def create(self):
-        pos = (self.player.staff.rect.x, self.player.staff.rect.y)
+    def create(self, player):
+        pos = (player.staff.rect.x, player.staff.rect.y)
         sprite = load_sprite('/test/fireball.png')
         # calcular direção do projétil
         mouse_pos = pygame.mouse.get_pos()
@@ -52,11 +51,11 @@ class FireballAttack(Attack):
 
 
 class LineAttack(Attack):
-    def __init__(self, attack_groups, player, obstacle_sprites):
-        super().__init__(attack_groups, player, obstacle_sprites, cooldown=2400)
+    def __init__(self, attack_groups, obstacle_sprites):
+        super().__init__(attack_groups, obstacle_sprites, cooldown=2400)
 
-    def create(self):
-        pos = (self.player.staff.rect.centerx, self.player.staff.rect.y + 12)
+    def create(self, player):
+        pos = (player.staff.rect.centerx, player.staff.rect.y + 12)
         sprite = load_sprite('/test/kamehameha.png')
         pivot = (0, 12)
         # rotacionar o sprite
