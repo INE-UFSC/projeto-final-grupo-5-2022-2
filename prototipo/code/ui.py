@@ -14,8 +14,8 @@ class UI:
 
     def show_health(self, health):
         for i in range(health):
-            bg_rect = pygame.Rect(10 + i * (ITEM_BOX_SIZE + 10), 10, ITEM_BOX_SIZE, ITEM_BOX_SIZE)
-            self.display_surface.blit(self.health_sprite, bg_rect)
+            self.display_surface.blit(self.health_sprite,
+                                      self.health_sprite.get_rect(topleft=(10 + i * (ITEM_BOX_SIZE + 10), 10)))
 
     def show_exp(self, exp):
         text_surf = self.font.render(str(int(exp)), False, TEXT_COLOR)
