@@ -1,3 +1,50 @@
+# To-Do para o protótipo
+Roteiro original disponível [aqui](https://docs.google.com/document/d/189AMDekPZeVRerxjPzfzko3lhdjk1klbzrnkBnuZqAE/edit?usp=sharing).
+
+## Inimigos
+- [ ] Criar a classe Enemy e um inimigo básico
+- Dá pra se basear bastante na classe Player. O inimigo seria uma Entity com um funcionamento parecido com o Player, mas em vez de se mover pelo teclado, seria um algoritmo que realiza o movimento e decide atacar
+  - [ ] Interação entre o player e os inimigos
+    - [ ] Fazer o EnemyDamageArea dar dano nos inimigos
+    - [ ] Criar o PlayerDamageArea
+    - [ ] Fazer o PlayerDamageArea dar dano no Player
+  - etc...
+
+## Outras partes da gameplay que faltam
+- [ ] Ataque de dano em área 
+  - Criar uma nova classe que estende o Attack, configurar o create() dela, adicionar a lógica de selecionar o ataque no Player e o ícone na UI
+- [ ] Dash do Player
+  - Funcionamento descrito no roteiro
+- [ ] Upgrades
+  - Alguns upgrades estão listados no roteiro
+  - Os upgrades, de uma maneira geral, vão ter uma função que altera um atributo do Player quando chamada. Essa função vai ser chamada somente uma vez ao adquirir o upgrade
+
+## Outros ajustes
+- [ ] Separar as classes Level e Room baseado no diagrama
+  - O level só controlaria a room atual, e as rooms seriam responsáveis por criar e manter o mapa
+
+- [ ] Fazer as outras classes que faltam do diagrama
+
+# Não obrigatórios para o protótipo
+## Sprites
+Os sprites são feitos em uma resolução menor e aumentados em 4 vezes pra resultar em um jogo mais fluido. Por exemplo, um sprite 16x16 é aumentado para 64x64
+
+
+- [ ] Menus
+- [ ] Ataques do player
+- [ ] Player
+- [ ] Mapa e seus obstáculos
+- [ ] Inimigos
+- [ ] HUD
+- [ ] Power-ups
+- [ ] Partículas
+  - De maneira geral, só para decorar o jogo mesmo, fazendo partículas para a bola de fogo, para o cajado criando ataques, para os inimigos tomando dano e morrendo, etc...
+
+## Save
+- [ ] Sistema de save
+
+---
+
 Nesse diretório, o grupo irá trabalhar em cima do primeiro protótipo do jogo.
 
 A ideia do protótipo não é que ele seja uma versão demo do jogo completo, mas sim que o principal mecanismo do jogo esteja implementado com certo grau de sucesso. Exemplo: em um jogo do tipo plataforma 2D, basta mostrar um retângulo colidindo com objetos e saltando/destruindo com alguma comando do usuário. A interface gráfica (com sprites) é opcional nessa etapa.
