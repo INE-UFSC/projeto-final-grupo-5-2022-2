@@ -56,11 +56,15 @@ class EnemyDamageArea(DamageArea):
     def enemy_collision(self, player, attackable_group):
         collision_sprites = pygame.sprite.spritecollide(self, attackable_group, False)
         if collision_sprites:
-            for target_sprite in collision_sprites:
-                target_sprite.damage(self.damage, player)
-
             if self.destroy_on_impact:
+                # ataque só dá dano em 1 inimigo
+                collision_sprites[0].damage(self.damage, player)
                 self.kill()
+            else:
+                # ataque dá dano em vários inimigos
+                for target_sprite in collision_sprites:
+                    target_sprite.damage(self.damage, player)
+
 
     def update(self):
         # movimento
