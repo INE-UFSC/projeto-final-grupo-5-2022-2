@@ -25,6 +25,11 @@ class Player(Entity):
         self.attacks = [FireballAttack(attack_groups, obstacle_sprites),
                         LineAttack(attack_groups, obstacle_sprites)]
 
+        # dano
+        self.vulnerable = True
+        self.hurt_time = None
+        self.invincibility_duration = 500
+
         # cajado (somente o sprite)
         self.staff = Staff(groups, self)
 
@@ -66,8 +71,27 @@ class Player(Entity):
         for attack in self.attacks:
             attack.check_cooldown()
 
+        if not self.vulnerable:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.hurt_time >= self.invincibility_duration:
+                self.vulnerable = True
+
+    def animate(self):
+        if not self.vulnerable:
+            alpha = self.wave_value()
+            self.image.set_alpha(alpha)
+        else:
+            self.image.set_alpha(255)
+
+    def damage(self, damage):
+        if self.vulnerable:
+            self.health -= damage
+            self.vulnerable = False
+            self.hurt_time = pygame.time.get_ticks()
+
     def update(self):
         self.input()
+        self.animate()
         self.move(self.speed)
         self.cooldowns()
 

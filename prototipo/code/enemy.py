@@ -57,6 +57,7 @@ class Enemy(Entity):
         if self.status == 'attack':
             self.attack_time = pygame.time.get_ticks()
             self.can_attack = False  # TODO: passar para a lógica do animate() ao adicionar sprites
+            player.damage(1)
         elif self.status == 'move':
             self.direction = self.get_player_distance_direction(player)[1]
         else:
@@ -64,7 +65,6 @@ class Enemy(Entity):
 
     def animate(self):
         if not self.vulnerable:
-            # TODO: ver https://www.youtube.com/watch?v=uW3Fhe-Vkx4 para fazer um flickering branco
             alpha = self.wave_value()
             self.image.set_alpha(alpha)
         else:

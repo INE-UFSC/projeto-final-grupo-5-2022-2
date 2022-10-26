@@ -11,6 +11,8 @@ Roteiro original disponível [aqui](https://docs.google.com/document/d/189AMDekP
   - etc...
 
 ## Outras partes da gameplay que faltam
+- [ ] Fazer o flickering do Player e do Enemy serem brancos em vez de transparente
+  - Precisa mudar a parte que confere o self.vulnerable e altera o alpha no animate() do Player e do Enemy. Conferir [este vídeo aqui](https://www.youtube.com/watch?v=uW3Fhe-Vkx4) sobre como fazer uma máscara.
 - [ ] Ataque de dano em área 
   - Criar uma nova classe que estende o Attack, configurar o create() dela, adicionar a lógica de selecionar o ataque no Player e o ícone na UI
 - [ ] Dash do Player
