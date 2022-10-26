@@ -1,9 +1,10 @@
 import pygame
 
-from ui import UI
+from enemy import Enemy
 from player import Player
 from settings import *
 from tile import Tile
+from ui import UI
 
 
 class Level:
@@ -28,10 +29,13 @@ class Level:
                 elif col == 'p':
                     self.player = Player((x, y), [self.visible_sprites], [self.visible_sprites, self.attack_sprites],
                                          self.obstacle_sprites)
+                elif col == 'e':
+                    Enemy('test', (x, y), [self.visible_sprites], self.obstacle_sprites)
 
     def run(self):
         self.visible_sprites.custom_draw()
         self.visible_sprites.update()
+        self.visible_sprites.enemy_update(self.player)
         self.ui.display(self.player)
 
 
@@ -43,3 +47,9 @@ class YSortCameraGroup(pygame.sprite.Group):
     def custom_draw(self):
         for sprite in sorted(self.sprites(), key=lambda sprite: sprite.rect.centery):
             self.display_surface.blit(sprite.image, sprite.rect)
+
+    def enemy_update(self, player):
+        enemy_sprites = [sprite for sprite in self.sprites() if
+                         hasattr(sprite, 'sprite_type') and sprite.sprite_type == 'enemy']
+        for enemy in enemy_sprites:
+            enemy.enemy_update(player)
