@@ -8,7 +8,9 @@ from utils import load_sprite
 
 
 class Attack(ABC):
-    def __init__(self, attack_groups, obstacle_sprites, cooldown=0):
+    def __init__(self, icon, attack_groups, obstacle_sprites, cooldown=0):
+        self.icon = load_sprite(icon)
+
         self.attack_groups = attack_groups
         self.obstacle_sprites = obstacle_sprites
 
@@ -37,7 +39,7 @@ class Attack(ABC):
 
 class FireballAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
-        super().__init__(attack_groups, obstacle_sprites, cooldown=900)
+        super().__init__('/test/icon_fireball.png', attack_groups, obstacle_sprites, cooldown=900)
 
     def create(self, player):
         pos = (player.staff.rect.x, player.staff.rect.y)
@@ -54,7 +56,7 @@ class FireballAttack(Attack):
 
 class LineAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
-        super().__init__(attack_groups, obstacle_sprites, cooldown=2400)
+        super().__init__('/test/icon_line.png', attack_groups, obstacle_sprites, cooldown=2400)
 
     def create(self, player):
         pos = (player.staff.rect.centerx, player.staff.rect.y + 12)

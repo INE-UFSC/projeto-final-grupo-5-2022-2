@@ -19,9 +19,7 @@ disponível [aqui](https://docs.google.com/document/d/189AMDekPZeVRerxjPzfzko3lh
 - [ ] Fazer lógica de morte do Player
     - Usar a função check_death() do Enemy como referência
 - [ ] Ataque de dano em área
-    - Criar uma nova classe que estende o Attack, configurar o create() dela, adicionar a lógica de selecionar o ataque
-      no Player e o ícone na UI
-- [ ] Fazer os inimigos darem experiência ao Player
+    - Criar uma nova classe que estende o Attack, configurar o create() dela (isto é, a parte que cria as DamageAreas no mapa), adicionar o ataque na lista de ataques definida no init do Player e a seleção no input()
   - Adicionar um atributo de exp ao Player e exp no Enemy. Quando o Enemy morrer, incrementar enemy.exp em player.exp. 
   - Talvez, seja possível fazer isso no check_death() do Enemy, mas será necessário mover ele para o enemy_update() para receber o parâmetro player, colocar o player no check_death() e chamar uma função para incrementar o exp do Player quando o Enemy morrer.
 - [ ] Upgrades

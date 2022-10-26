@@ -10,7 +10,6 @@ class UI:
         self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
 
         self.health_sprite = load_sprite('/test/heart.png')
-        self.attack_sprites = [load_sprite('/test/icon_fireball.png'), load_sprite('/test/icon_line.png')]
 
     def show_health(self, health):
         for i in range(health):
@@ -36,7 +35,7 @@ class UI:
             pygame.draw.rect(self.display_surface, UI_BG_COLOR, bg_rect)
 
             # ícone
-            attack_surf = self.attack_sprites[i]
+            attack_surf = attack.icon
             attack_rect = attack_surf.get_rect(center=bg_rect.center)
             self.display_surface.blit(attack_surf, attack_rect)
 
