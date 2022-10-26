@@ -19,6 +19,7 @@ class Enemy(Entity):
         self.health = 3
         self.speed = 3
         self.attack_radius = 20
+        self.collision_damage = 1
 
         # ataque
         self.can_attack = True
@@ -57,7 +58,7 @@ class Enemy(Entity):
         if self.status == 'attack':
             self.attack_time = pygame.time.get_ticks()
             self.can_attack = False  # TODO: passar para a lógica do animate() ao adicionar sprites
-            player.damage(1)
+            player.damage(self.collision_damage)
         elif self.status == 'move':
             self.direction = self.get_player_distance_direction(player)[1]
         else:
