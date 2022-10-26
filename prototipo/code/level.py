@@ -14,6 +14,7 @@ class Level:
         self.visible_sprites = YSortCameraGroup()
         self.obstacle_sprites = pygame.sprite.Group()
         self.attack_sprites = pygame.sprite.Group()
+        self.attackable_sprites = pygame.sprite.Group()
         # criar o mapa
         self.create_map()
 
@@ -30,12 +31,17 @@ class Level:
                     self.player = Player((x, y), [self.visible_sprites], [self.visible_sprites, self.attack_sprites],
                                          self.obstacle_sprites)
                 elif col == 'e':
-                    Enemy('test', (x, y), [self.visible_sprites], self.obstacle_sprites)
+                    Enemy('test', (x, y), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites)
 
     def run(self):
         self.visible_sprites.custom_draw()
         self.visible_sprites.update()
         self.visible_sprites.enemy_update(self.player)
+
+        # conferir colisão dos ataques com os inimigos
+        for attack_sprite in self.attack_sprites:
+            attack_sprite.enemy_collision(self.player, self.attackable_sprites)
+
         self.ui.display(self.player)
 
 

@@ -12,15 +12,19 @@ class DamageArea(Entity, ABC):
 
 
 class EnemyDamageArea(DamageArea):
-    def __init__(self, pos, groups, obstacle_sprites, speed=0, direction=pygame.math.Vector2(),
+    def __init__(self, pos, groups, obstacle_sprites, damage=0, speed=0, direction=pygame.math.Vector2(),
+                 destroy_on_impact=False,
                  surface=pygame.Surface((TILESIZE, TILESIZE)), destroy_time=6000):
         super().__init__(groups)
+        self.sprite_type = 'enemy_damage_area'
         self.image = surface
         self.rect = self.image.get_rect(topleft=pos)
         self.hitbox = self.rect
 
+        self.damage = damage
         self.speed = speed
         self.direction = direction
+        self.destroy_on_impact = destroy_on_impact
         self.obstacle_sprites = obstacle_sprites
 
         self.creation_time = pygame.time.get_ticks()
@@ -49,7 +53,17 @@ class EnemyDamageArea(DamageArea):
                         self.hitbox.top = sprite.smaller_hitbox.bottom
         return collided
 
+    def enemy_collision(self, player, attackable_group):
+        collision_sprites = pygame.sprite.spritecollide(self, attackable_group, False)
+        if collision_sprites:
+            for target_sprite in collision_sprites:
+                target_sprite.damage(self.damage, player)
+
+            if self.destroy_on_impact:
+                self.kill()
+
     def update(self):
+        # movimento
         if self.speed != 0:
             moved = self.move(self.speed)
             if not moved:

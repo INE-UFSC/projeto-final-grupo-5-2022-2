@@ -5,7 +5,7 @@ Roteiro original disponível [aqui](https://docs.google.com/document/d/189AMDekP
 - [x] Criar a classe Enemy e um inimigo básico
 - Dá pra se basear bastante na classe Player. O inimigo seria uma Entity com um funcionamento parecido com o Player, mas em vez de se mover pelo teclado, seria um algoritmo que realiza o movimento e decide atacar
   - [ ] Interação entre o player e os inimigos
-    - [ ] Fazer o EnemyDamageArea dar dano nos inimigos
+    - [x] Fazer o EnemyDamageArea dar dano nos inimigos
     - [ ] Criar o PlayerDamageArea
     - [ ] Fazer o PlayerDamageArea dar dano no Player
   - etc...

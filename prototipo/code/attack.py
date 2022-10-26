@@ -47,7 +47,9 @@ class FireballAttack(Attack):
         angle = math.atan2(pos[1] - mouse_pos[1], pos[0] - mouse_pos[0])
         direction = pygame.math.Vector2(-math.cos(angle), -math.sin(angle))
         # criar o projétil
-        EnemyDamageArea(pos, self.attack_groups, self.obstacle_sprites, speed=40, direction=direction, surface=sprite)
+        EnemyDamageArea(pos, self.attack_groups, self.obstacle_sprites, damage=1, speed=40, direction=direction,
+                        destroy_on_impact=True,
+                        surface=sprite)
 
 
 class LineAttack(Attack):
@@ -68,5 +70,6 @@ class LineAttack(Attack):
         sprite = pygame.transform.rotate(sprite, angle)
         sprite_rect = sprite.get_rect(center=rotated_image_center)
         # criar o ataque
-        damage_area = EnemyDamageArea(pos, self.attack_groups, self.obstacle_sprites, surface=sprite, destroy_time=180)
+        damage_area = EnemyDamageArea(pos, self.attack_groups, self.obstacle_sprites, damage=5, surface=sprite,
+                                      destroy_time=180)
         damage_area.rect = sprite_rect

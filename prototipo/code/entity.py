@@ -1,3 +1,5 @@
+import math
+
 import pygame.sprite
 
 
@@ -41,3 +43,12 @@ class Entity(pygame.sprite.Sprite):
                     if self.direction.y < 0:
                         self.hitbox.top = sprite.hitbox.bottom
         return collided
+
+    '''Utilizado para o flickering quando a entidade recebe dano'''
+
+    def wave_value(self):
+        value = math.sin(pygame.time.get_ticks())
+        if value >= 0:
+            return 255
+        else:
+            return 0

@@ -16,12 +16,19 @@ class Enemy(Entity):
         self.obstacle_sprites = obstacle_sprites
 
         self.status = ''
+        self.health = 3
         self.speed = 3
         self.attack_radius = 20
 
+        # ataque
         self.can_attack = True
         self.attack_time = None
         self.attack_cooldown = 400
+
+        # invencibilidade
+        self.vulnerable = True
+        self.hit_time = None
+        self.invincibility_duration = 300
 
     def get_player_distance_direction(self, player):
         enemy_vec = pygame.math.Vector2(self.rect.center)
@@ -55,15 +62,46 @@ class Enemy(Entity):
         else:
             self.direction = pygame.math.Vector2()
 
-    def cooldown(self):
+    def animate(self):
+        if not self.vulnerable:
+            # TODO: ver https://www.youtube.com/watch?v=uW3Fhe-Vkx4 para fazer um flickering branco
+            alpha = self.wave_value()
+            self.image.set_alpha(alpha)
+        else:
+            self.image.set_alpha(255)
+
+    def cooldowns(self):
+        current_time = pygame.time.get_ticks()
+
         if not self.can_attack:
-            current_time = pygame.time.get_ticks()
             if current_time - self.attack_time >= self.attack_cooldown:
                 self.can_attack = True
 
+        if not self.vulnerable:
+            if current_time - self.hit_time >= self.invincibility_duration:
+                self.vulnerable = True
+
+    def damage(self, damage, player):
+        if self.vulnerable:
+            self.direction = self.get_player_distance_direction(player)[1]
+            self.health -= damage
+            self.hit_time = pygame.time.get_ticks()
+            self.vulnerable = False
+
+    def check_death(self):
+        if self.health <= 0:
+            self.kill()
+
+    def hit_reaction(self):
+        if not self.vulnerable:
+            self.direction *= -1  # fazer o inimigo ser empurrado para trás ao tomar um ataque
+
     def update(self):
+        self.hit_reaction()
         self.move(self.speed)
-        self.cooldown()
+        self.animate()
+        self.cooldowns()
+        self.check_death()
 
     def enemy_update(self, player):
         self.get_status(player)
