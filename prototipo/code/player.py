@@ -10,6 +10,7 @@ from utils import load_sprite
 class Player(Entity):
     def __init__(self, pos, groups, attack_groups, obstacle_sprites):
         super().__init__(groups)
+        self.sprite_type = 'player'
         self.image = load_sprite('/test/player.png')
         self.rect = self.image.get_rect(topleft=pos)
         self.hitbox = self.rect.inflate(0, -26)
@@ -30,7 +31,7 @@ class Player(Entity):
         self.hurt_time = None
         self.invincibility_duration = 500
 
-        # cajado (somente o sprite)
+        # cajado (somente desenha o sprite)
         self.staff = Staff(groups, self)
 
     def input(self):

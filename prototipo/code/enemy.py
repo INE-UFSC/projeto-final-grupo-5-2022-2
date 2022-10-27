@@ -18,10 +18,10 @@ class Enemy(Entity):
         self.status = ''
         self.health = 3
         self.speed = 3
-        self.attack_radius = 20
         self.collision_damage = 1
 
         # ataque
+        self.damage_hitbox = self.hitbox.inflate(2, 2)  # hitbox maior que, quando colide com o player, dá dano nele
         self.can_attack = True
         self.attack_time = None
         self.attack_cooldown = 400
@@ -45,9 +45,8 @@ class Enemy(Entity):
         return distance, direction
 
     def get_status(self, player):
-        distance = self.get_player_distance_direction(player)[0]
-
-        if distance <= self.attack_radius and self.can_attack:
+        # decide o status atual
+        if player.hitbox.colliderect(self.damage_hitbox) and self.can_attack:
             if self.status != 'attack':
                 pass  # TODO: self.frame_index = 0
             self.status = 'attack'
@@ -55,6 +54,7 @@ class Enemy(Entity):
             self.status = 'move'
 
     def actions(self, player):
+        # faz uma ação baseado no status atual
         if self.status == 'attack':
             self.attack_time = pygame.time.get_ticks()
             self.can_attack = False  # TODO: passar para a lógica do animate() ao adicionar sprites
@@ -97,6 +97,11 @@ class Enemy(Entity):
         if not self.vulnerable:
             self.direction = pygame.math.Vector2()  # fazer o inimigo parar ao tomar um ataque
 
+    def move(self, speed, collision_hitbox_name='hitbox'):
+        # o move() está sendo reescrito somente para atualizar a posição do damage_hitbox
+        super().move(speed, collision_hitbox_name)
+        self.damage_hitbox.center = self.hitbox.center
+
     def update(self):
         self.hit_reaction()
         self.move(self.speed)
@@ -105,5 +110,8 @@ class Enemy(Entity):
         self.check_death()
 
     def enemy_update(self, player):
+        # esse enemy_update() é diferente do update() por receber o parâmetro player
+        # ele também é chamado dentro do Level, mas, por ter uma assinatura diferente do update()
+        # dos outros sprites, não pode ser chamado da mesma forma que eles
         self.get_status(player)
         self.actions(player)
