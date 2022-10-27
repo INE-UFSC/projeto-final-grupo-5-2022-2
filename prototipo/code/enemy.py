@@ -29,7 +29,7 @@ class Enemy(Entity):
         # invencibilidade
         self.vulnerable = True
         self.hit_time = None
-        self.invincibility_duration = 300
+        self.invincibility_duration = 150
 
     def get_player_distance_direction(self, player):
         enemy_vec = pygame.math.Vector2(self.rect.center)
@@ -95,7 +95,7 @@ class Enemy(Entity):
 
     def hit_reaction(self):
         if not self.vulnerable:
-            self.direction *= -1  # fazer o inimigo ser empurrado para trás ao tomar um ataque
+            self.direction = pygame.math.Vector2()  # fazer o inimigo parar ao tomar um ataque
 
     def update(self):
         self.hit_reaction()
