@@ -1,5 +1,4 @@
 import random
-from abc import ABC
 
 import pygame
 
@@ -8,17 +7,11 @@ from particles import FireSource
 from settings import TILESIZE
 
 
-class DamageArea(Entity, ABC):
-    def __init__(self, groups):
-        super().__init__(groups)
-
-
-class EnemyDamageArea(DamageArea):
+class EnemyDamageArea(Entity):
     def __init__(self, pos, groups, obstacle_sprites, damage=0, speed=0, direction=pygame.math.Vector2(),
                  destroy_on_impact=False,
                  surface=pygame.Surface((TILESIZE, TILESIZE)), destroy_time=6000, particle_spawners=[], hit_sound=None):
-        super().__init__(groups)
-        self.sprite_type = 'enemy_damage_area'
+        super().__init__(groups, 'enemy_damage_area')
         self.image = surface
         self.rect = self.image.get_rect(topleft=pos)
         self.hitbox = self.rect
@@ -76,8 +69,3 @@ class EnemyDamageArea(DamageArea):
                     particle_spawner.update()
             particle_spawner.kill()
         super().kill()
-
-
-class PlayerDamageArea(DamageArea):
-    def __init__(self):
-        pass

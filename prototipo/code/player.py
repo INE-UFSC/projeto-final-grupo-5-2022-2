@@ -9,8 +9,7 @@ from utils import load_sprite
 
 class Player(Entity):
     def __init__(self, pos, groups, attack_groups, obstacle_sprites):
-        super().__init__(groups)
-        self.sprite_type = 'player'
+        super().__init__(groups, 'player')
         self.image = load_sprite('/test/player.png')
         self.rect = self.image.get_rect(topleft=pos)
         self.hitbox = self.rect.inflate(0, -26)

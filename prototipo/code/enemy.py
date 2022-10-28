@@ -6,9 +6,8 @@ from utils import load_sprite
 
 class Enemy(Entity):
     def __init__(self, monster_name, pos, groups, obstacle_sprites):
-        super().__init__(groups)
+        super().__init__(groups, 'enemy')
 
-        self.sprite_type = 'enemy'
         self.image = load_sprite('/test/enemy.png')
 
         self.rect = self.image.get_rect(topleft=pos)

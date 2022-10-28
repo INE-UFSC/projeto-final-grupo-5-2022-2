@@ -68,7 +68,6 @@ class YSortCameraGroup(pygame.sprite.Group):
         # os inimigos possuem um update() chamado enemy_update() que precisa receber o player como
         # parâmetro para algumas interações
         # essa função chama esse outro update()
-        enemy_sprites = [sprite for sprite in self.sprites() if
-                         hasattr(sprite, 'sprite_type') and sprite.sprite_type == 'enemy']
+        enemy_sprites = [sprite for sprite in self.sprites() if sprite.sprite_type == 'enemy']
         for enemy in enemy_sprites:
             enemy.enemy_update(player)

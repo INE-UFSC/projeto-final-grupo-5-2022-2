@@ -4,8 +4,9 @@ import pygame.sprite
 
 
 class Entity(pygame.sprite.Sprite):
-    def __init__(self, groups):
+    def __init__(self, groups, sprite_type):
         super().__init__(groups)
+        self.sprite_type = sprite_type
         self.direction = pygame.math.Vector2()
 
     def move(self, speed, collision_hitbox_name='hitbox'):
