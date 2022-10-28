@@ -41,7 +41,9 @@ class UI:
 
             # cooldown
             if not attack.can_attack:
-                rect_height = ITEM_BOX_SIZE - ITEM_BOX_SIZE * (current_time - attack.attack_time) / attack.cooldown
+                # aqui tem que usar o max() para não resultar em altura 0
+                rect_height = max(1,
+                                  ITEM_BOX_SIZE - ITEM_BOX_SIZE * (current_time - attack.attack_time) / attack.cooldown)
                 cooldown_surf = pygame.Surface((ITEM_BOX_SIZE, rect_height))
                 cooldown_surf.set_alpha(128)
                 cooldown_surf.fill(COLOR_BLACK)
