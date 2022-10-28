@@ -16,7 +16,7 @@ class DamageArea(Entity, ABC):
 class EnemyDamageArea(DamageArea):
     def __init__(self, pos, groups, obstacle_sprites, damage=0, speed=0, direction=pygame.math.Vector2(),
                  destroy_on_impact=False,
-                 surface=pygame.Surface((TILESIZE, TILESIZE)), destroy_time=6000, particle_spawners=[]):
+                 surface=pygame.Surface((TILESIZE, TILESIZE)), destroy_time=6000, particle_spawners=[], hit_sound=None):
         super().__init__(groups)
         self.sprite_type = 'enemy_damage_area'
         self.image = surface
@@ -33,6 +33,7 @@ class EnemyDamageArea(DamageArea):
         self.destroy_time = destroy_time
 
         self.particle_spawners = particle_spawners
+        self.hit_sound = hit_sound
 
     def enemy_collision(self, player, attackable_group):
         collision_sprites = pygame.sprite.spritecollide(self, attackable_group, False)
@@ -45,6 +46,9 @@ class EnemyDamageArea(DamageArea):
                 # ataque dá dano em vários inimigos
                 for target_sprite in collision_sprites:
                     target_sprite.damage(self.damage, player)
+
+            if self.hit_sound is not None:
+                self.hit_sound.play()
 
     def update(self):
         # movimento

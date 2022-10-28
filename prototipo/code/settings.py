@@ -5,20 +5,17 @@ HEIGHT = 720
 FPS = 60
 TILESIZE = 64
 
-GRAPHICS_PATH = os.path.abspath(os.path.join(os.getcwd(), os.pardir, 'graphics'))
+GAME_PATH = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
 
 COLOR_BLACK = (0, 0, 0)
 
-UI_FONT = f'{GRAPHICS_PATH}/font/joystix.ttf'
+UI_FONT = f'{GAME_PATH}/graphics/font/joystix.ttf'
 UI_FONT_SIZE = 18
 UI_BG_COLOR = '#222222'
 UI_BORDER_COLOR = '#111111'
 UI_BORDER_COLOR_ACTIVE = '#FFFFFF'
 TEXT_COLOR = '#EEEEEE'
 ITEM_BOX_SIZE = 64
-
-
-
 
 WORLD_MAP = [
     ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'],

@@ -1,15 +1,13 @@
 import math
 from abc import ABC, abstractmethod
 
-import pygame
-
 from damage_area import EnemyDamageArea
 from particles import FireSource, LightSource
-from utils import load_sprite
+from utils import *
 
 
 class Attack(ABC):
-    def __init__(self, icon, attack_groups, obstacle_sprites, cooldown=0):
+    def __init__(self, icon, attack_groups, obstacle_sprites, cooldown=0, cast_sound='', hit_sound=''):
         self.icon = load_sprite(icon)
 
         self.attack_groups = attack_groups
@@ -18,6 +16,13 @@ class Attack(ABC):
         self.cooldown = cooldown
         self.can_attack = True
         self.attack_time = 0
+
+        if cast_sound != '':
+            self.cast_sound = load_sound(cast_sound)
+            self.cast_sound.set_volume(0.2)
+        if hit_sound != '':
+            self.hit_sound = load_sound(hit_sound)
+            self.hit_sound.set_volume(0.1)
 
     def use(self, player):
         if self.can_attack:
@@ -40,7 +45,8 @@ class Attack(ABC):
 
 class FireballAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
-        super().__init__('/test/icon_fireball.png', attack_groups, obstacle_sprites, cooldown=900)
+        super().__init__('/test/icon_fireball.png', attack_groups, obstacle_sprites, cooldown=900,
+                         cast_sound='fireball_cast.ogg', hit_sound='fireball_hit.ogg')
 
     def create(self, player):
         pos = (player.staff.rect.x, player.staff.rect.y)
@@ -54,7 +60,9 @@ class FireballAttack(Attack):
                         destroy_on_impact=True,
                         surface=sprite,
                         particle_spawners=[LightSource(pos, self.attack_groups[0]),
-                                           FireSource(pos, self.attack_groups[0])])
+                                           FireSource(pos, self.attack_groups[0])],
+                        hit_sound=self.hit_sound)
+        self.cast_sound.play()
 
 
 class LineAttack(Attack):
