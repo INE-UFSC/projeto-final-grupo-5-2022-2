@@ -1,6 +1,5 @@
-import pygame
-
 from enemy import Enemy
+from particles import *
 from player import Player
 from settings import *
 from tile import Tile
@@ -58,10 +57,17 @@ class YSortCameraGroup(pygame.sprite.Group):
         self.display_surface = pygame.display.get_surface()
 
     def custom_draw(self):
-        for sprite in sorted(self.sprites(), key=lambda sprite: sprite.rect.centery):
+        # remover as partículas de luz dos sprites para não desenhar elas aqui
+        # ela é desenhada na própria partícula para ficar na frente dos outros sprites
+        sprites = [sprite for sprite in self.sprites() if sprite.sprite_type != 'light']
+        # desenhar os sprites
+        for sprite in sorted(sprites, key=lambda sprite: sprite.rect.centery):
             self.display_surface.blit(sprite.image, sprite.rect)
 
     def enemy_update(self, player):
+        # os inimigos possuem um update() chamado enemy_update() que precisa receber o player como
+        # parâmetro para algumas interações
+        # essa função chama esse outro update()
         enemy_sprites = [sprite for sprite in self.sprites() if
                          hasattr(sprite, 'sprite_type') and sprite.sprite_type == 'enemy']
         for enemy in enemy_sprites:

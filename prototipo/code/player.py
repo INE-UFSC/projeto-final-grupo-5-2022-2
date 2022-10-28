@@ -100,6 +100,7 @@ class Player(Entity):
 class Staff(pygame.sprite.Sprite):
     def __init__(self, groups, player):
         super().__init__(groups)
+        self.sprite_type = 'player'
         self.player = player
         self.image = load_sprite('/test/staff.png')
         self.rect = self.image.get_rect(topleft=self.player.rect.center)

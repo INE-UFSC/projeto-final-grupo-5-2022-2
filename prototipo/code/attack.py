@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 import pygame
 
 from damage_area import EnemyDamageArea
+from particles import FireSource, LightSource
 from utils import load_sprite
 
 
@@ -51,7 +52,9 @@ class FireballAttack(Attack):
         # criar o projétil
         EnemyDamageArea(pos, self.attack_groups, self.obstacle_sprites, damage=1, speed=40, direction=direction,
                         destroy_on_impact=True,
-                        surface=sprite)
+                        surface=sprite,
+                        particle_spawners=[LightSource(pos, self.attack_groups[0]),
+                                           FireSource(pos, self.attack_groups[0])])
 
 
 class LineAttack(Attack):

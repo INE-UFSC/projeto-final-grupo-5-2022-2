@@ -1,8 +1,10 @@
+import random
 from abc import ABC
 
 import pygame
 
 from entity import Entity
+from particles import FireSource
 from settings import TILESIZE
 
 
@@ -14,7 +16,7 @@ class DamageArea(Entity, ABC):
 class EnemyDamageArea(DamageArea):
     def __init__(self, pos, groups, obstacle_sprites, damage=0, speed=0, direction=pygame.math.Vector2(),
                  destroy_on_impact=False,
-                 surface=pygame.Surface((TILESIZE, TILESIZE)), destroy_time=6000):
+                 surface=pygame.Surface((TILESIZE, TILESIZE)), destroy_time=6000, particle_spawners=[]):
         super().__init__(groups)
         self.sprite_type = 'enemy_damage_area'
         self.image = surface
@@ -29,6 +31,8 @@ class EnemyDamageArea(DamageArea):
 
         self.creation_time = pygame.time.get_ticks()
         self.destroy_time = destroy_time
+
+        self.particle_spawners = particle_spawners
 
     def enemy_collision(self, player, attackable_group):
         collision_sprites = pygame.sprite.spritecollide(self, attackable_group, False)
@@ -54,6 +58,20 @@ class EnemyDamageArea(DamageArea):
         current_time = pygame.time.get_ticks()
         if current_time - self.creation_time >= self.destroy_time:
             self.kill()
+
+        for particle_spawner in self.particle_spawners:
+            particle_spawner.rect.center = self.rect.center
+
+    def kill(self):
+        # apagar os particle spawners
+        for particle_spawner in self.particle_spawners:
+            if isinstance(particle_spawner, FireSource):
+                # fazer uma "explosão" de fogo ao destruir
+                for i in range(5, 15):
+                    particle_spawner.offset = random.randint(16, 32)
+                    particle_spawner.update()
+            particle_spawner.kill()
+        super().kill()
 
 
 class PlayerDamageArea(DamageArea):
