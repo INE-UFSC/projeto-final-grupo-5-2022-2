@@ -26,7 +26,7 @@ class UI:
         self.display_surface.blit(text_surf, text_rect)
         pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, text_rect.inflate(20, 20), 3)
 
-    def show_attacks(self, selected_attack, attacks):
+    def show_attacks(self, attacks):
         current_time = pygame.time.get_ticks()
 
         for i, attack in enumerate(attacks):
@@ -49,13 +49,9 @@ class UI:
                 cooldown_surf.fill(COLOR_BLACK)
                 self.display_surface.blit(cooldown_surf, bg_rect)
 
-            # seleção
-            if i == selected_attack - 1:
-                pygame.draw.rect(self.display_surface, UI_BORDER_COLOR_ACTIVE, bg_rect, 3)
-            else:
-                pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, bg_rect, 3)
+            pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, bg_rect, 3)
 
     def display(self, player):
         self.show_health(player.health)
         self.show_exp(player.exp)
-        self.show_attacks(player.selected_attack, player.attacks)
+        self.show_attacks(player.attacks)

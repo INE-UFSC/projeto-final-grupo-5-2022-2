@@ -2,7 +2,7 @@ import math
 
 import pygame
 
-from attack import FireballAttack, LineAttack
+from attack import FireballAttack, LineAttack, SliceAttack
 from entity import Entity
 from utils import load_sprite
 
@@ -21,8 +21,8 @@ class Player(Entity):
         self.obstacle_sprites = obstacle_sprites
 
         # ataques
-        self.selected_attack = 1
         self.attacks = [FireballAttack(attack_groups, obstacle_sprites),
+                        SliceAttack(attack_groups, obstacle_sprites),
                         LineAttack(attack_groups, obstacle_sprites)]
 
         # dano
@@ -53,19 +53,13 @@ class Player(Entity):
             self.direction.x = 0
 
         # ataque
-        if keys[pygame.K_1] and len(self.attacks) >= 1:
-            self.selected_attack = 1
-        elif keys[pygame.K_2] and len(self.attacks) >= 2:
-            self.selected_attack = 2
+        if keys[pygame.K_q]:
+            self.attacks[2].use(self)
 
         if mouse[0]:
-            if self.attacks[self.selected_attack - 1].can_attack:
-                self.attacks[self.selected_attack - 1].use(self)
-
-                if self.selected_attack != 1:
-                    self.attacks[0].block()  # para o jogador não atirar uma bola de fogo imediatamente após um especial
-
-            self.selected_attack = 1  # retornar após qualquer ataque para o básico
+            self.attacks[0].use(self)
+        if mouse[2]:
+            self.attacks[1].use(self)
 
     def cooldowns(self):
         for attack in self.attacks:
