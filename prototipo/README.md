@@ -20,6 +20,7 @@ disponível [aqui](https://docs.google.com/document/d/189AMDekPZeVRerxjPzfzko3lh
     - Usar a função check_death() do Enemy como referência
 - [ ] Ataque de dano em área
     - Criar uma nova classe que estende o Attack, configurar o create() dela (isto é, a parte que cria as DamageAreas no mapa), adicionar o ataque na lista de ataques definida no init do Player e a seleção no input()
+    - Sugestão: remover o LineAttack e fazer o ataque em área como uma ult com cooldown longo utilizada ao pressionar Q
 - [ ] Sistema de experiência e níveis
   - Adicionar um atributo de exp ao Player e exp no Enemy. Quando o Enemy morrer, incrementar enemy.exp em player.exp. 
   - Talvez, seja possível fazer isso no check_death() do Enemy, mas será necessário mover ele para o enemy_update() para receber o parâmetro player, colocar o player no check_death() e chamar uma função para incrementar o exp do Player quando o Enemy morrer.
@@ -28,10 +29,11 @@ disponível [aqui](https://docs.google.com/document/d/189AMDekPZeVRerxjPzfzko3lh
     - Alguns upgrades estão listados no roteiro
     - Os upgrades, de uma maneira geral, vão ter uma função que altera um atributo do Player quando chamada. Essa função
       vai ser chamada somente uma vez ao adquirir o upgrade
-- [ ] Fazer o flickering do Player e do Enemy serem brancos em vez de transparente
-    - Precisa mudar a parte que confere o self.vulnerable e altera o alpha no animate() do Player e do Enemy.
-      Conferir [este vídeo aqui](https://www.youtube.com/watch?v=uW3Fhe-Vkx4) sobre como fazer uma máscara.
+- ~~[ ] Fazer o flickering do Player e do Enemy serem brancos em vez de transparente~~
+    - ~~Precisa mudar a parte que confere o self.vulnerable e altera o alpha no animate() do Player e do Enemy.
+      Conferir [este vídeo aqui](https://www.youtube.com/watch?v=uW3Fhe-Vkx4) sobre como fazer uma máscara.~~
 - [ ] Dash do Player
+    - Sugestão: substituir pelo SliceAttack?
     - Funcionamento descrito no roteiro
   
 ## Outros ajustes
