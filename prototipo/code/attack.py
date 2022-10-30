@@ -112,7 +112,6 @@ class SliceAttack(Attack):
         # calcular a posição da linha
         step = 16  # de quantos em quantos pixels a damage area vai andar
         pos_list = [current_pos]
-        damage_area_list = []
         # condições para sair do while
         x_relation = mouse_pos[0] > current_pos[0]
         y_relation = mouse_pos[1] > current_pos[1]
@@ -126,7 +125,6 @@ class SliceAttack(Attack):
                                           blood_on_kill=True,
                                           direction=direction)
             damage_area.rect.center = current_pos
-            damage_area_list.append(damage_area)  # para alterar o sprite das damage areas depois
 
             # condições para parar de criar
             for obstacle in self.obstacle_sprites:
