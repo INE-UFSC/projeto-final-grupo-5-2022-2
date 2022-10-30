@@ -3,14 +3,15 @@ import random
 import pygame
 
 from entity import Entity
-from particles import FireSource
+from particles import FireSource, BloodSource
 from settings import TILESIZE
 
 
 class EnemyDamageArea(Entity):
     def __init__(self, pos, groups, obstacle_sprites, damage=0, speed=0, direction=pygame.math.Vector2(),
                  destroy_on_impact=False,
-                 surface=pygame.Surface((TILESIZE, TILESIZE)), destroy_time=6000, particle_spawners=[], hit_sound=None):
+                 surface=pygame.Surface((TILESIZE, TILESIZE)), destroy_time=6000, particle_spawners=[], hit_sound=None,
+                 blood_on_kill=False):
         super().__init__(groups, 'enemy_damage_area')
         self.image = surface
         self.rect = self.image.get_rect(topleft=pos)
@@ -26,22 +27,30 @@ class EnemyDamageArea(Entity):
         self.destroy_time = destroy_time
 
         self.particle_spawners = particle_spawners
+        self.blood_on_kill = blood_on_kill
+
         self.hit_sound = hit_sound
 
     def enemy_collision(self, player, attackable_group):
         collision_sprites = pygame.sprite.spritecollide(self, attackable_group, False)
         if collision_sprites:
-            if self.destroy_on_impact:
-                # ataque só dá dano em 1 inimigo
-                collision_sprites[0].damage(self.damage, player)
-                self.kill()
-            else:
-                # ataque dá dano em vários inimigos
-                for target_sprite in collision_sprites:
-                    target_sprite.damage(self.damage, player)
+            for target_sprite in collision_sprites:
+                if not target_sprite.vulnerable:  # pular os inimigos que não estão vulneráveis
+                    continue
 
-            if self.hit_sound is not None:
-                self.hit_sound.play()
+                if self.hit_sound is not None:
+                    self.hit_sound.play()
+
+                target_sprite.damage(self.damage, player)
+                if target_sprite.health <= 0:
+                    target_sprite.check_death()
+                    if self.blood_on_kill:
+                        BloodSource(collision_sprites[0].rect.center, self.groups()[0], self.obstacle_sprites,
+                                    self.direction)
+
+                if self.destroy_on_impact:  # ataque dá dano em só um inimigo
+                    self.kill()
+                    break
 
     def update(self):
         # movimento

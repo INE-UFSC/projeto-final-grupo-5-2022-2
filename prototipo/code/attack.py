@@ -93,9 +93,10 @@ class LineAttack(Attack):
 class SliceAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
         super().__init__('/test/icon_slice.png', attack_groups, obstacle_sprites, cooldown=1200,
-                         cast_sound='slice_cast.ogg')
+                         cast_sound='slice_cast.ogg', hit_sound='slice_hit.ogg')
         self.image = load_sprite('/test/slice.png')
-        self.cast_sound.set_volume(0.05)
+        self.cast_sound.set_volume(0.1)
+        self.hit_sound.set_volume(0.1)
 
     def create(self, player):
         # essa função basicamente vai criando damage areas a cada intervalo
@@ -121,7 +122,9 @@ class SliceAttack(Attack):
             current_pos = (current_pos[0] + direction.x * step, current_pos[1] + direction.y * step)
             pos_list.append(current_pos)
             damage_area = EnemyDamageArea(current_pos, self.attack_groups, self.obstacle_sprites, damage=5,
-                                          surface=self.image, destroy_time=1)
+                                          surface=self.image, destroy_time=100, hit_sound=self.hit_sound,
+                                          blood_on_kill=True,
+                                          direction=direction)
             damage_area.rect.center = current_pos
             damage_area_list.append(damage_area)  # para alterar o sprite das damage areas depois
 
