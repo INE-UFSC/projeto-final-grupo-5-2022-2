@@ -45,14 +45,14 @@ class Attack(ABC):
 
 class FireballAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
-        super().__init__('/test/icon_fireball.png', attack_groups, obstacle_sprites, cooldown=900,
+        super().__init__(os.path.join('test','icon_fireball.png'), attack_groups, obstacle_sprites, cooldown=900,
                          cast_sound='fireball_cast.ogg', hit_sound='fireball_hit.ogg')
         self.cast_sound.set_volume(0.2)
         self.hit_sound.set_volume(0.1)
 
     def create(self, player):
         pos = (player.staff.rect.x, player.staff.rect.y)
-        sprite = load_sprite('/test/fireball.png')
+        sprite = load_sprite(os.path.join('test', 'fireball.png'))
         # calcular direção do projétil
         mouse_pos = pygame.mouse.get_pos()
         angle = math.atan2(pos[1] - mouse_pos[1], pos[0] - mouse_pos[0])
@@ -69,11 +69,11 @@ class FireballAttack(Attack):
 
 class LineAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
-        super().__init__('/test/icon_line.png', attack_groups, obstacle_sprites, cooldown=2400)
+        super().__init__(os.path.join('test','icon_line.png'), attack_groups, obstacle_sprites, cooldown=2400)
 
     def create(self, player):
         pos = (player.staff.rect.centerx, player.staff.rect.y + 12)
-        sprite = load_sprite('/test/kamehameha.png')
+        sprite = load_sprite(os.path.join('test', 'kamehameha.png'))
         pivot = (0, 12)
         # rotacionar o sprite
         mouse_pos = pygame.mouse.get_pos()
@@ -92,9 +92,9 @@ class LineAttack(Attack):
 
 class SliceAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
-        super().__init__('/test/icon_slice.png', attack_groups, obstacle_sprites, cooldown=1200,
+        super().__init__(os.path.join('test', 'icon_slice.png'), attack_groups, obstacle_sprites, cooldown=1200,
                          cast_sound='slice_cast.ogg', hit_sound='slice_hit.ogg')
-        self.image = load_sprite('/test/slice.png')
+        self.image = load_sprite(os.path.join('test', 'slice.png'))
         self.cast_sound.set_volume(0.1)
         self.hit_sound.set_volume(0.1)
 

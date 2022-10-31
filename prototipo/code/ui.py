@@ -9,7 +9,7 @@ class UI:
         self.display_surface = pygame.display.get_surface()
         self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
 
-        self.health_sprite = load_sprite('/test/heart.png')
+        self.health_sprite = load_sprite(os.path.join('test', 'heart.png'))
 
     def show_health(self, health):
         for i in range(health):

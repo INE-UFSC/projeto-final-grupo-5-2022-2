@@ -1,4 +1,5 @@
 import pygame
+import os
 
 from entity import Entity
 from utils import load_sprite
@@ -8,7 +9,7 @@ class Enemy(Entity):
     def __init__(self, monster_name, pos, groups, obstacle_sprites):
         super().__init__(groups, 'enemy')
 
-        self.image = load_sprite('/test/enemy.png')
+        self.image = load_sprite(os.path.join('test', 'enemy.png'))
 
         self.rect = self.image.get_rect(topleft=pos)
         self.hitbox = self.rect.inflate(0, -26)

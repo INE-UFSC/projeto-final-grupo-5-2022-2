@@ -5,7 +5,7 @@ HEIGHT = 720
 FPS = 60
 TILESIZE = 64
 
-GAME_PATH = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
+GAME_PATH = os.path.abspath(os.path.join(os.getcwd(), 'prototipo'))
 
 COLOR_BLACK = (0, 0, 0)
 
