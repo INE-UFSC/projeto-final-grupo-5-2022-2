@@ -71,7 +71,7 @@ class EnemyDamageArea(Entity):
 
                 target_sprite.damage(self._damage, player)
                 if target_sprite.health <= 0:
-                    target_sprite.check_death()
+                    target_sprite.check_death(player)
                     if self.__blood_on_kill:
                         BloodSource(collision_sprites[0].rect.center, self.groups()[0], self._obstacle_sprites,
                                     self._direction)

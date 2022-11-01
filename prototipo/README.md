@@ -21,7 +21,7 @@ disponível [aqui](https://docs.google.com/document/d/189AMDekPZeVRerxjPzfzko3lh
 - [ ] Ataque de dano em área
     - Criar uma nova classe que estende o Attack, configurar o create() dela (isto é, a parte que cria as DamageAreas no mapa), adicionar o ataque na lista de ataques definida no init do Player e a seleção no input()
     - Sugestão: remover o LineAttack e fazer o ataque em área como uma ult com cooldown longo utilizada ao pressionar Q
-- [ ] Sistema de experiência e níveis
+- [x] Sistema de experiência e níveis
   - Adicionar um atributo de exp ao Player e exp no Enemy. Quando o Enemy morrer, incrementar enemy.exp em player.exp. 
   - Talvez, seja possível fazer isso no check_death() do Enemy, mas será necessário mover ele para o enemy_update() para receber o parâmetro player, colocar o player no check_death() e chamar uma função para incrementar o exp do Player quando o Enemy morrer.
   - Acredito que seria legal fazer que, a cada nível, o player ganha um ponto de upgrade que permite ele comprar algum upgrade.

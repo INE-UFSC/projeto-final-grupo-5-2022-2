@@ -10,17 +10,31 @@ class UI:
         self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
 
         self.health_sprite = load_sprite('/test/heart.png')
+        self.__exp_bar_rect = pygame.Rect(0, 0, EXP_BAR_WIDTH, BAR_HEIGHT)
+        self.__exp_bar_rect.topright = (self.display_surface.get_size()[0] - 20, 10)
 
     def show_health(self, health):
         for i in range(health):
             self.display_surface.blit(self.health_sprite,
                                       self.health_sprite.get_rect(topleft=(10 + i * (ITEM_BOX_SIZE + 10), 10)))
 
-    def show_exp(self, exp):
-        text_surf = self.font.render(str(int(exp)), False, TEXT_COLOR)
-        x = self.display_surface.get_size()[0] - 20
-        y = self.display_surface.get_size()[1] - 20
-        text_rect = text_surf.get_rect(bottomright=(x, y))
+    def show_exp(self, exp, level_up_exp, current_level):
+        # barra
+        pygame.draw.rect(self.display_surface, UI_BG_COLOR, self.__exp_bar_rect)
+
+        ratio = exp / level_up_exp
+        current_width = self.__exp_bar_rect.width * ratio
+        current_rect = self.__exp_bar_rect.copy()
+        current_rect.width = current_width
+
+        pygame.draw.rect(self.display_surface, EXP_BAR_COLOR, current_rect)
+        pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, self.__exp_bar_rect, 3)
+
+        # nível atual
+        text_surf = self.font.render(str(f'LV: {current_level}'), False, TEXT_COLOR)
+        x = self.display_surface.get_size()[0] - 30
+        y = 10 + BAR_HEIGHT + 7
+        text_rect = text_surf.get_rect(topright=(x, y))
 
         pygame.draw.rect(self.display_surface, UI_BG_COLOR, text_rect.inflate(20, 20))
         self.display_surface.blit(text_surf, text_rect)
@@ -51,7 +65,18 @@ class UI:
 
             pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, bg_rect, 3)
 
+    def show_upgrade_points(self, upgrade_points):
+        text_surf = self.font.render(str(int(upgrade_points)), False, TEXT_COLOR)
+        x = self.display_surface.get_size()[0] - 20
+        y = self.display_surface.get_size()[1] - 20
+        text_rect = text_surf.get_rect(bottomright=(x, y))
+
+        pygame.draw.rect(self.display_surface, UI_BG_COLOR, text_rect.inflate(20, 20))
+        self.display_surface.blit(text_surf, text_rect)
+        pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, text_rect.inflate(20, 20), 3)
+
     def display(self, player):
         self.show_health(player.health)
-        self.show_exp(player.exp)
+        self.show_exp(player.exp, player.level_up_exp, player.current_level)
         self.show_attacks(player.attacks)
+        self.show_upgrade_points(player.upgrade_points)
