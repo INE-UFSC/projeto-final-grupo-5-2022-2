@@ -20,7 +20,7 @@ class Player(Entity):
         self.__exp = 0
         self.__level_up_exp = 10
         self.__level_up_exp_increment = 10
-        self.__current_level = 0
+        self.__current_level = 1
         self.__upgrade_points = 0
 
         self.obstacle_sprites = obstacle_sprites
@@ -114,6 +114,18 @@ class Player(Entity):
     @property
     def exp(self):
         return self.__exp
+
+    @property
+    def level_up_exp(self):
+        return self.__level_up_exp
+
+    @property
+    def current_level(self):
+        return self.__current_level
+
+    @property
+    def upgrade_points(self):
+        return self.__upgrade_points
 
     @property
     def vulnerable(self):
