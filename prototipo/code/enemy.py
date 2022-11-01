@@ -30,22 +30,6 @@ class Enemy(Entity):
         self._hit_time = None
         self._invincibility_duration = 150
 
-    @property
-    def hitbox(self):
-        return self._hitbox
-
-    @property
-    def collision_damage(self):
-        return self._collision_damage
-
-    @property
-    def health(self):
-        return self._health
-
-    @property
-    def vulnerable(self):
-        return self._vulnerable
-
     def get_player_distance_direction(self, player):
         enemy_vec = pygame.math.Vector2(self.rect.center)
         player_vec = pygame.math.Vector2(player.rect.center)
@@ -130,3 +114,27 @@ class Enemy(Entity):
         # dos outros sprites, não pode ser chamado da mesma forma que eles
         self.get_status(player)
         self.actions(player)
+
+    @property
+    def obstacle_sprites(self):
+        return self._obstacle_sprites
+
+    @obstacle_sprites.setter
+    def obstacle_sprites(self, obstacle_sprites):
+        self._obstacle_sprites = obstacle_sprites
+
+    @property
+    def hitbox(self):
+        return self._hitbox
+
+    @property
+    def collision_damage(self):
+        return self._collision_damage
+
+    @property
+    def health(self):
+        return self._health
+
+    @property
+    def vulnerable(self):
+        return self._vulnerable

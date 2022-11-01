@@ -21,6 +21,8 @@ class Level:
 
         self.ui = UI()
 
+        self.timer = 0  # TEMPORÁRIO
+
     def create_map(self):
         for row_index, row in enumerate(WORLD_MAP):
             for col_index, col in enumerate(row):
@@ -51,6 +53,11 @@ class Level:
             attack_sprite.enemy_collision(self.player, self.attackable_sprites)
 
         self.ui.display(self.player)
+
+        # invocar inimigo (TEMPORÁRIO)
+        self.timer += 1
+        if self.timer % 120 == 0:
+            Enemy('test', (320, 320), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites)
 
 
 class YSortCameraGroup(pygame.sprite.Group):
