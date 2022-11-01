@@ -12,24 +12,40 @@ class Enemy(Entity):
         self.image = load_sprite(os.path.join('test', 'enemy.png'))
 
         self.rect = self.image.get_rect(topleft=pos)
-        self.hitbox = self.rect.inflate(0, -26)
-        self.obstacle_sprites = obstacle_sprites
+        self._hitbox = self.rect.inflate(0, -26)
+        self._obstacle_sprites = obstacle_sprites
 
-        self.status = ''
-        self.health = 3
-        self.speed = 3
-        self.collision_damage = 1
+        self._status = ''
+        self._health = 3
+        self._speed = 3
+        self._collision_damage = 1
 
         # ataque
-        self.damage_hitbox = self.hitbox.inflate(2, 2)  # hitbox maior que, quando colide com o player, dá dano nele
-        self.can_attack = True
-        self.attack_time = None
-        self.attack_cooldown = 400
+        self._damage_hitbox = self._hitbox.inflate(2, 2)  # hitbox maior que, quando colide com o player, dá dano nele
+        self._can_attack = True
+        self._attack_time = None
+        self._attack_cooldown = 400
 
         # invencibilidade
-        self.vulnerable = True
-        self.hit_time = None
-        self.invincibility_duration = 150
+        self._vulnerable = True
+        self._hit_time = None
+        self._invincibility_duration = 150
+
+    @property
+    def hitbox(self):
+        return self._hitbox
+
+    @property
+    def collision_damage(self):
+        return self._collision_damage
+
+    @property
+    def health(self):
+        return self._health
+
+    @property
+    def vulnerable(self):
+        return self._vulnerable
 
     def get_player_distance_direction(self, player):
         enemy_vec = pygame.math.Vector2(self.rect.center)
@@ -46,26 +62,26 @@ class Enemy(Entity):
 
     def get_status(self, player):
         # decide o status atual
-        if player.hitbox.colliderect(self.damage_hitbox) and self.can_attack:
-            if self.status != 'attack':
+        if player.hitbox.colliderect(self._damage_hitbox) and self._can_attack:
+            if self._status != 'attack':
                 pass  # TODO: self.frame_index = 0
-            self.status = 'attack'
+            self._status = 'attack'
         else:
-            self.status = 'move'
+            self._status = 'move'
 
     def actions(self, player):
         # faz uma ação baseado no status atual
-        if self.status == 'attack':
-            self.attack_time = pygame.time.get_ticks()
-            self.can_attack = False  # TODO: passar para a lógica do animate() ao adicionar sprites
-            player.damage(self.collision_damage)
-        elif self.status == 'move':
-            self.direction = self.get_player_distance_direction(player)[1]
+        if self._status == 'attack':
+            self._attack_time = pygame.time.get_ticks()
+            self._can_attack = False  # TODO: passar para a lógica do animate() ao adicionar sprites
+            player.damage(self._collision_damage)
+        elif self._status == 'move':
+            self._direction = self.get_player_distance_direction(player)[1]
         else:
-            self.direction = pygame.math.Vector2()
+            self._direction = pygame.math.Vector2()
 
     def animate(self):
-        if not self.vulnerable:
+        if not self._vulnerable:
             alpha = self.wave_value()
             self.image.set_alpha(alpha)
         else:
@@ -74,37 +90,37 @@ class Enemy(Entity):
     def cooldowns(self):
         current_time = pygame.time.get_ticks()
 
-        if not self.can_attack:
-            if current_time - self.attack_time >= self.attack_cooldown:
-                self.can_attack = True
+        if not self._can_attack:
+            if current_time - self._attack_time >= self._attack_cooldown:
+                self._can_attack = True
 
-        if not self.vulnerable:
-            if current_time - self.hit_time >= self.invincibility_duration:
-                self.vulnerable = True
+        if not self._vulnerable:
+            if current_time - self._hit_time >= self._invincibility_duration:
+                self._vulnerable = True
 
     def damage(self, damage, player):
-        if self.vulnerable:
-            self.direction = self.get_player_distance_direction(player)[1]
-            self.health -= damage
-            self.hit_time = pygame.time.get_ticks()
-            self.vulnerable = False
+        if self._vulnerable:
+            self._direction = self.get_player_distance_direction(player)[1]
+            self._health -= damage
+            self._hit_time = pygame.time.get_ticks()
+            self._vulnerable = False
 
     def check_death(self):
-        if self.health <= 0:
+        if self._health <= 0:
             self.kill()
 
     def hit_reaction(self):
-        if not self.vulnerable:
-            self.direction = pygame.math.Vector2()  # fazer o inimigo parar ao tomar um ataque
+        if not self._vulnerable:
+            self._direction = pygame.math.Vector2()  # fazer o inimigo parar ao tomar um ataque
 
     def move(self, speed, collision_hitbox_name='hitbox'):
         # o move() está sendo reescrito somente para atualizar a posição do damage_hitbox
         super().move(speed, collision_hitbox_name)
-        self.damage_hitbox.center = self.hitbox.center
+        self._damage_hitbox.center = self._hitbox.center
 
     def update(self):
         self.hit_reaction()
-        self.move(self.speed)
+        self.move(self._speed)
         self.animate()
         self.cooldowns()
         self.check_death()
