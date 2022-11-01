@@ -15,8 +15,13 @@ class Player(Entity):
         self.hitbox = self.rect.inflate(0, -26)
 
         self.__health = 3
-        self.__exp = 0
         self.__speed = 5
+
+        self.__exp = 0
+        self.__level_up_exp = 10
+        self.__level_up_exp_increment = 10
+        self.__current_level = 1
+        self.__upgrade_points = 0
 
         self.obstacle_sprites = obstacle_sprites
 
@@ -32,26 +37,6 @@ class Player(Entity):
 
         # cajado (somente desenha o sprite)
         self.__staff = Staff(groups)
-
-    @property
-    def attacks(self):
-        return self.__attacks
-
-    @property
-    def health(self):
-        return self.__health
-
-    @property
-    def exp(self):
-        return self.__exp
-
-    @property
-    def vulnerable(self):
-        return self.__vulnerable
-
-    @property
-    def staff(self):
-        return self.__staff
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -103,12 +88,52 @@ class Player(Entity):
             self.__vulnerable = False
             self.__hurt_time = pygame.time.get_ticks()
 
+    def give_exp(self, exp):
+        self.__exp += exp
+        while self.__exp >= self.__level_up_exp:
+            self.__exp -= self.__level_up_exp
+            self.__current_level += 1
+            self.__upgrade_points += 1
+            self.__level_up_exp += self.__level_up_exp_increment
+
     def update(self):
         self.input()
         self.animate()
         self.staff.animate(self)
         self.move(self.__speed)
         self.cooldowns()
+
+    @property
+    def attacks(self):
+        return self.__attacks
+
+    @property
+    def health(self):
+        return self.__health
+
+    @property
+    def exp(self):
+        return self.__exp
+
+    @property
+    def level_up_exp(self):
+        return self.__level_up_exp
+
+    @property
+    def current_level(self):
+        return self.__current_level
+
+    @property
+    def upgrade_points(self):
+        return self.__upgrade_points
+
+    @property
+    def vulnerable(self):
+        return self.__vulnerable
+
+    @property
+    def staff(self):
+        return self.__staff
 
 
 class Staff(pygame.sprite.Sprite):
