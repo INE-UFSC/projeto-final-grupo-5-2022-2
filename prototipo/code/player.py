@@ -22,8 +22,8 @@ class Player(Entity):
 
         # ataques
         self.__attacks = [FireballAttack(attack_groups, obstacle_sprites),
-                        SliceAttack(attack_groups, obstacle_sprites),
-                        LineAttack(attack_groups, obstacle_sprites)]
+                          SliceAttack(attack_groups, obstacle_sprites),
+                          LineAttack(attack_groups, obstacle_sprites)]
 
         # dano
         self.__vulnerable = True
@@ -31,7 +31,7 @@ class Player(Entity):
         self.__invincibility_duration = 500
 
         # cajado (somente desenha o sprite)
-        self.__staff = Staff(groups, self)
+        self.__staff = Staff(groups)
 
     @property
     def attacks(self):
@@ -106,30 +106,30 @@ class Player(Entity):
     def update(self):
         self.input()
         self.animate()
+        self.staff.animate(self)
         self.move(self.__speed)
         self.cooldowns()
 
 
 class Staff(pygame.sprite.Sprite):
-    def __init__(self, groups, player):
+    def __init__(self, groups):
         super().__init__(groups)
         self.__sprite_type = 'player'
-        self.__player = player
         self.image = load_sprite('/test/staff.png')
-        self.rect = self.image.get_rect(topleft=self.__player.rect.center)
+        self.rect = self.image.get_rect()
         self.__original_rect = self.rect
 
     @property
     def sprite_type(self):
         return self.__sprite_type
 
-    def update(self):
-        self.rect.center = self.__player.rect.center + pygame.math.Vector2(25, 10)
+    def animate(self, player):
+        self.rect.center = player.rect.center + pygame.math.Vector2(25, 10)
         # atualizar posição do cajado
         mouse_pos = pygame.mouse.get_pos()
         dist = math.sqrt(
-            (mouse_pos[0] - self.__player.rect.centerx) ** 2 + (mouse_pos[1] - self.__player.rect.centery) ** 2)
-        angle = math.atan2(self.__player.rect.centery - mouse_pos[1], self.__player.rect.centerx - mouse_pos[0])
+            (mouse_pos[0] - player.rect.centerx) ** 2 + (mouse_pos[1] - player.rect.centery) ** 2)
+        angle = math.atan2(player.rect.centery - mouse_pos[1], player.rect.centerx - mouse_pos[0])
         sin = -math.sin(angle)
         cos = -math.cos(angle)
         offset = (dist // 32) ** 1 / 2
