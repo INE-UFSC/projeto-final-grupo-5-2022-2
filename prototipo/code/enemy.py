@@ -18,6 +18,7 @@ class Enemy(Entity):
         self._health = 3
         self._speed = 3
         self._collision_damage = 1
+        self.__exp = 1
 
         # ataque
         self._damage_hitbox = self._hitbox.inflate(2, 2)  # hitbox maior que, quando colide com o player, dá dano nele
@@ -88,9 +89,10 @@ class Enemy(Entity):
             self._hit_time = pygame.time.get_ticks()
             self._vulnerable = False
 
-    def check_death(self):
+    def check_death(self, player):
         if self._health <= 0:
             self.kill()
+            player.give_exp(self.__exp)
 
     def hit_reaction(self):
         if not self._vulnerable:
@@ -106,12 +108,12 @@ class Enemy(Entity):
         self.move(self._speed)
         self.animate()
         self.cooldowns()
-        self.check_death()
 
     def enemy_update(self, player):
         # esse enemy_update() é diferente do update() por receber o parâmetro player
         # ele também é chamado dentro do Level, mas, por ter uma assinatura diferente do update()
         # dos outros sprites, não pode ser chamado da mesma forma que eles
+        self.check_death(player)
         self.get_status(player)
         self.actions(player)
 
