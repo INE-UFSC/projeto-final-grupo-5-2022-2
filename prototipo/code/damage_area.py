@@ -17,19 +17,47 @@ class EnemyDamageArea(Entity):
         self.rect = self.image.get_rect(topleft=pos)
         self.hitbox = self.rect
 
-        self.damage = damage
-        self.speed = speed
-        self.direction = direction
-        self.destroy_on_impact = destroy_on_impact
-        self.obstacle_sprites = obstacle_sprites
+        self._damage = damage
+        self._speed = speed
+        self._direction = direction
+        self._destroy_on_impact = destroy_on_impact
+        self._obstacle_sprites = obstacle_sprites
+        self._particle_spawners = particle_spawners
 
-        self.creation_time = pygame.time.get_ticks()
-        self.destroy_time = destroy_time
+        self.__blood_on_kill = blood_on_kill
+        self.__creation_time = pygame.time.get_ticks()
+        self.__destroy_time = destroy_time
 
-        self.particle_spawners = particle_spawners
-        self.blood_on_kill = blood_on_kill
 
         self.hit_sound = hit_sound
+
+    @property
+    def hitbox(self):
+        return self._hitbox
+
+    @hitbox.setter
+    def hitbox(self, value):
+        self._hitbox = value
+
+    @property
+    def damage(self):
+        return self._damage
+
+    @property
+    def speed(self):
+        return self._speed
+
+    @property
+    def destroy_on_impact(self):
+        return self._destroy_on_impact
+
+    @property
+    def obstacle_sprites(self):
+        return self._obstacle_sprites
+
+    @property
+    def particle_spawners(self):
+        return self._particle_spawners
 
     def enemy_collision(self, player, attackable_group):
         collision_sprites = pygame.sprite.spritecollide(self, attackable_group, False)
@@ -41,36 +69,36 @@ class EnemyDamageArea(Entity):
                 if self.hit_sound is not None:
                     self.hit_sound.play()
 
-                target_sprite.damage(self.damage, player)
+                target_sprite.damage(self._damage, player)
                 if target_sprite.health <= 0:
                     target_sprite.check_death()
-                    if self.blood_on_kill:
-                        BloodSource(collision_sprites[0].rect.center, self.groups()[0], self.obstacle_sprites,
-                                    self.direction)
+                    if self.__blood_on_kill:
+                        BloodSource(collision_sprites[0].rect.center, self.groups()[0], self._obstacle_sprites,
+                                    self._direction)
 
-                if self.destroy_on_impact:  # ataque dá dano em só um inimigo
+                if self._destroy_on_impact:  # ataque dá dano em só um inimigo
                     self.kill()
                     break
 
     def update(self):
         # movimento
-        if self.speed != 0:
-            moved = self.move(self.speed, 'smaller_hitbox')
+        if self._speed != 0:
+            moved = self.move(self._speed, 'smaller_hitbox')
             if not moved:
                 # projétil colidiu com algum obstáculo
                 self.kill()
 
         # destruir após um tempo
         current_time = pygame.time.get_ticks()
-        if current_time - self.creation_time >= self.destroy_time:
+        if current_time - self.__creation_time >= self.__destroy_time:
             self.kill()
 
-        for particle_spawner in self.particle_spawners:
+        for particle_spawner in self._particle_spawners:
             particle_spawner.rect.center = self.rect.center
 
     def kill(self):
         # apagar os particle spawners
-        for particle_spawner in self.particle_spawners:
+        for particle_spawner in self._particle_spawners:
             if isinstance(particle_spawner, FireSource):
                 # fazer uma "explosão" de fogo ao destruir
                 for i in range(5, 15):
