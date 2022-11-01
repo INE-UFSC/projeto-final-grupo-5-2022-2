@@ -12,6 +12,10 @@ class Entity(pygame.sprite.Sprite):
     @property
     def sprite_type(self):
         return self._sprite_type
+    
+    @sprite_type.setter
+    def sprite_type(self, value):
+        self._sprite_type = value
 
     @property
     def direction(self):
@@ -25,14 +29,14 @@ class Entity(pygame.sprite.Sprite):
         # o collision_hitbox_name é utilizado pelo DamageArea para escolher colidir somente com a
         # hitbox menor (smaller_hitbox) dos Tiles
 
-        if self._direction.magnitude() != 0:
+        if self.direction.magnitude() != 0:
             # manter a velocidade caso o player esteja indo em na diagonal
-            self._direction = self._direction.normalize()
+            self.direction = self.direction.normalize()
 
-        self.hitbox.x += self._direction.x * speed
+        self.hitbox.x += self.direction.x * speed
         collided = self.collision('horizontal', collision_hitbox_name)
-        self.hitbox.y += self._direction.y * speed
-        collided = collided or self.collision('vertical', collision_hitbox_name)
+        self.hitbox.y += self.direction.y * speed
+        collided = self.collision('vertical', collision_hitbox_name) or collided
         # manter a hitbox nos pés da entidade
         self.rect.centerx = self.hitbox.centerx
         self.rect.bottom = self.hitbox.bottom

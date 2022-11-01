@@ -46,6 +46,10 @@ class Player(Entity):
         return self.__exp
 
     @property
+    def speed(self):
+        return self.__speed
+
+    @property
     def vulnerable(self):
         return self.__vulnerable
 
