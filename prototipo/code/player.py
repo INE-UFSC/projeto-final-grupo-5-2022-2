@@ -1,5 +1,4 @@
 import math
-import os
 
 import pygame
 
@@ -11,7 +10,7 @@ from utils import load_sprite
 class Player(Entity):
     def __init__(self, pos, groups, attack_groups, obstacle_sprites):
         super().__init__(groups, 'player')
-        self.image = load_sprite(os.path.join('test', 'player.png'))
+        self.image = load_sprite('/test/player.png')
         self.rect = self.image.get_rect(topleft=pos)
         self.hitbox = self.rect.inflate(0, -26)
 
@@ -116,10 +115,8 @@ class Staff(pygame.sprite.Sprite):
         super().__init__(groups)
         self.__sprite_type = 'player'
         self.__player = player
-
-        self.image = load_sprite(os.path.join('test', 'staff.png'))
+        self.image = load_sprite('/test/staff.png')
         self.rect = self.image.get_rect(topleft=self.__player.rect.center)
-
         self.__original_rect = self.rect
 
     @property

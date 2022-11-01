@@ -1,6 +1,5 @@
 import math
 import random
-import os
 from abc import ABC, abstractmethod
 
 import pygame
@@ -50,7 +49,7 @@ class FireParticle(Particle):
         super().__init__(groups)
         self.sprite_type = 'particle'
 
-        self.mask_circle_32 = load_sprite(os.path.join('mask','circle_32.png'))
+        self.mask_circle_32 = load_sprite('/mask/circle_32.png')
         self.image = self.mask_circle_32.copy()
         self.image.set_alpha(0)  # para não desenhar a partícula ainda não configurada
         self.rect = self.image.get_rect(center=pos)
@@ -107,7 +106,7 @@ class LightParticle(Particle):
         super().__init__(groups)
         self.sprite_type = 'light'
 
-        self.mask_circle_32 = load_sprite(os.path.join('mask','circle_32.png'))
+        self.mask_circle_32 = load_sprite('/mask/circle_32.png')
         self.image = self.mask_circle_32.copy()
         self.image.set_alpha(0)  # para não desenhar a partícula ainda não configurada
         self.rect = self.image.get_rect(center=pos)
@@ -161,7 +160,7 @@ class BloodParticle(Particle):
         self.sprite_type = 'on_ground'
         self.obstacle_sprites = obstacle_sprites
 
-        self.mask_circle_32 = load_sprite(os.path.join('mask','circle_32.png'))
+        self.mask_circle_32 = load_sprite('/mask/circle_32.png')
         self.image = self.mask_circle_32.copy()
         self.image.set_alpha(0)  # para não desenhar a partícula ainda não configurada
         self.rect = self.image.get_rect(center=pos)
