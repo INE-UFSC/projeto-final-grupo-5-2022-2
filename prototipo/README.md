@@ -43,6 +43,9 @@ disponível [aqui](https://docs.google.com/document/d/189AMDekPZeVRerxjPzfzko3lh
 
 - [ ] Fazer as outras classes que faltam do diagrama
 
+- [ ] Arrumar a visibilidade dos atributos (transformar em privado) nas classes restantes
+
+
 # Não obrigatórios para o protótipo
 
 ## Sprites
