@@ -11,74 +11,15 @@ from ui import UI
 class Level:
     def __init__(self):
         self.__display_surface = pygame.display.get_surface()
+        # salas
+        self.__room_list = list([Room(WORLD_MAP)])
+        self.__current_room = self.__room_list[0]
 
-        # criar o mapa
-        self.__rooms_list = list()
-        self.__rooms_list.append(Room(WORLD_MAP))
-        self.__current_room = self.__rooms_list[0]
-
-        self.ui = UI()
-
-        self.timer = 0  # TEMPORÁRIO
-
-    @property
-    def visible_sprites(self):
-        return self.current_room.visible_sprites
-
-    @property
-    def obstacle_sprites(self):
-        return self.current_room.obstacle_sprites
-
-    @property
-    def attack_sprites(self):
-        return self.current_room.attack_sprites
-
-    @property
-    def attackable_sprites(self):
-        return self.current_room.attackable_sprites
-
-    @property
-    def rooms_list(self):
-        return self.__rooms_list
-
-    @property
-    def current_room(self):
-        return self.__current_room
-
-    @current_room.setter
-    def current_room(self, room):
-        self.__current_room = room
-
-    def spawn_enemy(self, pos):
-        e = Enemy('test', pos, [self.current_room.visible_sprites,
-                  self.current_room.attackable_sprites], self.obstacle_sprites)
-
-        # permite os inimigos colidirem com os outros inimigos e com o player
-        enemy_obstacle_sprites = pygame.sprite.Group(
-            self.current_room.player, self.obstacle_sprites, self.attackable_sprites)
-        for sprite in self.attackable_sprites:
-            sprite.obstacle_sprites = enemy_obstacle_sprites
-        # permite o player colidir com os inimigos
-        self.current_room.player.obstacle_sprites = pygame.sprite.Group(
-            self.obstacle_sprites, self.attackable_sprites)
+    def toggle_menu(self):
+        self.__current_room.toggle_menu()
 
     def run(self):
-        self.current_room.visible_sprites.custom_draw()
-        self.current_room.visible_sprites.update()
-        self.current_room.visible_sprites.enemy_update(
-            self.current_room.player)
-
-        # conferir colisão dos ataques com os inimigos
-        for attack_sprite in self.current_room.attack_sprites:
-            attack_sprite.enemy_collision(
-                self.current_room.player, self.current_room.attackable_sprites)
-
-        self.ui.display(self.current_room.player)
-
-        # invocar inimigo (TEMPORÁRIO)
-        self.timer += 1
-        if self.timer % 120 == 0:
-            self.spawn_enemy((320, 320))
+        self.__current_room.run()
 
 
 class Room:
@@ -88,18 +29,15 @@ class Room:
         self.obstacle_sprites = pygame.sprite.Group()
         self.attack_sprites = pygame.sprite.Group()
         self.attackable_sprites = pygame.sprite.Group()
-
         # mapa
-        self.__room_map = room_map
+        self.create_map(room_map)
+        # ui
+        self.ui = UI()
 
-        self.create_map()
+        self.timer = 0  # TEMPORÁRIO
 
-    @property
-    def room_map(self):
-        return self.__room_map
-
-    def create_map(self):
-        for row_index, row in enumerate(self.room_map):
+    def create_map(self, room_map):
+        for row_index, row in enumerate(room_map):
             for col_index, col in enumerate(row):
                 x = col_index * TILESIZE
                 y = row_index * TILESIZE
@@ -109,8 +47,7 @@ class Room:
                     self.player = Player((x, y), [self.visible_sprites], [self.visible_sprites, self.attack_sprites],
                                          self.obstacle_sprites)
                 elif col == 'e':
-                    Enemy('test', (x, y), [
-                          self.visible_sprites, self.attackable_sprites], self.obstacle_sprites)
+                    Enemy('test', (x, y), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites)
 
         # permite os inimigos colidirem com os outros inimigos e com o player
         enemy_obstacle_sprites = pygame.sprite.Group(
@@ -118,8 +55,34 @@ class Room:
         for sprite in self.attackable_sprites:
             sprite.obstacle_sprites = enemy_obstacle_sprites
         # permite o player colidir com os inimigos
-        self.player.obstacle_sprites = pygame.sprite.Group(
-            self.obstacle_sprites, self.attackable_sprites)
+        self.player.obstacle_sprites = pygame.sprite.Group(self.obstacle_sprites, self.attackable_sprites)
+
+    def spawn_enemy(self, pos):
+        Enemy('test', pos, [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites)
+        # permite os inimigos colidirem com os outros inimigos e com o player
+        enemy_obstacle_sprites = pygame.sprite.Group(self.player, self.obstacle_sprites, self.attackable_sprites)
+        for sprite in self.attackable_sprites:
+            sprite.obstacle_sprites = enemy_obstacle_sprites
+        # permite o player colidir com os inimigos
+        self.player.obstacle_sprites = pygame.sprite.Group(self.obstacle_sprites, self.attackable_sprites)
+
+    def toggle_menu(self):
+        self.ui.toggle_menu()
+
+    def run(self):
+        self.visible_sprites.custom_draw()
+        self.ui.display(self.player)
+
+        if not self.ui.is_menu_open:
+            self.visible_sprites.update()
+            self.visible_sprites.enemy_update(self.player)
+            # conferir colisão dos ataques com os inimigos
+            for attack_sprite in self.attack_sprites:
+                attack_sprite.enemy_collision(self.player, self.attackable_sprites)
+            # invocar inimigo (TEMPORÁRIO)
+            self.timer += 1
+            if self.timer % 120 == 0:
+                self.spawn_enemy((320, 320))
 
 
 class YSortCameraGroup(pygame.sprite.Group):

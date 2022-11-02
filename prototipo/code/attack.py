@@ -9,62 +9,103 @@ from utils import *
 
 
 class Attack(ABC):
-    def __init__(self, icon, attack_groups, obstacle_sprites, cooldown=0, cast_sound='', hit_sound=''):
+    def __init__(self, icon, attack_groups, obstacle_sprites, damage=1, cooldown=0, cast_sound='', hit_sound=''):
         self.icon = load_sprite(icon)
 
-        self._attack_groups = attack_groups
-        self._obstacle_sprites = obstacle_sprites
+        self.__attack_groups = attack_groups
+        self.__obstacle_sprites = obstacle_sprites
 
-        self._cooldown = cooldown
-        self._can_attack = True
-        self._attack_time = 0
+        self.__base_damage = damage
+        self.__damage = damage
+
+        self.__base_cooldown = cooldown
+        self.__cooldown = cooldown
+        self.__can_attack = True
+        self.__attack_time = 0
 
         if cast_sound != '':
-            self._cast_sound = load_sound(cast_sound)
+            self.__cast_sound = load_sound(cast_sound)
         if hit_sound != '':
-            self._hit_sound = load_sound(hit_sound)
-
-    @property
-    def attack_groups(self):
-        return self._attack_groups
-
-    @property
-    def can_attack(self):
-        return self._can_attack
-
-    @property
-    def attack_time(self):
-        return self._attack_time
-
-    @property
-    def cooldown(self):
-        return self._cooldown
+            self.__hit_sound = load_sound(hit_sound)
 
     def use(self, player):
-        if self._can_attack:
+        if self.__can_attack:
             self.create(player)
             self.block()
 
     def block(self):
-        self._can_attack = False
-        self._attack_time = pygame.time.get_ticks()
+        self.__can_attack = False
+        self.__attack_time = self.__cooldown
 
     def check_cooldown(self):
-        current_time = pygame.time.get_ticks()
-        if not self._can_attack and current_time - self._attack_time >= self._cooldown:
-            self._can_attack = True
+        if not self.__can_attack:
+            self.__attack_time -= 1
+            if self.__attack_time <= 0:
+                self.__can_attack = True
 
     @abstractmethod
     def create(self, player):
         pass
 
+    @property
+    def damage(self):
+        return self.__damage
+
+    @damage.setter
+    def damage(self, damage):
+        self.__damage = damage
+
+    @property
+    def base_damage(self):
+        return self.__base_damage
+
+    @property
+    def attack_groups(self):
+        return self.__attack_groups
+
+    @property
+    def can_attack(self):
+        return self.__can_attack
+
+    @property
+    def attack_time(self):
+        return self.__attack_time
+
+    @property
+    def cooldown(self):
+        return self.__cooldown
+
+    @cooldown.setter
+    def cooldown(self, cooldown):
+        self.__cooldown = cooldown
+
+    @property
+    def base_cooldown(self):
+        return self.__base_cooldown
+
+    @property
+    def cast_sound(self):
+        return self.__cast_sound
+
+    @property
+    def hit_sound(self):
+        return self.__hit_sound
+
+    @property
+    def obstacle_sprites(self):
+        return self.__obstacle_sprites
+
+    @property
+    def attack_groups(self):
+        return self.__attack_groups
+
 
 class FireballAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
-        super().__init__('/test/icon_fireball.png', attack_groups, obstacle_sprites, cooldown=900,
+        super().__init__('/test/icon_fireball.png', attack_groups, obstacle_sprites, damage=1, cooldown=75,
                          cast_sound='fireball_cast.ogg', hit_sound='fireball_hit.ogg')
-        self._cast_sound.set_volume(0.2)
-        self._hit_sound.set_volume(0.1)
+        self.cast_sound.set_volume(0.2)
+        self.hit_sound.set_volume(0.1)
 
     def create(self, player):
         pos = (player.staff.rect.x, player.staff.rect.y)
@@ -74,18 +115,19 @@ class FireballAttack(Attack):
         angle = math.atan2(pos[1] - mouse_pos[1], pos[0] - mouse_pos[0])
         direction = pygame.math.Vector2(-math.cos(angle), -math.sin(angle))
         # criar o projétil
-        EnemyDamageArea(pos, self._attack_groups, self._obstacle_sprites, damage=1, speed=40, direction=direction,
+        EnemyDamageArea(pos, self.attack_groups, self.obstacle_sprites, damage=self.damage, speed=40,
+                        direction=direction,
                         destroy_on_impact=True,
                         surface=sprite,
-                        particle_spawners=[LightSource(pos, self._attack_groups[0]),
-                                           FireSource(pos, self._attack_groups[0])],
-                        hit_sound=self._hit_sound)
-        self._cast_sound.play()
+                        particle_spawners=[LightSource(pos, self.attack_groups[0]),
+                                           FireSource(pos, self.attack_groups[0])],
+                        hit_sound=self.hit_sound)
+        self.cast_sound.play()
 
 
 class LineAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
-        super().__init__('/test/icon_line.png', attack_groups, obstacle_sprites, cooldown=2400)
+        super().__init__('/test/icon_line.png', attack_groups, obstacle_sprites, damage=100, cooldown=240)
 
     def create(self, player):
         pos = (player.staff.rect.centerx, player.staff.rect.y + 12)
@@ -101,26 +143,26 @@ class LineAttack(Attack):
         sprite = pygame.transform.rotate(sprite, angle)
         sprite_rect = sprite.get_rect(center=rotated_image_center)
         # criar o ataque
-        damage_area = EnemyDamageArea(pos, self._attack_groups, self._obstacle_sprites, damage=5, surface=sprite,
-                                      destroy_time=180)
+        damage_area = EnemyDamageArea(pos, self.attack_groups, self.obstacle_sprites, damage=self.damage,
+                                      surface=sprite,
+                                      destroy_time=20)
         damage_area.rect = sprite_rect
 
 
 class SliceAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
-        super().__init__('/test/icon_slice.png', attack_groups, obstacle_sprites, cooldown=1200,
+        super().__init__('/test/icon_slice.png', attack_groups, obstacle_sprites, damage=100, cooldown=120,
                          cast_sound='slice_cast.ogg', hit_sound='slice_hit.ogg')
         self.image = load_sprite('/test/slice.png')
-        self._cast_sound.set_volume(0.1)
-        self._hit_sound.set_volume(0.1)
-
+        self.cast_sound.set_volume(0.1)
+        self.hit_sound.set_volume(0.1)
 
     def create(self, player):
         # essa função basicamente vai criando damage areas a cada intervalo
         # 'step' em direção do mouse até chegar nele ou o sprite colidir em uma parede
         # no final, ele move o sprite do player para a última posição com uma damage area
         # desde que o player não colida com uma parede
-        self._cast_sound.play()
+        self.cast_sound.play()
         current_pos = player.hitbox.center
         # calcular direção do corte
         mouse_pos = pygame.mouse.get_pos()
@@ -137,14 +179,14 @@ class SliceAttack(Attack):
             # criar o próximo damage area
             current_pos = (current_pos[0] + direction.x * step, current_pos[1] + direction.y * step)
             pos_list.append(current_pos)
-            damage_area = EnemyDamageArea(current_pos, self._attack_groups, self._obstacle_sprites, damage=5,
-                                          surface=self.image, destroy_time=100, hit_sound=self._hit_sound,
+            damage_area = EnemyDamageArea(current_pos, self.attack_groups, self.obstacle_sprites, damage=self.damage,
+                                          surface=self.image, destroy_time=8, hit_sound=self.hit_sound,
                                           blood_on_kill=True,
                                           direction=direction)
             damage_area.rect.center = current_pos
 
             # condições para parar de criar
-            for obstacle in self._obstacle_sprites:
+            for obstacle in self.obstacle_sprites:
                 if damage_area.rect.colliderect(obstacle.rect):
                     collided = True
                     break
@@ -160,7 +202,7 @@ class SliceAttack(Attack):
         while len(pos_list) > 0:
             # esse loop vai removendo todas as posições em que o player colidiria com uma parede
             player.hitbox.center = pos_list[len(pos_list) - 1]
-            for sprite in self._obstacle_sprites:
+            for sprite in self.obstacle_sprites:
                 if player.hitbox.colliderect(sprite.hitbox):
                     pos_list.pop()
                     break

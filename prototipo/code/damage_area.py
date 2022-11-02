@@ -25,9 +25,8 @@ class EnemyDamageArea(Entity):
         self._particle_spawners = particle_spawners
 
         self.__blood_on_kill = blood_on_kill
-        self.__creation_time = pygame.time.get_ticks()
         self.__destroy_time = destroy_time
-
+        self.__destroy_timer = 0
 
         self.hit_sound = hit_sound
 
@@ -89,8 +88,8 @@ class EnemyDamageArea(Entity):
                 self.kill()
 
         # destruir após um tempo
-        current_time = pygame.time.get_ticks()
-        if current_time - self.__creation_time >= self.__destroy_time:
+        self.__destroy_timer += 1
+        if self.__destroy_timer >= self.__destroy_time:
             self.kill()
 
         for particle_spawner in self._particle_spawners:

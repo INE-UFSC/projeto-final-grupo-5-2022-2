@@ -23,13 +23,13 @@ class Enemy(Entity):
         # ataque
         self._damage_hitbox = self._hitbox.inflate(2, 2)  # hitbox maior que, quando colide com o player, dá dano nele
         self._can_attack = True
-        self._attack_time = None
-        self._attack_cooldown = 400
+        self._attack_time = 0
+        self._attack_cooldown = 40
 
         # invencibilidade
         self._vulnerable = True
-        self._hit_time = None
-        self._invincibility_duration = 150
+        self._hit_time = 0
+        self._invincibility_duration = 20
 
     def get_player_distance_direction(self, player):
         enemy_vec = pygame.math.Vector2(self.rect.center)
@@ -56,7 +56,7 @@ class Enemy(Entity):
     def actions(self, player):
         # faz uma ação baseado no status atual
         if self._status == 'attack':
-            self._attack_time = pygame.time.get_ticks()
+            self._attack_time = self._attack_cooldown
             self._can_attack = False  # TODO: passar para a lógica do animate() ao adicionar sprites
             player.damage(self._collision_damage)
         elif self._status == 'move':
@@ -72,21 +72,21 @@ class Enemy(Entity):
             self.image.set_alpha(255)
 
     def cooldowns(self):
-        current_time = pygame.time.get_ticks()
-
         if not self._can_attack:
-            if current_time - self._attack_time >= self._attack_cooldown:
+            self._attack_time -= 1
+            if self._attack_time <= 0:
                 self._can_attack = True
 
         if not self._vulnerable:
-            if current_time - self._hit_time >= self._invincibility_duration:
+            self._hit_time -= 1
+            if self._hit_time <= 0:
                 self._vulnerable = True
 
     def damage(self, damage, player):
         if self._vulnerable:
             self._direction = self.get_player_distance_direction(player)[1]
             self._health -= damage
-            self._hit_time = pygame.time.get_ticks()
+            self._hit_time = self._invincibility_duration
             self._vulnerable = False
 
     def check_death(self, player):

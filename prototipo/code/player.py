@@ -15,13 +15,16 @@ class Player(Entity):
         self.hitbox = self.rect.inflate(0, -26)
 
         self.__health = 3
-        self.__speed = 5
+        self.__max_health = 7
+        self.__base_speed = 5
+        self.__move_speed = self.__base_speed
 
         self.__exp = 0
         self.__level_up_exp = 10
         self.__level_up_exp_increment = 10
         self.__current_level = 1
         self.__upgrade_points = 0
+        self.__upgrade_list = []
 
         self.obstacle_sprites = obstacle_sprites
 
@@ -32,35 +35,11 @@ class Player(Entity):
 
         # dano
         self.__vulnerable = True
-        self.__hurt_time = None
-        self.__invincibility_duration = 500
+        self.__hurt_time = 0
+        self.__invincibility_duration = 60
 
         # cajado (somente desenha o sprite)
         self.__staff = Staff(groups)
-
-    @property
-    def attacks(self):
-        return self.__attacks
-
-    @property
-    def health(self):
-        return self.__health
-
-    @property
-    def exp(self):
-        return self.__exp
-
-    @property
-    def speed(self):
-        return self.__speed
-
-    @property
-    def vulnerable(self):
-        return self.__vulnerable
-
-    @property
-    def staff(self):
-        return self.__staff
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -95,8 +74,8 @@ class Player(Entity):
             attack.check_cooldown()
 
         if not self.__vulnerable:
-            current_time = pygame.time.get_ticks()
-            if current_time - self.__hurt_time >= self.__invincibility_duration:
+            self.__hurt_time -= 1
+            if self.__hurt_time <= 0:
                 self.__vulnerable = True
 
     def animate(self):
@@ -110,7 +89,7 @@ class Player(Entity):
         if self.__vulnerable:
             self.__health -= damage
             self.__vulnerable = False
-            self.__hurt_time = pygame.time.get_ticks()
+            self.__hurt_time = self.__invincibility_duration
 
     def give_exp(self, exp):
         self.__exp += exp
@@ -120,11 +99,22 @@ class Player(Entity):
             self.__upgrade_points += 1
             self.__level_up_exp += self.__level_up_exp_increment
 
+    def give_upgrade(self, upgrade):
+        if self.__upgrade_points > 0:
+            self.__upgrade_points -= 1
+            upgrade.apply(self)
+            self.__upgrade_list.append(upgrade)
+
+    def give_health(self, health):
+        self.__health += health
+        if self.__health > self.__max_health:
+            self.__health = self.__max_health
+
     def update(self):
         self.input()
         self.animate()
         self.staff.animate(self)
-        self.move(self.__speed)
+        self.move(self.__move_speed)
         self.cooldowns()
 
     @property
@@ -136,8 +126,36 @@ class Player(Entity):
         return self.__health
 
     @property
+    def max_health(self):
+        return self.__max_health
+
+    @property
+    def move_speed(self):
+        return self.__move_speed
+
+    @move_speed.setter
+    def move_speed(self, speed):
+        self.__move_speed = speed
+
+    @property
+    def base_speed(self):
+        return self.__base_speed
+
+    @property
     def exp(self):
         return self.__exp
+
+    @property
+    def speed(self):
+        return self.__move_speed
+
+    @property
+    def vulnerable(self):
+        return self.__vulnerable
+
+    @property
+    def staff(self):
+        return self.__staff
 
     @property
     def level_up_exp(self):
@@ -150,14 +168,6 @@ class Player(Entity):
     @property
     def upgrade_points(self):
         return self.__upgrade_points
-
-    @property
-    def vulnerable(self):
-        return self.__vulnerable
-
-    @property
-    def staff(self):
-        return self.__staff
 
 
 class Staff(pygame.sprite.Sprite):
