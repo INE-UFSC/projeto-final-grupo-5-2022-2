@@ -22,6 +22,7 @@ class Player(Entity):
         self.__level_up_exp_increment = 10
         self.__current_level = 1
         self.__upgrade_points = 0
+        self.__upgrade_list = []
 
         self.obstacle_sprites = obstacle_sprites
 
@@ -37,30 +38,6 @@ class Player(Entity):
 
         # cajado (somente desenha o sprite)
         self.__staff = Staff(groups)
-
-    @property
-    def attacks(self):
-        return self.__attacks
-
-    @property
-    def health(self):
-        return self.__health
-
-    @property
-    def exp(self):
-        return self.__exp
-
-    @property
-    def speed(self):
-        return self.__speed
-
-    @property
-    def vulnerable(self):
-        return self.__vulnerable
-
-    @property
-    def staff(self):
-        return self.__staff
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -120,6 +97,10 @@ class Player(Entity):
             self.__upgrade_points += 1
             self.__level_up_exp += self.__level_up_exp_increment
 
+    def give_upgrade(self, upgrade):
+        upgrade.apply(self)
+        self.__upgrade_list.append(upgrade)
+
     def update(self):
         self.input()
         self.animate()
@@ -140,6 +121,18 @@ class Player(Entity):
         return self.__exp
 
     @property
+    def speed(self):
+        return self.__speed
+
+    @property
+    def vulnerable(self):
+        return self.__vulnerable
+
+    @property
+    def staff(self):
+        return self.__staff
+
+    @property
     def level_up_exp(self):
         return self.__level_up_exp
 
@@ -150,14 +143,6 @@ class Player(Entity):
     @property
     def upgrade_points(self):
         return self.__upgrade_points
-
-    @property
-    def vulnerable(self):
-        return self.__vulnerable
-
-    @property
-    def staff(self):
-        return self.__staff
 
 
 class Staff(pygame.sprite.Sprite):
