@@ -16,7 +16,8 @@ class Player(Entity):
 
         self.__health = 3
         self.__max_health = 7
-        self.__speed = 5
+        self.__base_speed = 5
+        self.__speed = self.__base_speed
 
         self.__exp = 0
         self.__level_up_exp = 10
@@ -123,6 +124,18 @@ class Player(Entity):
     @property
     def health(self):
         return self.__health
+
+    @property
+    def max_health(self):
+        return self.__max_health
+
+    @property
+    def speed(self):
+        return self.__speed
+
+    @property
+    def base_speed(self):
+        return self.__base_speed
 
     @property
     def exp(self):

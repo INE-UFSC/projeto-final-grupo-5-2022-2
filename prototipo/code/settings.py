@@ -21,6 +21,7 @@ ITEM_BOX_SIZE = 64
 BAR_HEIGHT = 32
 EXP_BAR_WIDTH = 176
 EXP_BAR_COLOR = '#0099db'
+STAT_BAR_WIDTH = 384
 
 WORLD_MAP = [
     ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'],

@@ -9,12 +9,16 @@ from utils import *
 
 
 class Attack(ABC):
-    def __init__(self, icon, attack_groups, obstacle_sprites, cooldown=0, cast_sound='', hit_sound=''):
+    def __init__(self, icon, attack_groups, obstacle_sprites, damage=1, cooldown=0, cast_sound='', hit_sound=''):
         self.icon = load_sprite(icon)
 
         self.__attack_groups = attack_groups
         self.__obstacle_sprites = obstacle_sprites
 
+        self.__base_damage = damage
+        self.__damage = damage
+
+        self.__base_cooldown = cooldown
         self.__cooldown = cooldown
         self.__can_attack = True
         self.__attack_time = 0
@@ -43,6 +47,18 @@ class Attack(ABC):
         pass
 
     @property
+    def damage(self):
+        return self.__damage
+
+    @damage.setter
+    def damage(self, damage):
+        self.__damage = damage
+
+    @property
+    def base_damage(self):
+        return self.__base_damage
+
+    @property
     def attack_groups(self):
         return self.__attack_groups
 
@@ -63,6 +79,10 @@ class Attack(ABC):
         self.__cooldown = cooldown
 
     @property
+    def base_cooldown(self):
+        return self.__base_cooldown
+
+    @property
     def cast_sound(self):
         return self.__cast_sound
 
@@ -81,7 +101,7 @@ class Attack(ABC):
 
 class FireballAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
-        super().__init__('/test/icon_fireball.png', attack_groups, obstacle_sprites, cooldown=900,
+        super().__init__('/test/icon_fireball.png', attack_groups, obstacle_sprites, damage=1, cooldown=900,
                          cast_sound='fireball_cast.ogg', hit_sound='fireball_hit.ogg')
         self.cast_sound.set_volume(0.2)
         self.hit_sound.set_volume(0.1)
@@ -94,7 +114,8 @@ class FireballAttack(Attack):
         angle = math.atan2(pos[1] - mouse_pos[1], pos[0] - mouse_pos[0])
         direction = pygame.math.Vector2(-math.cos(angle), -math.sin(angle))
         # criar o projétil
-        EnemyDamageArea(pos, self.attack_groups, self.obstacle_sprites, damage=1, speed=40, direction=direction,
+        EnemyDamageArea(pos, self.attack_groups, self.obstacle_sprites, damage=self.damage, speed=40,
+                        direction=direction,
                         destroy_on_impact=True,
                         surface=sprite,
                         particle_spawners=[LightSource(pos, self.attack_groups[0]),
@@ -105,7 +126,7 @@ class FireballAttack(Attack):
 
 class LineAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
-        super().__init__('/test/icon_line.png', attack_groups, obstacle_sprites, cooldown=2400)
+        super().__init__('/test/icon_line.png', attack_groups, obstacle_sprites, damage=100, cooldown=2400)
 
     def create(self, player):
         pos = (player.staff.rect.centerx, player.staff.rect.y + 12)
@@ -121,14 +142,15 @@ class LineAttack(Attack):
         sprite = pygame.transform.rotate(sprite, angle)
         sprite_rect = sprite.get_rect(center=rotated_image_center)
         # criar o ataque
-        damage_area = EnemyDamageArea(pos, self.attack_groups, self.obstacle_sprites, damage=5, surface=sprite,
+        damage_area = EnemyDamageArea(pos, self.attack_groups, self.obstacle_sprites, damage=self.damage,
+                                      surface=sprite,
                                       destroy_time=180)
         damage_area.rect = sprite_rect
 
 
 class SliceAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
-        super().__init__('/test/icon_slice.png', attack_groups, obstacle_sprites, cooldown=1200,
+        super().__init__('/test/icon_slice.png', attack_groups, obstacle_sprites, damage=100, cooldown=1200,
                          cast_sound='slice_cast.ogg', hit_sound='slice_hit.ogg')
         self.image = load_sprite('/test/slice.png')
         self.cast_sound.set_volume(0.1)
@@ -156,7 +178,7 @@ class SliceAttack(Attack):
             # criar o próximo damage area
             current_pos = (current_pos[0] + direction.x * step, current_pos[1] + direction.y * step)
             pos_list.append(current_pos)
-            damage_area = EnemyDamageArea(current_pos, self.attack_groups, self.obstacle_sprites, damage=5,
+            damage_area = EnemyDamageArea(current_pos, self.attack_groups, self.obstacle_sprites, damage=self.damage,
                                           surface=self.image, destroy_time=100, hit_sound=self.hit_sound,
                                           blood_on_kill=True,
                                           direction=direction)

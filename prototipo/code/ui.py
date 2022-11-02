@@ -93,6 +93,23 @@ class UI:
         shadow.fill(COLOR_BLACK)
         self.display_surface.blit(shadow, (0, 0))
 
+        # seção de stats
+        stats = {'HP': f'{player.health}/{player.max_health}',
+                 'DAMAGE': f'+{int((player.attacks[0].damage - player.attacks[0].base_damage) / player.attacks[0].base_damage * 100)}%',
+                 'FIRERATE': f'+{int((player.attacks[0].base_cooldown - player.attacks[0].cooldown) / player.attacks[0].base_cooldown * 100)}%',
+                 'SPEED': f'+{int((player.speed - player.base_speed) / player.base_speed * 100)}%'}
+
+        for i, key in enumerate(stats):
+            x, y = 128, 256 + 64 * i
+            stat_name_surf = self.font.render(f'{key}', False, TEXT_COLOR)
+            stat_name_rect = stat_name_surf.get_rect(topleft=(x, y))
+            stat_surf = self.font.render(f'{stats[key]}', False, TEXT_COLOR)
+            stat_rect = stat_surf.get_rect(topright=(x + STAT_BAR_WIDTH, y))
+            self.display_surface.blit(stat_name_surf, stat_name_rect)
+            self.display_surface.blit(stat_surf, stat_rect)
+            separator = pygame.Rect(stat_name_rect.left, stat_name_rect.bottom + 5, STAT_BAR_WIDTH, 4)
+            pygame.draw.rect(self.display_surface, UI_BORDER_COLOR_ACTIVE, separator)
+
         # seção de upgrades
         for button in self.__upgrade_button_list:
             button.enabled = player.upgrade_points > 0
