@@ -130,8 +130,8 @@ class UI:
     def buy_upgrade(self, args):
         # essa função vai receber como args o give_upgrade() do player e o upgrade
         # e o upgrade
-        self.reroll_upgrades()
         args[0](args[1])
+        self.reroll_upgrades()
 
     def display(self, player):
         if len(self.__upgrade_button_list) == 0:
