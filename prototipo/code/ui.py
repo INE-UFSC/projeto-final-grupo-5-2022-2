@@ -1,3 +1,4 @@
+import random
 from abc import abstractmethod, ABC
 
 import pygame
@@ -103,10 +104,17 @@ class UI:
 
     def reroll_upgrades(self, player):
         self.__upgrade_button_list = []
+        remaining_upgrades = list(self.__available_upgrades.values())
         for i in range(0, 3):
+            if len(remaining_upgrades) == 0:
+                break
+
+            upgrade = random.choice(remaining_upgrades)
+            remaining_upgrades.remove(upgrade)
+
             x = self.display_surface.get_size()[0] - 704
             y = 128 + 192 * i
-            button = UpgradeButton(x, y, self.__available_upgrades['firerate'], on_click=player.give_upgrade)
+            button = UpgradeButton(x, y, upgrade, on_click=player.give_upgrade)
             self.__upgrade_button_list.append(button)
 
     def display(self, player):
