@@ -35,8 +35,8 @@ class Player(Entity):
 
         # dano
         self.__vulnerable = True
-        self.__hurt_time = None
-        self.__invincibility_duration = 500
+        self.__hurt_time = 0
+        self.__invincibility_duration = 60
 
         # cajado (somente desenha o sprite)
         self.__staff = Staff(groups)
@@ -74,8 +74,8 @@ class Player(Entity):
             attack.check_cooldown()
 
         if not self.__vulnerable:
-            current_time = pygame.time.get_ticks()
-            if current_time - self.__hurt_time >= self.__invincibility_duration:
+            self.__hurt_time -= 1
+            if self.__hurt_time == 0:
                 self.__vulnerable = True
 
     def animate(self):
@@ -89,7 +89,7 @@ class Player(Entity):
         if self.__vulnerable:
             self.__health -= damage
             self.__vulnerable = False
-            self.__hurt_time = pygame.time.get_ticks()
+            self.__hurt_time = self.__invincibility_duration
 
     def give_exp(self, exp):
         self.__exp += exp
