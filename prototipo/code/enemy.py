@@ -72,8 +72,6 @@ class Enemy(Entity):
             self.image.set_alpha(255)
 
     def cooldowns(self):
-        current_time = pygame.time.get_ticks()
-
         if not self._can_attack:
             self._attack_time -= 1
             if self._attack_time == 0:

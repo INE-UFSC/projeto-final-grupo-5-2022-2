@@ -49,8 +49,6 @@ class UI:
         pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, text_rect.inflate(20, 20), 3)
 
     def show_attacks(self, attacks):
-        current_time = pygame.time.get_ticks()
-
         for i, attack in enumerate(attacks):
             bg_rect = pygame.Rect(10 + i * (ITEM_BOX_SIZE + 10), HEIGHT - 10 - ITEM_BOX_SIZE, ITEM_BOX_SIZE,
                                   ITEM_BOX_SIZE)

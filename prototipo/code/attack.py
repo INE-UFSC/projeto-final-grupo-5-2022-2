@@ -145,7 +145,7 @@ class LineAttack(Attack):
         # criar o ataque
         damage_area = EnemyDamageArea(pos, self.attack_groups, self.obstacle_sprites, damage=self.damage,
                                       surface=sprite,
-                                      destroy_time=180)
+                                      destroy_time=20)
         damage_area.rect = sprite_rect
 
 
@@ -180,7 +180,7 @@ class SliceAttack(Attack):
             current_pos = (current_pos[0] + direction.x * step, current_pos[1] + direction.y * step)
             pos_list.append(current_pos)
             damage_area = EnemyDamageArea(current_pos, self.attack_groups, self.obstacle_sprites, damage=self.damage,
-                                          surface=self.image, destroy_time=100, hit_sound=self.hit_sound,
+                                          surface=self.image, destroy_time=8, hit_sound=self.hit_sound,
                                           blood_on_kill=True,
                                           direction=direction)
             damage_area.rect.center = current_pos
