@@ -14,6 +14,16 @@ class Upgrade(ABC):
         pass
 
 
+class HealthUpgrade(Upgrade):
+    def __init__(self):
+        super().__init__('Health Upgrade',
+                         'Aumenta a quantidade de vidas em 1',
+                         '/icon/health_upgrade.png')
+
+    def apply(self, player):
+        player.give_health(1)
+
+
 class FireRateUpgrade(Upgrade):
     def __init__(self):
         super().__init__('Fire Rate Upgrade',

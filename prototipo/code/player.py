@@ -15,6 +15,7 @@ class Player(Entity):
         self.hitbox = self.rect.inflate(0, -26)
 
         self.__health = 3
+        self.__max_health = 7
         self.__speed = 5
 
         self.__exp = 0
@@ -102,6 +103,11 @@ class Player(Entity):
             self.__upgrade_points -= 1
             upgrade.apply(self)
             self.__upgrade_list.append(upgrade)
+
+    def give_health(self, health):
+        self.__health += health
+        if self.__health > self.__max_health:
+            self.__health = self.__max_health
 
     def update(self):
         self.input()

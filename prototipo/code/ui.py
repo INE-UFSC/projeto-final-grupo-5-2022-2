@@ -4,7 +4,7 @@ from abc import abstractmethod, ABC
 import pygame
 
 from settings import *
-from upgrade import FireRateUpgrade
+from upgrade import FireRateUpgrade, HealthUpgrade
 from utils import load_sprite
 
 
@@ -19,7 +19,7 @@ class UI:
 
         self.__is_menu_open = False
         self.__upgrade_button_list = []
-        self.__available_upgrades = {'firerate': FireRateUpgrade()}
+        self.__available_upgrades = {'health': HealthUpgrade(), 'firerate': FireRateUpgrade()}
 
     def show_health(self, health):
         for i in range(health):
