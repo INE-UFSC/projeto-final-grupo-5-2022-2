@@ -40,7 +40,7 @@ class Attack(ABC):
     def check_cooldown(self):
         if not self.__can_attack:
             self.__attack_time -= 1
-            if self.__attack_time == 0:
+            if self.__attack_time <= 0:
                 self.__can_attack = True
 
     @abstractmethod

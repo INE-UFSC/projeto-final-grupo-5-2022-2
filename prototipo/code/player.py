@@ -75,7 +75,7 @@ class Player(Entity):
 
         if not self.__vulnerable:
             self.__hurt_time -= 1
-            if self.__hurt_time == 0:
+            if self.__hurt_time <= 0:
                 self.__vulnerable = True
 
     def animate(self):

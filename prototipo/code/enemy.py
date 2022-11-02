@@ -74,12 +74,12 @@ class Enemy(Entity):
     def cooldowns(self):
         if not self._can_attack:
             self._attack_time -= 1
-            if self._attack_time == 0:
+            if self._attack_time <= 0:
                 self._can_attack = True
 
         if not self._vulnerable:
             self._hit_time -= 1
-            if self._hit_time == 0:
+            if self._hit_time <= 0:
                 self._vulnerable = True
 
     def damage(self, damage, player):
