@@ -119,25 +119,32 @@ class UI:
         upgrade_title_rect = upgrade_title_surf.get_rect(topleft=(self.display_surface.get_size()[0] - 704, 64))
         self.display_surface.blit(upgrade_title_surf, upgrade_title_rect)
 
-    def reroll_upgrades(self, player):
-        self.__upgrade_button_list = []
+    def reroll_upgrades(self):
         remaining_upgrades = list(self.__available_upgrades.values())
         for i in range(0, 3):
+            upgrade = random.choice(remaining_upgrades)
+            self.__upgrade_button_list[i].index[1] = upgrade
+            remaining_upgrades.remove(upgrade)
             if len(remaining_upgrades) == 0:
                 break
 
-            upgrade = random.choice(remaining_upgrades)
-            remaining_upgrades.remove(upgrade)
-
-            x = self.display_surface.get_size()[0] - 704
-            y = 128 + 192 * i
-            button = UpgradeButton(x, y, upgrade, on_click=player.give_upgrade)
-            self.__upgrade_button_list.append(button)
+    def buy_upgrade(self, args):
+        # essa função vai receber como args o give_upgrade() do player e o upgrade
+        # e o upgrade
+        self.reroll_upgrades()
+        args[0](args[1])
 
     def display(self, player):
+        if len(self.__upgrade_button_list) == 0:
+            # iniciar os botões de upgrade
+            for i in range(0, 3):
+                x = self.display_surface.get_size()[0] - 704
+                y = 128 + 192 * i
+                button = UpgradeButton(x, y, [player.give_upgrade, self.__available_upgrades['health']], on_click=self.buy_upgrade)
+                self.__upgrade_button_list.append(button)
+            self.reroll_upgrades()
+
         if self.__is_menu_open:
-            if len(self.__upgrade_button_list) == 0:
-                self.reroll_upgrades(player)
             self.show_menu(player)
 
         self.show_health(player.health)
@@ -196,6 +203,10 @@ class Button(pygame.sprite.Sprite, ABC):
     def index(self):
         return self.__index
 
+    @index.setter
+    def index(self, index):
+        self.__index = index
+
     @property
     def enabled(self):
         return self.__enabled
@@ -239,14 +250,14 @@ class UpgradeButton(Button):
 
             # conteúdo
             # nome
-            name_surf = self.font.render(self.index.name, False, TEXT_COLOR)
+            name_surf = self.font.render(self.index[1].name, False, TEXT_COLOR)
             name_rect = name_surf.get_rect(topleft=(self.rect.left + 10, self.rect.top + 10))
             self.display_surface.blit(name_surf, name_rect)
             # linha pra separar
             separator = pygame.Rect(name_rect.left, name_rect.bottom + 5, self.rect.width - 20, 4)
             pygame.draw.rect(self.display_surface, UI_BORDER_COLOR_ACTIVE, separator)
             # ícone
-            icon = self.index.icon
+            icon = self.index[1].icon
             icon_rect = icon.get_rect(topleft=(name_rect.left, separator.bottom + 10))
             pygame.draw.rect(self.display_surface, UI_BORDER_COLOR_ACTIVE, icon_rect, 4)
             self.display_surface.blit(icon, icon_rect)
@@ -255,7 +266,7 @@ class UpgradeButton(Button):
             description_surf.fill([0, 0, 0, 0])
             description_rect = name_surf.get_rect(topleft=(icon_rect.right + 10, icon_rect.top))
             # separar as linhas da descrição
-            words = self.index.description.split(' ')
+            words = self.index[1].description.split(' ')
             current_line = 0
             while len(words) > 0:
                 current_word_index = len(words)
