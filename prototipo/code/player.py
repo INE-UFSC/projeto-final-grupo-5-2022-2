@@ -17,7 +17,7 @@ class Player(Entity):
         self.__health = 3
         self.__max_health = 7
         self.__base_speed = 5
-        self.__speed = self.__base_speed
+        self.__move_speed = self.__base_speed
 
         self.__exp = 0
         self.__level_up_exp = 10
@@ -114,7 +114,7 @@ class Player(Entity):
         self.input()
         self.animate()
         self.staff.animate(self)
-        self.move(self.__speed)
+        self.move(self.__move_speed)
         self.cooldowns()
 
     @property
@@ -130,8 +130,12 @@ class Player(Entity):
         return self.__max_health
 
     @property
-    def speed(self):
-        return self.__speed
+    def move_speed(self):
+        return self.__move_speed
+
+    @move_speed.setter
+    def move_speed(self, speed):
+        self.__move_speed = speed
 
     @property
     def base_speed(self):
@@ -143,7 +147,7 @@ class Player(Entity):
 
     @property
     def speed(self):
-        return self.__speed
+        return self.__move_speed
 
     @property
     def vulnerable(self):

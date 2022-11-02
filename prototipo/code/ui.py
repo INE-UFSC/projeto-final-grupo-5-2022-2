@@ -1,10 +1,9 @@
 import random
-from abc import abstractmethod, ABC
 
 import pygame
 
 from settings import *
-from upgrade import FireRateUpgrade, HealthUpgrade
+from upgrade import *
 from utils import load_sprite
 
 
@@ -19,7 +18,8 @@ class UI:
 
         self.__is_menu_open = False
         self.__upgrade_button_list = []
-        self.__available_upgrades = {'health': HealthUpgrade(), 'firerate': FireRateUpgrade()}
+        self.__available_upgrades = {'health': HealthUpgrade(), 'damage': DamageUpgrade(),
+                                     'firerate': FireRateUpgrade(), 'speed': SpeedUpgrade()}
 
     def show_health(self, health):
         for i in range(health):
