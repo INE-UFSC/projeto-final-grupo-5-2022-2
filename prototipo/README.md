@@ -38,7 +38,7 @@ disponível [aqui](https://docs.google.com/document/d/189AMDekPZeVRerxjPzfzko3lh
   
 ## Outros ajustes
 
-- [ ] Separar as classes Level e Room baseado no diagrama
+- [x] Separar as classes Level e Room baseado no diagrama
     - O level só controlaria a room atual, e as rooms seriam responsáveis por criar e manter o mapa
 
 - [ ] Fazer as outras classes que faltam do diagrama
