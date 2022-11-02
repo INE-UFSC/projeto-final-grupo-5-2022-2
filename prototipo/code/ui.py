@@ -1,6 +1,9 @@
+from abc import abstractmethod, ABC
+
 import pygame
 
 from settings import *
+from upgrade import FireRateUpgrade
 from utils import load_sprite
 
 
@@ -12,6 +15,10 @@ class UI:
         self.health_sprite = load_sprite('/test/heart.png')
         self.__exp_bar_rect = pygame.Rect(0, 0, EXP_BAR_WIDTH, BAR_HEIGHT)
         self.__exp_bar_rect.topright = (self.display_surface.get_size()[0] - 20, 10)
+
+        self.__is_menu_open = False
+        self.__upgrade_button_list = []
+        self.__available_upgrades = {'firerate': FireRateUpgrade()}
 
     def show_health(self, health):
         for i in range(health):
@@ -75,8 +82,159 @@ class UI:
         self.display_surface.blit(text_surf, text_rect)
         pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, text_rect.inflate(20, 20), 3)
 
+    def toggle_menu(self):
+        self.__is_menu_open = not self.__is_menu_open
+
+    def show_menu(self, player):
+        # fundo
+        shadow = pygame.Surface(self.display_surface.get_size())
+        shadow.set_alpha(150)
+        shadow.fill(COLOR_BLACK)
+        self.display_surface.blit(shadow, (0, 0))
+
+        # seção de upgrades
+        for button in self.__upgrade_button_list:
+            button.enabled = player.upgrade_points > 0
+            button.button_update()
+
+        upgrade_title_surf = self.font.render('UPGRADES DISPONÍVEIS', False, TEXT_COLOR)
+        upgrade_title_rect = upgrade_title_surf.get_rect(topleft=(self.display_surface.get_size()[0] - 704, 64))
+        self.display_surface.blit(upgrade_title_surf, upgrade_title_rect)
+
+    def reroll_upgrades(self, player):
+        self.__upgrade_button_list = []
+        for i in range(0, 3):
+            x = self.display_surface.get_size()[0] - 704
+            y = 128 + 192 * i
+            button = UpgradeButton(x, y, self.__available_upgrades['firerate'], on_click=player.give_upgrade)
+            self.__upgrade_button_list.append(button)
+
     def display(self, player):
+        if self.__is_menu_open:
+            if len(self.__upgrade_button_list) == 0:
+                self.reroll_upgrades(player)
+            self.show_menu(player)
+
         self.show_health(player.health)
         self.show_exp(player.exp, player.level_up_exp, player.current_level)
         self.show_attacks(player.attacks)
         self.show_upgrade_points(player.upgrade_points)
+
+    @property
+    def is_menu_open(self):
+        return self.__is_menu_open
+
+
+class Button(pygame.sprite.Sprite, ABC):
+    def __init__(self, x, y, width, height, index, enabled=True, color=UI_BG_COLOR, hover_color=UI_HOVER_COLOR,
+                 on_click=None):
+        super().__init__()
+        self.__display_surface = pygame.display.get_surface()
+        self.__font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
+
+        self.rect = pygame.Rect(x, y, width, height)
+        self.__color = color
+        self.__hover_color = hover_color
+        self.__enabled = enabled
+
+        self.__index = index
+        self.__on_click = on_click
+        self.__can_click = True
+        self.__click_time = None
+        self.__click_cooldown = 50  # para evitar que o usuário clique várias vezes sem querer
+
+    def input(self):
+        if self.__enabled:
+            mouse_pos = pygame.mouse.get_pos()
+            mouse = pygame.mouse.get_pressed()
+            if mouse[0] and self.rect.collidepoint(mouse_pos):
+                self.__click_time = pygame.time.get_ticks()
+                if self.__can_click:
+                    self.__on_click(self.__index)
+                    self.__can_click = False
+
+    @abstractmethod
+    def display(self):
+        pass
+
+    def cooldown(self):
+        current_time = pygame.time.get_ticks()
+        if not self.__can_click and current_time - self.__click_time >= self.__click_cooldown:
+            self.__can_click = True
+
+    def button_update(self):
+        self.cooldown()
+        self.input()
+        self.display()
+
+    @property
+    def index(self):
+        return self.__index
+
+    @property
+    def enabled(self):
+        return self.__enabled
+
+    @enabled.setter
+    def enabled(self, enabled):
+        self.__enabled = enabled
+
+    @property
+    def color(self):
+        return self.__color
+
+    @property
+    def hover_color(self):
+        return self.__hover_color
+
+    @property
+    def display_surface(self):
+        return self.__display_surface
+
+    @property
+    def font(self):
+        return self.__font
+
+
+class UpgradeButton(Button):
+    def __init__(self, x, y, index, on_click):
+        super().__init__(x, y, 576, 128, index=index, on_click=on_click)
+
+    def display(self):
+        if self.enabled:
+            mouse_pos = pygame.mouse.get_pos()
+            if self.rect.collidepoint(mouse_pos):
+                # hover
+                pygame.draw.rect(self.display_surface, self.hover_color, self.rect)
+                pygame.draw.rect(self.display_surface, UI_BORDER_COLOR_ACTIVE, self.rect, 4)
+            else:
+                # normal
+                pygame.draw.rect(self.display_surface, self.color, self.rect)
+                pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, self.rect, 4)
+
+            # conteúdo
+            name_surf = self.font.render(self.index.name, False, TEXT_COLOR)
+            name_rect = name_surf.get_rect(topleft=(self.rect.left + 10, self.rect.top + 10))
+            self.display_surface.blit(name_surf, name_rect)
+
+            separator = pygame.Rect(name_rect.left, name_rect.bottom + 5, self.rect.width - 20, 4)
+            pygame.draw.rect(self.display_surface, UI_BORDER_COLOR_ACTIVE, separator)
+
+            icon = self.index.icon
+            icon_rect = icon.get_rect(topleft=(name_rect.left, separator.bottom + 10))
+            pygame.draw.rect(self.display_surface, UI_BORDER_COLOR_ACTIVE, icon_rect, 4)
+            self.display_surface.blit(icon, icon_rect)
+
+            description_surf = self.font.render(self.index.description, False, TEXT_COLOR)
+            description_rect = name_surf.get_rect(topleft=(icon_rect.right + 10, icon_rect.top))
+            self.display_surface.blit(description_surf, description_rect)
+        else:
+            disabled_background = pygame.Surface(self.rect.size)
+            disabled_background.fill(UI_BORDER_COLOR)
+            self.display_surface.blit(disabled_background, self.rect.topleft)
+            pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, self.rect, 4)
+
+            # texto de indisponível
+            msg_surf = self.font.render('VOCÊ NÃO POSSUI PONTOS DE UPGRADE!', False, TEXT_COLOR)
+            msg_rect = msg_surf.get_rect(center=self.rect.center)
+            self.display_surface.blit(msg_surf, msg_rect)

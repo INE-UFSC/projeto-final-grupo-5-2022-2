@@ -8,12 +8,14 @@ TILESIZE = 64
 GAME_PATH = os.path.abspath(os.path.join(__file__, os.pardir, os.pardir))
 
 COLOR_BLACK = (0, 0, 0)
+WHITE = '#ffffff'
 
 UI_FONT = f'{GAME_PATH}/graphics/font/joystix.ttf'
 UI_FONT_SIZE = 18
 UI_BG_COLOR = '#222222'
 UI_BORDER_COLOR = '#111111'
 UI_BORDER_COLOR_ACTIVE = '#FFFFFF'
+UI_HOVER_COLOR = '#424242'
 TEXT_COLOR = '#EEEEEE'
 ITEM_BOX_SIZE = 64
 BAR_HEIGHT = 32

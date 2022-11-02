@@ -98,8 +98,10 @@ class Player(Entity):
             self.__level_up_exp += self.__level_up_exp_increment
 
     def give_upgrade(self, upgrade):
-        upgrade.apply(self)
-        self.__upgrade_list.append(upgrade)
+        if self.__upgrade_points > 0:
+            self.__upgrade_points -= 1
+            upgrade.apply(self)
+            self.__upgrade_list.append(upgrade)
 
     def update(self):
         self.input()

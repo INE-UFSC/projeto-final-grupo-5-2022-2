@@ -1,6 +1,5 @@
 from abc import abstractmethod, ABC
 
-from player import Player
 from utils import load_sprite
 
 
@@ -19,5 +18,5 @@ class FireRateUpgrade(Upgrade):
     def __init__(self):
         super().__init__('Fire Rate Upgrade', 'DESCRICAO', '/test/icon_fire_rate_upgrade.png')
 
-    def apply(self, player: Player):
+    def apply(self, player):
         player.attacks[0].cooldown *= 0.9

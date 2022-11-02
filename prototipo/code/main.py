@@ -22,6 +22,9 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_TAB:
+                        self.level.toggle_menu()
 
             self.screen.fill(COLOR_BLACK)
             self.level.run()

@@ -43,21 +43,23 @@ class Level:
         # permite o player colidir com os inimigos
         self.player.obstacle_sprites = pygame.sprite.Group(self.obstacle_sprites, self.attackable_sprites)
 
+    def toggle_menu(self):
+        self.ui.toggle_menu()
+
     def run(self):
         self.visible_sprites.custom_draw()
-        self.visible_sprites.update()
-        self.visible_sprites.enemy_update(self.player)
-
-        # conferir colisão dos ataques com os inimigos
-        for attack_sprite in self.attack_sprites:
-            attack_sprite.enemy_collision(self.player, self.attackable_sprites)
-
         self.ui.display(self.player)
 
-        # invocar inimigo (TEMPORÁRIO)
-        self.timer += 1
-        if self.timer % 120 == 0:
-            Enemy('test', (320, 320), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites)
+        if not self.ui.is_menu_open:
+            self.visible_sprites.update()
+            self.visible_sprites.enemy_update(self.player)
+            # conferir colisão dos ataques com os inimigos
+            for attack_sprite in self.attack_sprites:
+                attack_sprite.enemy_collision(self.player, self.attackable_sprites)
+            # invocar inimigo (TEMPORÁRIO)
+            self.timer += 1
+            if self.timer % 120 == 0:
+                Enemy('test', (320, 320), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites)
 
 
 class YSortCameraGroup(pygame.sprite.Group):
