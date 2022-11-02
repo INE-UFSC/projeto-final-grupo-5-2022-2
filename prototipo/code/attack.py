@@ -35,12 +35,13 @@ class Attack(ABC):
 
     def block(self):
         self.__can_attack = False
-        self.__attack_time = pygame.time.get_ticks()
+        self.__attack_time = self.__cooldown
 
     def check_cooldown(self):
-        current_time = pygame.time.get_ticks()
-        if not self.__can_attack and current_time - self.__attack_time >= self.__cooldown:
-            self.__can_attack = True
+        if not self.__can_attack:
+            self.__attack_time -= 1
+            if self.__attack_time == 0:
+                self.__can_attack = True
 
     @abstractmethod
     def create(self, player):
@@ -101,7 +102,7 @@ class Attack(ABC):
 
 class FireballAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
-        super().__init__('/test/icon_fireball.png', attack_groups, obstacle_sprites, damage=1, cooldown=900,
+        super().__init__('/test/icon_fireball.png', attack_groups, obstacle_sprites, damage=1, cooldown=75,
                          cast_sound='fireball_cast.ogg', hit_sound='fireball_hit.ogg')
         self.cast_sound.set_volume(0.2)
         self.hit_sound.set_volume(0.1)
@@ -126,7 +127,7 @@ class FireballAttack(Attack):
 
 class LineAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
-        super().__init__('/test/icon_line.png', attack_groups, obstacle_sprites, damage=100, cooldown=2400)
+        super().__init__('/test/icon_line.png', attack_groups, obstacle_sprites, damage=100, cooldown=240)
 
     def create(self, player):
         pos = (player.staff.rect.centerx, player.staff.rect.y + 12)
@@ -150,7 +151,7 @@ class LineAttack(Attack):
 
 class SliceAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
-        super().__init__('/test/icon_slice.png', attack_groups, obstacle_sprites, damage=100, cooldown=1200,
+        super().__init__('/test/icon_slice.png', attack_groups, obstacle_sprites, damage=100, cooldown=120,
                          cast_sound='slice_cast.ogg', hit_sound='slice_hit.ogg')
         self.image = load_sprite('/test/slice.png')
         self.cast_sound.set_volume(0.1)

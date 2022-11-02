@@ -65,7 +65,8 @@ class UI:
             if not attack.can_attack:
                 # aqui tem que usar o max() para não resultar em altura 0
                 rect_height = max(1,
-                                  ITEM_BOX_SIZE - ITEM_BOX_SIZE * (current_time - attack.attack_time) / attack.cooldown)
+                                  ITEM_BOX_SIZE - ITEM_BOX_SIZE * (
+                                              attack.cooldown - attack.attack_time) / attack.cooldown)
                 cooldown_surf = pygame.Surface((ITEM_BOX_SIZE, rect_height))
                 cooldown_surf.set_alpha(128)
                 cooldown_surf.fill(COLOR_BLACK)
@@ -140,7 +141,8 @@ class UI:
             for i in range(0, 3):
                 x = self.display_surface.get_size()[0] - 704
                 y = 128 + 192 * i
-                button = UpgradeButton(x, y, [player.give_upgrade, self.__available_upgrades['health']], on_click=self.buy_upgrade)
+                button = UpgradeButton(x, y, [player.give_upgrade, self.__available_upgrades['health']],
+                                       on_click=self.buy_upgrade)
                 self.__upgrade_button_list.append(button)
             self.reroll_upgrades()
 
