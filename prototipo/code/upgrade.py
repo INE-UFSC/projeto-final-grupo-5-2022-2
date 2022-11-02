@@ -16,7 +16,9 @@ class Upgrade(ABC):
 
 class FireRateUpgrade(Upgrade):
     def __init__(self):
-        super().__init__('Fire Rate Upgrade', 'DESCRICAO', '/test/icon_fire_rate_upgrade.png')
+        super().__init__('Fire Rate Upgrade',
+                         'Esta descrição é um teste para conferir se a UI está separando as linhas corretamente',
+                         '/test/icon_fire_rate_upgrade.png')
 
     def apply(self, player):
         player.attacks[0].cooldown *= 0.9

@@ -221,20 +221,42 @@ class UpgradeButton(Button):
                 pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, self.rect, 4)
 
             # conteúdo
+            # nome
             name_surf = self.font.render(self.index.name, False, TEXT_COLOR)
             name_rect = name_surf.get_rect(topleft=(self.rect.left + 10, self.rect.top + 10))
             self.display_surface.blit(name_surf, name_rect)
-
+            # linha pra separar
             separator = pygame.Rect(name_rect.left, name_rect.bottom + 5, self.rect.width - 20, 4)
             pygame.draw.rect(self.display_surface, UI_BORDER_COLOR_ACTIVE, separator)
-
+            # ícone
             icon = self.index.icon
             icon_rect = icon.get_rect(topleft=(name_rect.left, separator.bottom + 10))
             pygame.draw.rect(self.display_surface, UI_BORDER_COLOR_ACTIVE, icon_rect, 4)
             self.display_surface.blit(icon, icon_rect)
-
-            description_surf = self.font.render(self.index.description, False, TEXT_COLOR)
+            # descrição
+            description_surf = pygame.Surface((482, 64)).convert_alpha()
+            description_surf.fill([0, 0, 0, 0])
             description_rect = name_surf.get_rect(topleft=(icon_rect.right + 10, icon_rect.top))
+            # separar as linhas da descrição
+            words = self.index.description.split(' ')
+            current_line = 0
+            while len(words) > 0:
+                current_word_index = len(words)
+                # escrever removendo a cada iteração a última palavra
+                # até que caiba dentro do retângulo da descrição
+                while True:
+                    line_text = ' '.join(words[0:current_word_index])
+                    line_surf = self.font.render(line_text, False, TEXT_COLOR)
+                    if line_surf.get_size()[0] <= description_surf.get_size()[0]:
+                        break
+                    else:
+                        current_word_index -= 1
+                # desenhar a linha atual
+                description_surf.blit(line_surf, (0, current_line * 22))
+                # remover as palavras utilizadas na última linha
+                words = words[current_word_index:len(words)]
+                current_line += 1
+            # desenhar descrição
             self.display_surface.blit(description_surf, description_rect)
         else:
             disabled_background = pygame.Surface(self.rect.size)
