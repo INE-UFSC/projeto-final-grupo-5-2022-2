@@ -27,7 +27,7 @@ class Attack(ABC):
             self.__cast_sound = load_sound(cast_sound)
         if hit_sound != '':
             self.__hit_sound = load_sound(hit_sound)
-            
+
     @property
     def icon(self):
         return self.__icon
@@ -129,30 +129,6 @@ class FireballAttack(Attack):
         self.cast_sound.play()
 
 
-class LineAttack(Attack):
-    def __init__(self, attack_groups, obstacle_sprites):
-        super().__init__('/test/icon_line.png', attack_groups, obstacle_sprites, damage=100, cooldown=240)
-
-    def create(self, player):
-        pos = (player.staff.rect.centerx, player.staff.rect.y + 12)
-        sprite = load_sprite('/test/kamehameha.png')
-        pivot = (0, 12)
-        # rotacionar o sprite
-        mouse_pos = pygame.mouse.get_pos()
-        angle = 360 - math.degrees(math.atan2(mouse_pos[1] - pos[1], mouse_pos[0] - pos[0]))
-        image_rect = sprite.get_rect(topleft=(pos[0] - pivot[0], pos[1] - pivot[1]))
-        offset_center_to_pivot = pygame.math.Vector2(pos) - image_rect.center
-        rotated_offset = offset_center_to_pivot.rotate(-angle)
-        rotated_image_center = (pos[0] - rotated_offset.x, pos[1] - rotated_offset.y)
-        sprite = pygame.transform.rotate(sprite, angle)
-        sprite_rect = sprite.get_rect(center=rotated_image_center)
-        # criar o ataque
-        damage_area = EnemyDamageArea(pos, self.attack_groups, self.obstacle_sprites, damage=self.damage,
-                                      surface=sprite,
-                                      destroy_time=20)
-        damage_area.rect = sprite_rect
-
-
 class SliceAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
         super().__init__('/test/icon_slice.png', attack_groups, obstacle_sprites, damage=100, cooldown=120,
@@ -217,9 +193,10 @@ class SliceAttack(Attack):
             player.hitbox.center = pos_list.pop()
             # caso não sobre posições na lista, o player vai permanecer na posição inicial
 
+
 class AreaAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
-        super().__init__('/test/icon_area.png', attack_groups, obstacle_sprites, damage=100, cooldown=240)
+        super().__init__('/icon/area_attack.png', attack_groups, obstacle_sprites, damage=100, cooldown=240)
 
     def create(self, player):
         # pegar a posição do mouse 

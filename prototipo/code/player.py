@@ -29,7 +29,6 @@ class Player(Entity):
         # ataques
         self.__attacks = [FireballAttack(attack_groups, obstacle_sprites),
                           SliceAttack(attack_groups, obstacle_sprites),
-                          LineAttack(attack_groups, obstacle_sprites),
                           AreaAttack(attack_groups, obstacle_sprites)]
 
         # dano
@@ -62,8 +61,6 @@ class Player(Entity):
         # ataque
         if keys[pygame.K_q]:
             self.__attacks[2].use(self)
-        if keys[pygame.K_e]:
-            self.__attacks[3].use(self)
 
         if mouse[0]:
             self.__attacks[0].use(self)
