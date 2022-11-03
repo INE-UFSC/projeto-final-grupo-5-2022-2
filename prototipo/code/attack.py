@@ -1,4 +1,5 @@
 import math
+import random
 from abc import ABC, abstractmethod
 
 import pygame.transform
@@ -206,3 +207,9 @@ class AreaAttack(Attack):
         damage_area = EnemyDamageArea(pos, self.attack_groups, self.obstacle_sprites, damage=self.damage,
                                       surface=sprite, destroy_time=60, damage_time=1, fade_out_step=4.25)
         damage_area.rect = sprite.get_rect(center=pos)
+        # criar partículas
+        particle_spawner = FireSource((player.staff.rect.centerx, player.staff.rect.y + 15), self.attack_groups[0])
+        for i in range(5, 15):
+            particle_spawner.offset = random.randint(16, 32)
+            particle_spawner.update()
+        particle_spawner.kill()
