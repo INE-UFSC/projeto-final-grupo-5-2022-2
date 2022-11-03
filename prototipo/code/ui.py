@@ -96,7 +96,7 @@ class UI:
         stats = {'HP': f'{player.health}/{player.max_health}',
                  'DAMAGE': f'+{int((player.attacks[0].damage - player.attacks[0].base_damage) / player.attacks[0].base_damage * 100)}%',
                  'FIRERATE': f'+{int((player.attacks[0].base_cooldown - player.attacks[0].cooldown) / player.attacks[0].base_cooldown * 100)}%',
-                 'SPEED': f'+{int((player.speed - player.base_speed) / player.base_speed * 100)}%'}
+                 'SPEED': f'+{int((player.move_speed - player.base_speed) / player.base_speed * 100)}%'}
 
         for i, key in enumerate(stats):
             x, y = 128, 256 + 64 * i
@@ -129,7 +129,6 @@ class UI:
 
     def buy_upgrade(self, args):
         # essa função vai receber como args o give_upgrade() do player e o upgrade
-        # e o upgrade
         args[0](args[1])
         self.reroll_upgrades()
 

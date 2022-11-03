@@ -1,7 +1,3 @@
-import math
-
-import pygame
-
 from attack import *
 from entity import Entity
 from utils import load_sprite
@@ -26,7 +22,7 @@ class Player(Entity):
         self.__upgrade_points = 0
         self.__upgrade_list = []
 
-        #movimento
+        # movimento
         self.obstacle_sprites = obstacle_sprites
         self.__speed = 5
 
@@ -43,30 +39,6 @@ class Player(Entity):
 
         # cajado (somente desenha o sprite)
         self.__staff = Staff(groups)
-
-    @property
-    def attacks(self):
-        return self.__attacks
-
-    @property
-    def health(self):
-        return self.__health
-
-    @property
-    def exp(self):
-        return self.__exp
-
-    @property
-    def speed(self):
-        return self.__speed
-
-    @property
-    def vulnerable(self):
-        return self.__vulnerable
-
-    @property
-    def staff(self):
-        return self.__staff
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -173,10 +145,6 @@ class Player(Entity):
     @property
     def exp(self):
         return self.__exp
-
-    @property
-    def speed(self):
-        return self.__move_speed
 
     @property
     def vulnerable(self):
