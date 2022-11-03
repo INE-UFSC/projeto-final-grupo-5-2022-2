@@ -10,8 +10,9 @@ from settings import TILESIZE
 class EnemyDamageArea(Entity):
     def __init__(self, pos, groups, obstacle_sprites, damage=0, speed=0, direction=pygame.math.Vector2(),
                  destroy_on_impact=False,
-                 surface=pygame.Surface((TILESIZE, TILESIZE)), destroy_time=6000, particle_spawners=[], hit_sound=None,
-                 blood_on_kill=False, fade_out_step = 0):
+                 surface=pygame.Surface((TILESIZE, TILESIZE)), destroy_time=6000, damage_time=0, particle_spawners=[],
+                 hit_sound=None,
+                 blood_on_kill=False, fade_out_step=0):
         super().__init__(groups, 'enemy_damage_area')
         self.image = surface
         self.rect = self.image.get_rect(topleft=pos)
@@ -27,9 +28,9 @@ class EnemyDamageArea(Entity):
         self.__blood_on_kill = blood_on_kill
         self.__fade_out_step = fade_out_step
         self.__destroy_time = destroy_time
+        self.__damage_time = damage_time if damage_time != 0 else destroy_time
 
         self.__destroy_timer = 0
-        self.__is_enabled = True
 
         self.hit_sound = hit_sound
 
@@ -62,6 +63,10 @@ class EnemyDamageArea(Entity):
         return self._particle_spawners
 
     def enemy_collision(self, player, attackable_group):
+        if not self.__damage_time > 0:
+            # dar dano somente enquanto o damage time for maior que 0
+            return
+
         collision_sprites = pygame.sprite.spritecollide(self, attackable_group, False)
         if collision_sprites:
             for target_sprite in collision_sprites:
@@ -90,6 +95,10 @@ class EnemyDamageArea(Entity):
             if not moved:
                 # projétil colidiu com algum obstáculo
                 self.kill()
+
+        # tempo enquanto vai dar dano
+        if self.__damage_time > 0:
+            self.__damage_time -= 1
 
         # destruir após um tempo
         self.__destroy_timer += 1
