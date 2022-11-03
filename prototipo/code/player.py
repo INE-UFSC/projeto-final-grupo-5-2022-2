@@ -2,7 +2,7 @@ import math
 
 import pygame
 
-from attack import FireballAttack, LineAttack, SliceAttack
+from attack import *
 from entity import Entity
 from utils import load_sprite
 
@@ -26,12 +26,15 @@ class Player(Entity):
         self.__upgrade_points = 0
         self.__upgrade_list = []
 
+        #movimento
         self.obstacle_sprites = obstacle_sprites
+        self.__speed = 5
 
         # ataques
         self.__attacks = [FireballAttack(attack_groups, obstacle_sprites),
                           SliceAttack(attack_groups, obstacle_sprites),
-                          LineAttack(attack_groups, obstacle_sprites)]
+                          LineAttack(attack_groups, obstacle_sprites),
+                          AreaAttack(attack_groups, obstacle_sprites)]
 
         # dano
         self.__vulnerable = True
@@ -40,6 +43,30 @@ class Player(Entity):
 
         # cajado (somente desenha o sprite)
         self.__staff = Staff(groups)
+
+    @property
+    def attacks(self):
+        return self.__attacks
+
+    @property
+    def health(self):
+        return self.__health
+
+    @property
+    def exp(self):
+        return self.__exp
+
+    @property
+    def speed(self):
+        return self.__speed
+
+    @property
+    def vulnerable(self):
+        return self.__vulnerable
+
+    @property
+    def staff(self):
+        return self.__staff
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -63,6 +90,8 @@ class Player(Entity):
         # ataque
         if keys[pygame.K_q]:
             self.__attacks[2].use(self)
+        if keys[pygame.K_e]:
+            self.__attacks[3].use(self)
 
         if mouse[0]:
             self.__attacks[0].use(self)

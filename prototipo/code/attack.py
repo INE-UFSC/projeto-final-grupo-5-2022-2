@@ -10,7 +10,7 @@ from utils import *
 
 class Attack(ABC):
     def __init__(self, icon, attack_groups, obstacle_sprites, damage=1, cooldown=0, cast_sound='', hit_sound=''):
-        self.icon = load_sprite(icon)
+        self.__icon = load_sprite(icon)
 
         self.__attack_groups = attack_groups
         self.__obstacle_sprites = obstacle_sprites
@@ -27,6 +27,10 @@ class Attack(ABC):
             self.__cast_sound = load_sound(cast_sound)
         if hit_sound != '':
             self.__hit_sound = load_sound(hit_sound)
+            
+    @property
+    def icon(self):
+        return self.__icon
 
     def use(self, player):
         if self.__can_attack:
@@ -212,3 +216,17 @@ class SliceAttack(Attack):
                 break
             player.hitbox.center = pos_list.pop()
             # caso não sobre posições na lista, o player vai permanecer na posição inicial
+
+class AreaAttack(Attack):
+    def __init__(self, attack_groups, obstacle_sprites):
+        super().__init__('/test/icon_area.png', attack_groups, obstacle_sprites, damage=100, cooldown=240)
+
+    def create(self, player):
+        # pegar a posição do mouse 
+        pos = pygame.mouse.get_pos()
+        sprite = load_sprite('/test/area.png')
+        # criar o ataque
+        damage_area = EnemyDamageArea(pos, self.attack_groups, self.obstacle_sprites, damage=self.damage,
+                                      surface=sprite,
+                                      destroy_time=60, fade_out_step=4.25)
+        damage_area.rect = sprite.get_rect(center=pos)

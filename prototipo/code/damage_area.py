@@ -11,7 +11,7 @@ class EnemyDamageArea(Entity):
     def __init__(self, pos, groups, obstacle_sprites, damage=0, speed=0, direction=pygame.math.Vector2(),
                  destroy_on_impact=False,
                  surface=pygame.Surface((TILESIZE, TILESIZE)), destroy_time=6000, particle_spawners=[], hit_sound=None,
-                 blood_on_kill=False):
+                 blood_on_kill=False, fade_out_step = 0):
         super().__init__(groups, 'enemy_damage_area')
         self.image = surface
         self.rect = self.image.get_rect(topleft=pos)
@@ -25,8 +25,11 @@ class EnemyDamageArea(Entity):
         self._particle_spawners = particle_spawners
 
         self.__blood_on_kill = blood_on_kill
+        self.__fade_out_step = fade_out_step
         self.__destroy_time = destroy_time
+
         self.__destroy_timer = 0
+        self.__is_enabled = True
 
         self.hit_sound = hit_sound
 
@@ -81,6 +84,7 @@ class EnemyDamageArea(Entity):
 
     def update(self):
         # movimento
+        self.image.set_alpha(self.image.get_alpha() - self.__fade_out_step)
         if self._speed != 0:
             moved = self.move(self._speed, 'smaller_hitbox')
             if not moved:

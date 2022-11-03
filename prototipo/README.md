@@ -18,7 +18,7 @@ disponível [aqui](https://docs.google.com/document/d/189AMDekPZeVRerxjPzfzko3lh
 
 - [ ] Fazer lógica de morte do Player
     - Usar a função check_death() do Enemy como referência
-- [ ] Ataque de dano em área
+- [x] Ataque de dano em área
     - Criar uma nova classe que estende o Attack, configurar o create() dela (isto é, a parte que cria as DamageAreas no mapa), adicionar o ataque na lista de ataques definida no init do Player e a seleção no input()
     - Sugestão: remover o LineAttack e fazer o ataque em área como uma ult com cooldown longo utilizada ao pressionar Q
 - [x] Sistema de experiência e níveis
