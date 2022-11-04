@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 import pygame
 import pygame.sprite
 
-from utils import load_sprite
+from code.utils import load_sprite
 
 
 class ParticleSource(pygame.sprite.Sprite, ABC):

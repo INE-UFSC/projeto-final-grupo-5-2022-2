@@ -1,6 +1,6 @@
 from abc import abstractmethod, ABC
 
-from utils import load_sprite
+from code.utils import load_sprite
 
 
 class Upgrade(ABC):

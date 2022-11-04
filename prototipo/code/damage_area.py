@@ -2,9 +2,9 @@ import random
 
 import pygame
 
-from entity import Entity
-from particles import FireSource, BloodSource
-from settings import TILESIZE
+from code.entity import Entity
+from code.particles import FireSource, BloodSource
+from code.settings import TILESIZE
 
 
 class EnemyDamageArea(Entity):

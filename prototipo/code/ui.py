@@ -2,9 +2,9 @@ import random
 
 import pygame
 
-from settings import *
-from upgrade import *
-from utils import load_sprite
+from code.settings import *
+from code.upgrade import *
+from code.utils import load_sprite
 
 
 class UI:

@@ -1,6 +1,6 @@
 import pygame
 
-from utils import load_sprite
+from code.utils import load_sprite
 
 
 class Tile(pygame.sprite.Sprite):

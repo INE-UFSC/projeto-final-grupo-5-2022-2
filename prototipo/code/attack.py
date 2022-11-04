@@ -4,9 +4,9 @@ from abc import ABC, abstractmethod
 
 import pygame.transform
 
-from damage_area import EnemyDamageArea
-from particles import FireSource, LightSource
-from utils import *
+from code.damage_area import EnemyDamageArea
+from code.particles import FireSource, LightSource
+from code.utils import *
 
 
 class Attack(ABC):

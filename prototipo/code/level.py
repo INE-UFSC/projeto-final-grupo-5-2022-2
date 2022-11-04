@@ -1,11 +1,11 @@
 import pygame.math
 
-from enemy import Enemy
-from particles import *
-from player import Player
-from settings import *
-from tile import Tile
-from ui import UI
+from code.enemy import Enemy
+from code.particles import *
+from code.player import Player
+from code.settings import *
+from code.tile import Tile
+from code.ui import UI
 
 
 class Level:

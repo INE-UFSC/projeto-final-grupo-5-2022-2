@@ -1,6 +1,6 @@
 import pygame
 
-from settings import *
+from code.settings import *
 
 
 def load_sprite(file):

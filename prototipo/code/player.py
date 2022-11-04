@@ -1,6 +1,6 @@
-from attack import *
-from entity import Entity
-from utils import load_sprite
+from code.attack import *
+from code.entity import Entity
+from code.utils import load_sprite
 
 
 class Player(Entity):
@@ -85,7 +85,7 @@ class Player(Entity):
 
     def damage(self, damage):
         if self.__vulnerable:
-            self.__health -= damage
+            self.health -= damage
             self.__vulnerable = False
             self.__hurt_time = self.__invincibility_duration
 
@@ -104,9 +104,13 @@ class Player(Entity):
             self.__upgrade_list.append(upgrade)
 
     def give_health(self, health):
-        self.__health += health
-        if self.__health > self.__max_health:
-            self.__health = self.__max_health
+        self.health += health
+        if self.health > self.__max_health:
+            self.health = self.__max_health
+
+    # Implementar a tela de game over
+    def kill(self):
+        pass
 
     def update(self):
         self.input()
@@ -122,6 +126,12 @@ class Player(Entity):
     @property
     def health(self):
         return self.__health
+
+    @health.setter
+    def health(self, health):
+        self.__health = health
+        if self.health <= 0:
+            self.kill()
 
     @property
     def max_health(self):

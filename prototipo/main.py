@@ -2,8 +2,8 @@ import sys
 
 import pygame
 
-from level import Level
-from settings import *
+from code.level import Level as Level
+from code.settings import *
 
 
 class Game:

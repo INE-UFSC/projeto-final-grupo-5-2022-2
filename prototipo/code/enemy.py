@@ -1,7 +1,7 @@
 import pygame
 
-from entity import Entity
-from utils import load_sprite
+from code.entity import Entity
+from code.utils import load_sprite
 
 
 class Enemy(Entity):

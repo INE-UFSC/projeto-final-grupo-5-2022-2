@@ -5,6 +5,8 @@ HEIGHT = 720
 FPS = 60
 TILESIZE = 64
 
+# Para o executável funcionar corretamente precisa adicionar mais um os.pardir
+# no os.path.join abaixo.
 GAME_PATH = os.path.abspath(os.path.join(__file__, os.pardir, os.pardir))
 
 COLOR_BLACK = (0, 0, 0)
