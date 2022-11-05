@@ -1,3 +1,5 @@
+import sys
+
 from code.attack import *
 from code.entity import Entity
 from code.utils import load_sprite
@@ -85,7 +87,7 @@ class Player(Entity):
 
     def damage(self, damage):
         if self.__vulnerable:
-            self.health -= damage
+            self.__health -= damage
             self.__vulnerable = False
             self.__hurt_time = self.__invincibility_duration
 
@@ -104,15 +106,19 @@ class Player(Entity):
             self.__upgrade_list.append(upgrade)
 
     def give_health(self, health):
-        self.health += health
-        if self.health > self.__max_health:
-            self.health = self.__max_health
+        self.__health += health
+        if self.__health > self.__max_health:
+            self.__health = self.__max_health
 
-    # Implementar a tela de game over
-    def kill(self):
-        pass
+    def check_death(self):
+        if self.__health <= 0:
+            # TEMPORÁRIO
+            # futuramente, é necessário implementar a tela de GAME OVER
+            pygame.quit()
+            sys.exit()
 
     def update(self):
+        self.check_death()
         self.input()
         self.animate()
         self.staff.animate(self)
@@ -126,12 +132,6 @@ class Player(Entity):
     @property
     def health(self):
         return self.__health
-
-    @health.setter
-    def health(self, health):
-        self.__health = health
-        if self.health <= 0:
-            self.kill()
 
     @property
     def max_health(self):
