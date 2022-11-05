@@ -1,3 +1,12 @@
+## Execução
+
+1. No terminal, abra o jogo com
+```sh
+py main.py
+```
+
+___
+
 # To-Do para o protótipo
 
 Roteiro original
@@ -16,7 +25,7 @@ disponível [aqui](https://docs.google.com/document/d/189AMDekPZeVRerxjPzfzko3lh
 
 ## Outras partes da gameplay que faltam
 
-- [ ] Fazer lógica de morte do Player
+- [x] Fazer lógica de morte do Player
     - Usar a função check_death() do Enemy como referência
 - [x] Ataque de dano em área
     - Criar uma nova classe que estende o Attack, configurar o create() dela (isto é, a parte que cria as DamageAreas no
@@ -36,7 +45,7 @@ disponível [aqui](https://docs.google.com/document/d/189AMDekPZeVRerxjPzfzko3lh
 - [ ] ~~Fazer o flickering do Player e do Enemy serem brancos em vez de transparente~~
     - ~~Precisa mudar a parte que confere o self.vulnerable e altera o alpha no animate() do Player e do Enemy.
       Conferir [este vídeo aqui](https://www.youtube.com/watch?v=uW3Fhe-Vkx4) sobre como fazer uma máscara.~~
-- [ ] Dash do Player
+- [ ] ~~Dash do Player~~
     - Sugestão: substituir pelo SliceAttack?
     - Funcionamento descrito no roteiro
 
