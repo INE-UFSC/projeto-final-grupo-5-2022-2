@@ -33,8 +33,8 @@ class Attack(ABC):
     def icon(self):
         return self.__icon
 
-    def use(self, player):
-        if self.__can_attack:
+    def use(self, player, key):
+        if self.__can_attack and key:
             self.create(player)
             self.block()
 
@@ -197,8 +197,12 @@ class SliceAttack(Attack):
 
 class AreaAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
-        super().__init__('/icon/area_attack.png', attack_groups, obstacle_sprites, damage=100, cooldown=240, cast_sound='area_cast.ogg')
+        super().__init__('/icon/area_attack.png', attack_groups, obstacle_sprites, damage=100, cooldown=240,
+                         cast_sound='area_cast.ogg')
         self.cast_sound.set_volume(0.5)
+
+        self.__display_surface = pygame.display.get_surface()
+        self.__attack_started = False
 
     def create(self, player):
         self.cast_sound.play()
@@ -215,3 +219,21 @@ class AreaAttack(Attack):
             particle_spawner.offset = random.randint(16, 32)
             particle_spawner.update()
         particle_spawner.kill()
+
+    def use(self, player, key):
+        # reescrever o use para mostrar a área de dano enquanto o jogador está segurando Q
+        # e só atacar ao soltar
+        if self.can_attack:
+            if key:
+                # desenhar o indicador de área
+                self.__attack_started = True
+                mouse_pos = pygame.mouse.get_pos()
+                area_rect = pygame.Rect(mouse_pos[0], mouse_pos[1], 256, 256)
+                area_rect.center = mouse_pos
+                pygame.draw.rect(self.__display_surface, WHITE, area_rect, 4)
+            else:
+                # criar o ataque
+                if self.__attack_started:
+                    self.create(player)
+                    self.block()
+                    self.__attack_started = False

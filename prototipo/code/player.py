@@ -60,14 +60,10 @@ class Player(Entity):
         else:
             self._direction.x = 0
 
-        # ataque
-        if keys[pygame.K_q]:
-            self.__attacks[2].use(self)
-
-        if mouse[0]:
-            self.__attacks[0].use(self)
-        if mouse[2]:
-            self.__attacks[1].use(self)
+        # ataques
+        self.__attacks[0].use(self, mouse[0])
+        self.__attacks[1].use(self, mouse[2])
+        self.__attacks[2].use(self, keys[pygame.K_q])
 
     def cooldowns(self):
         for attack in self.__attacks:
