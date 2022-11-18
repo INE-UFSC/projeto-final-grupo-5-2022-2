@@ -21,6 +21,9 @@ class UI:
         self.__available_upgrades = {'health': HealthUpgrade(), 'damage': DamageUpgrade(),
                                      'firerate': FireRateUpgrade(), 'speed': SpeedUpgrade()}
 
+        pygame.mouse.set_visible(False)
+        self.__cursor = load_sprite('/cursor.png')
+
     def show_health(self, health):
         for i in range(health):
             self.display_surface.blit(self.health_sprite,
@@ -64,7 +67,7 @@ class UI:
                 # aqui tem que usar o max() para não resultar em altura 0
                 rect_height = max(1,
                                   ITEM_BOX_SIZE - ITEM_BOX_SIZE * (
-                                              attack.cooldown - attack.attack_time) / attack.cooldown)
+                                          attack.cooldown - attack.attack_time) / attack.cooldown)
                 cooldown_surf = pygame.Surface((ITEM_BOX_SIZE, rect_height))
                 cooldown_surf.set_alpha(128)
                 cooldown_surf.fill(COLOR_BLACK)
@@ -132,6 +135,12 @@ class UI:
         args[0](args[1])
         self.reroll_upgrades()
 
+    def show_cursor(self):
+        x, y = pygame.mouse.get_pos()
+        x -= self.__cursor.get_width() // 2
+        y -= self.__cursor.get_height() // 2
+        self.display_surface.blit(self.__cursor, (x, y))
+
     def display(self, player):
         if len(self.__upgrade_button_list) == 0:
             # iniciar os botões de upgrade
@@ -150,6 +159,7 @@ class UI:
         self.show_exp(player.exp, player.level_up_exp, player.current_level)
         self.show_attacks(player.attacks)
         self.show_upgrade_points(player.upgrade_points)
+        self.show_cursor()
 
     @property
     def is_menu_open(self):
