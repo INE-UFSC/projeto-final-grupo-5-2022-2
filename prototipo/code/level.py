@@ -6,6 +6,7 @@ from code.player import Player
 from code.settings import *
 from code.tile import Tile
 from code.ui import UI
+from code.waves import WaveManager
 
 
 class Level:
@@ -31,10 +32,10 @@ class Room:
         self.attackable_sprites = pygame.sprite.Group()
         # mapa
         self.create_map(room_map)
+        # waves
+        self.__wave_manager = WaveManager('1')
         # ui
         self.ui = UI()
-
-        self.timer = 0  # TEMPORÁRIO
 
     def create_map(self, room_map):
         for row_index, row in enumerate(room_map):
@@ -47,10 +48,10 @@ class Room:
                     self.player = Player((x, y), [self.visible_sprites], [self.visible_sprites, self.attack_sprites],
                                          self.obstacle_sprites)
                 elif col == 'e':
-                    self.spawn_enemy((x, y))
+                    self.spawn_enemy('enemy', (x, y))
 
-    def spawn_enemy(self, pos):
-        Enemy('test', pos, [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites)
+    def spawn_enemy(self, name, pos):
+        Enemy(name, pos, [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites)
         # permite os inimigos colidirem com os outros inimigos e com o player
         enemy_obstacle_sprites = pygame.sprite.Group(self.player, self.obstacle_sprites, self.attackable_sprites)
         for sprite in self.attackable_sprites:
@@ -66,15 +67,12 @@ class Room:
         self.ui.display(self.player)
 
         if not self.ui.is_menu_open:
+            self.__wave_manager.update(self.spawn_enemy)
             self.visible_sprites.update()
             self.visible_sprites.enemy_update(self.player)
             # conferir colisão dos ataques com os inimigos
             for attack_sprite in self.attack_sprites:
                 attack_sprite.enemy_collision(self.player, self.attackable_sprites)
-            # invocar inimigo (TEMPORÁRIO)
-            self.timer += 1
-            if self.timer % 120 == 0:
-                self.spawn_enemy((320, 320))
 
 
 class YSortCameraGroup(pygame.sprite.Group):
