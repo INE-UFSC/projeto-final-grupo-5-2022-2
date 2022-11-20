@@ -6,24 +6,24 @@ import pygame.sprite
 class Entity(pygame.sprite.Sprite):
     def __init__(self, groups, sprite_type):
         super().__init__(groups)
-        self._sprite_type = sprite_type
-        self._direction = pygame.math.Vector2()
+        self.__sprite_type = sprite_type
+        self.__direction = pygame.math.Vector2()
 
     @property
     def sprite_type(self):
-        return self._sprite_type
+        return self.__sprite_type
     
     @sprite_type.setter
     def sprite_type(self, value):
-        self._sprite_type = value
+        self.__sprite_type = value
 
     @property
     def direction(self):
-        return self._direction
+        return self.__direction
 
     @direction.setter
     def direction(self, direction):
-        self._direction = direction
+        self.__direction = direction
 
     def move(self, speed, collision_hitbox_name='hitbox'):
         # o collision_hitbox_name é utilizado pelo DamageArea para escolher colidir somente com a
@@ -51,18 +51,18 @@ class Entity(pygame.sprite.Sprite):
             for sprite in self.obstacle_sprites:
                 if sprite != self and getattr(sprite, hitbox_name).colliderect(self.hitbox):
                     collided = True
-                    if self._direction.x > 0:
+                    if self.__direction.x > 0:
                         self.hitbox.right = sprite.hitbox.left
-                    if self._direction.x < 0:
+                    if self.__direction.x < 0:
                         self.hitbox.left = sprite.hitbox.right
         # colisão vertical
         elif direction == 'vertical':
             for sprite in self.obstacle_sprites:
                 if sprite != self and getattr(sprite, hitbox_name).colliderect(self.hitbox):
                     collided = True
-                    if self._direction.y > 0:
+                    if self.__direction.y > 0:
                         self.hitbox.bottom = sprite.hitbox.top
-                    if self._direction.y < 0:
+                    if self.__direction.y < 0:
                         self.hitbox.top = sprite.hitbox.bottom
         return collided
 
@@ -73,3 +73,5 @@ class Entity(pygame.sprite.Sprite):
             return 255
         else:
             return 0
+
+
