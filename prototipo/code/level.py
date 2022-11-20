@@ -64,7 +64,7 @@ class Room:
 
     def run(self):
         self.visible_sprites.custom_draw()
-        self.ui.display(self.player)
+        self.ui.display(self.player, self.__wave_manager.timer)
 
         if not self.ui.is_menu_open:
             self.__wave_manager.update(self.spawn_enemy)

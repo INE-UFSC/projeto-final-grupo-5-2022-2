@@ -11,6 +11,7 @@ class UI:
     def __init__(self):
         self.display_surface = pygame.display.get_surface()
         self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
+        self.__timer_font = pygame.font.Font(UI_FONT, UI_FONT_SIZE + 6)
 
         self.health_sprite = load_sprite('/test/heart.png')
         self.__exp_bar_rect = pygame.Rect(0, 0, EXP_BAR_WIDTH, BAR_HEIGHT)
@@ -141,7 +142,23 @@ class UI:
         y -= self.__cursor.get_height() // 2
         self.display_surface.blit(self.__cursor, (x, y))
 
-    def display(self, player):
+    def show_timer(self, time):
+        if time == WAVE_TIME:
+            # não mostrar o timer caso a wave tenha acabado
+            return
+
+        remaining_time = WAVE_TIME - time
+        total_seconds = remaining_time // 60
+        minutes = total_seconds // 60
+        seconds = total_seconds % 60
+
+        time_surf = self.font.render(f'{minutes}:{seconds:02d}', False, TEXT_COLOR)
+        time_rect = time_surf.get_rect(topleft=(self.display_surface.get_width() // 2 - time_surf.get_width() // 2, 20))
+        pygame.draw.rect(self.display_surface, UI_BG_COLOR, time_rect.inflate(20, 20))
+        pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, time_rect.inflate(20, 20), 3)
+        self.display_surface.blit(time_surf, time_rect)
+
+    def display(self, player, time):
         if len(self.__upgrade_button_list) == 0:
             # iniciar os botões de upgrade
             for i in range(0, 3):
@@ -152,13 +169,15 @@ class UI:
                 self.__upgrade_button_list.append(button)
             self.reroll_upgrades()
 
-        if self.__is_menu_open:
-            self.show_menu(player)
-
+        self.show_timer(time)
         self.show_health(player.health)
         self.show_exp(player.exp, player.level_up_exp, player.current_level)
         self.show_attacks(player.attacks)
         self.show_upgrade_points(player.upgrade_points)
+
+        if self.__is_menu_open:
+            self.show_menu(player)
+
         self.show_cursor()
 
     @property
