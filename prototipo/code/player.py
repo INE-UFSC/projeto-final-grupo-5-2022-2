@@ -61,9 +61,9 @@ class Player(Entity):
             self._direction.x = 0
 
         # ataques
-        self.__attacks[0].use(self, mouse[0])
-        self.__attacks[1].use(self, mouse[2])
-        self.__attacks[2].use(self, keys[pygame.K_q])
+        attack_keys = (mouse[0], mouse[2], keys[pygame.K_q])
+        for i, attack in enumerate(self.__attacks):
+            attack.use(self, attack_keys[i])
 
     def cooldowns(self):
         for attack in self.__attacks:
