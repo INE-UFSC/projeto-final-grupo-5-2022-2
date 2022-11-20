@@ -26,16 +26,41 @@ class Level:
 class Room:
     def __init__(self, room_map):
         # sprites
-        self.visible_sprites = YSortCameraGroup()
-        self.obstacle_sprites = pygame.sprite.Group()
-        self.attack_sprites = pygame.sprite.Group()
-        self.attackable_sprites = pygame.sprite.Group()
+        self.__visible_sprites = YSortCameraGroup()
+        self.__obstacle_sprites = pygame.sprite.Group()
+        self.__attack_sprites = pygame.sprite.Group()
+        self.__attackable_sprites = pygame.sprite.Group()
         # mapa
         self.create_map(room_map)
         # waves
         self.__wave_manager = WaveManager('1')
         # ui
-        self.ui = UI()
+        self.__ui = UI()
+
+    @property
+    def visible_sprites(self):
+        return self.__visible_sprites
+
+    @property
+    def obstacle_sprites(self):
+        return self.__obstacle_sprites
+
+    @property
+    def attack_sprites(self):
+        return self.__attack_sprites
+
+    @property
+    def attackable_sprites(self):
+        return self.__attackable_sprites
+
+    @property
+    def wave_maneger(self):
+        return self.__wave_manager
+
+    @property
+    def ui(self):
+        return self.__ui
+
 
     def create_map(self, room_map):
         for row_index, row in enumerate(room_map):
@@ -45,7 +70,7 @@ class Room:
                 if col == 'x':
                     Tile((x, y), [self.visible_sprites, self.obstacle_sprites])
                 elif col == 'p':
-                    self.player = Player((x, y), [self.visible_sprites], [self.visible_sprites, self.attack_sprites],
+                    self.player = Player((x, y), [self.__visible_sprites], [self.__visible_sprites, self.__attack_sprites],
                                          self.obstacle_sprites)
                 elif col == 'e':
                     self.spawn_enemy('enemy', (x, y))
@@ -53,11 +78,11 @@ class Room:
     def spawn_enemy(self, name, pos):
         Enemy(name, pos, [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites)
         # permite os inimigos colidirem com os outros inimigos e com o player
-        enemy_obstacle_sprites = pygame.sprite.Group(self.player, self.obstacle_sprites, self.attackable_sprites)
+        enemy_obstacle_sprites = pygame.sprite.Group(self.player, self.__obstacle_sprites, self.__attackable_sprites)
         for sprite in self.attackable_sprites:
             sprite.obstacle_sprites = enemy_obstacle_sprites
         # permite o player colidir com os inimigos
-        self.player.obstacle_sprites = pygame.sprite.Group(self.obstacle_sprites, self.attackable_sprites)
+        self.player.obstacle_sprites = pygame.sprite.Group(self.__obstacle_sprites, self.__attackable_sprites)
 
     def toggle_menu(self):
         self.ui.toggle_menu()
