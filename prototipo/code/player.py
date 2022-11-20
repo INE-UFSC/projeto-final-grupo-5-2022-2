@@ -25,7 +25,7 @@ class Player(Entity):
         self.__upgrade_list = []
 
         # movimento
-        self.obstacle_sprites = obstacle_sprites
+        self.__obstacle_sprites = obstacle_sprites
         self.__speed = 5
 
         # ataques
@@ -176,6 +176,27 @@ class Player(Entity):
     @property
     def upgrade_points(self):
         return self.__upgrade_points
+
+    @property
+    def obstacle_sprites(self):
+        return self.__obstacle_sprites
+
+    @property
+    def speed(self):
+        return self.__speed
+
+    @speed.setter
+    def speed(self, speed):
+        self.__speed = speed
+
+    @property
+    def upgrade_list(self):
+        return self.__upgrade_list
+
+    @property
+    def level_ip_ex_increment(self):
+        return self.__level_up_exp_increment
+
 
 
 
