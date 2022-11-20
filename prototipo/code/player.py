@@ -47,23 +47,23 @@ class Player(Entity):
 
         # movimento vertical
         if keys[pygame.K_w]:
-            self._direction.y = -1
+            self.direction.y = -1
         elif keys[pygame.K_s]:
-            self._direction.y = 1
+            self.direction.y = 1
         else:
-            self._direction.y = 0
+            self.direction.y = 0
         # movimento horizontal
         if keys[pygame.K_d]:
-            self._direction.x = 1
+            self.direction.x = 1
         elif keys[pygame.K_a]:
-            self._direction.x = -1
+            self.direction.x = -1
         else:
-            self._direction.x = 0
+            self.direction.x = 0
 
         # ataques
-        attack_keys = (mouse[0], mouse[2], keys[pygame.K_q])
-        for i, attack in enumerate(self.__attacks):
-            attack.use(self, attack_keys[i])
+        self.__attacks[0].use(self, mouse[0])
+        self.__attacks[1].use(self, mouse[2])
+        self.__attacks[2].use(self, keys[pygame.K_q])
 
     def cooldowns(self):
         for attack in self.__attacks:
@@ -168,6 +168,7 @@ class Player(Entity):
     @property
     def upgrade_points(self):
         return self.__upgrade_points
+
 
 
 class Staff(pygame.sprite.Sprite):
