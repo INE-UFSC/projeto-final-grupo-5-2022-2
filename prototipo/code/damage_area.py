@@ -16,7 +16,7 @@ class EnemyDamageArea(Entity):
         super().__init__(groups, 'enemy_damage_area')
         self.image = surface
         self.rect = self.image.get_rect(topleft=pos)
-        self.hitbox = self.rect
+        self.__hitbox = self.rect
 
         self.__damage = damage
         self.__speed = speed
@@ -36,11 +36,11 @@ class EnemyDamageArea(Entity):
 
     @property
     def hitbox(self):
-        return self._hitbox
+        return self.__hitbox
 
     @hitbox.setter
     def hitbox(self, value):
-        self._hitbox = value
+        self.__hitbox = value
 
     @property
     def damage(self):
