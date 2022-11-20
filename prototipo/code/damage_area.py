@@ -20,7 +20,7 @@ class EnemyDamageArea(Entity):
 
         self.__damage = damage
         self.__speed = speed
-        self.__direction = direction
+        self.direction = direction
         self.__destroy_on_impact = destroy_on_impact
         self.__obstacle_sprites = obstacle_sprites
         self.__particle_spawners = particle_spawners
@@ -105,7 +105,7 @@ class EnemyDamageArea(Entity):
                     target_sprite.check_death(player)
                     if self.__blood_on_kill:
                         BloodSource(collision_sprites[0].rect.center, self.groups()[0], self.__obstacle_sprites,
-                                    self.__direction)
+                                    self.direction)
 
                 if self.__destroy_on_impact:  # ataque dá dano em só um inimigo
                     self.kill()

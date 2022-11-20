@@ -60,9 +60,9 @@ class Enemy(Entity):
             self.__can_attack = False  # TODO: passar para a lógica do animate() ao adicionar sprites
             player.damage(self.__collision_damage)
         elif self.__status == 'move':
-            self.__direction = self.get_player_distance_direction(player)[1]
+            self.direction = self.get_player_distance_direction(player)[1]
         else:
-            self.__direction = pygame.math.Vector2()
+            self.direction = pygame.math.Vector2()
 
     def animate(self):
         if not self.__vulnerable:
@@ -84,7 +84,7 @@ class Enemy(Entity):
 
     def damage(self, damage, player):
         if self.__vulnerable:
-            self.__direction = self.get_player_distance_direction(player)[1]
+            self.direction = self.get_player_distance_direction(player)[1]
             self.__health -= damage
             self.__hit_time = self.__invincibility_duration
             self.__vulnerable = False
@@ -96,7 +96,7 @@ class Enemy(Entity):
 
     def hit_reaction(self):
         if not self.__vulnerable:
-            self.__direction = pygame.math.Vector2()  # fazer o inimigo parar ao tomar um ataque
+            self.direction = pygame.math.Vector2()  # fazer o inimigo parar ao tomar um ataque
 
     def move(self, speed, collision_hitbox_name='hitbox'):
         # o move() está sendo reescrito somente para atualizar a posição do damage_hitbox
@@ -137,7 +137,6 @@ class Enemy(Entity):
     def health(self):
         return self.__health
 
-
     @health.setter
     def health(self, health):
         self.__health = health
@@ -149,7 +148,6 @@ class Enemy(Entity):
     @vulnerable.setter
     def vulnerable(self, vulnerable):
         self.__vulnerable = vulnerable
-    
 
     @property
     def status(self):
@@ -158,11 +156,11 @@ class Enemy(Entity):
     @status.setter
     def status(self, status):
         self.__status = status
-    
-    @property 
+
+    @property
     def speed(self):
         return self.__speed
-    
+
     @property
     def exp(self):
         return self.__exp
@@ -178,11 +176,10 @@ class Enemy(Entity):
     @property
     def attack_time(self):
         return self.__attack_time
-    
+
     @property
     def attack_cooldown(self):
         return self.__attack_cooldown
-
 
     @property
     def hit_time(self):
@@ -191,5 +188,3 @@ class Enemy(Entity):
     @property
     def invincibility_duration(self):
         return self.__invincibility_duration
-
-    
