@@ -11,10 +11,17 @@ from code.utils import load_sprite
 class ParticleSource(pygame.sprite.Sprite, ABC):
     def __init__(self, pos, groups):
         super().__init__(groups)
-        self.sprite_type = 'particle_source'
+        self.__sprite_type = 'particle_source'
         self.image = pygame.Surface((1, 1))
         self.rect = self.image.get_rect(center=pos)
 
+    @property
+    def sprite_type(self):
+        return self.__sprite_type
+
+    @sprite_type.setter
+    def sprite_type(self, sprite_type):
+        self.__sprite_type = sprite_type
 
 class Particle(pygame.sprite.Sprite, ABC):
     def __init__(self, groups):
@@ -34,7 +41,11 @@ class Particle(pygame.sprite.Sprite, ABC):
 class FireSource(ParticleSource):
     def __init__(self, pos, groups):
         super().__init__(pos, groups)
-        self.offset = 16
+        self.__offset = 16
+
+    @property
+    def offset(self):
+        return self.__offset
 
     def update(self):
         # criar as partículas de fogo
@@ -47,16 +58,37 @@ class FireSource(ParticleSource):
 class FireParticle(Particle):
     def __init__(self, pos, groups, colors=['#ffffff', '#fee761', '#feae34', '#f77622', '#e43b44', '#3e2731']):
         super().__init__(groups)
-        self.sprite_type = 'particle'
+        self.__sprite_type = 'particle'
 
-        self.mask_circle_32 = load_sprite('/mask/circle_32.png')
+        self.__mask_circle_32 = load_sprite('/mask/circle_32.png')
         self.image = self.mask_circle_32.copy()
         self.image.set_alpha(0)  # para não desenhar a partícula ainda não configurada
         self.rect = self.image.get_rect(center=pos)
 
-        self.size = 16 * random.randint(100, 150) / 100
-        self.colors = colors
-        self.color_index = 0
+        self.__size = 16 * random.randint(100, 150) / 100
+        self.__colors = colors
+        self.__color_index = 0
+
+    @property
+    def mask_circle_32(self):
+        return self.__mask_circle_32
+
+    @property
+    def sprite_type(self):
+        return self.__sprite_type
+
+    @property
+    def size(self):
+        return self.__size
+
+    @property
+    def colors(self):
+        return self.__colors
+
+    @property
+    def color_index(self):
+        return self.__color_index
+
 
     def animate(self):
         if self.inner_timer % 4 == 0:
@@ -104,19 +136,51 @@ class LightSource(ParticleSource):
 class LightParticle(Particle):
     def __init__(self, pos, groups, diameter, color, shrink_mag=16, grow_mag=16):
         super().__init__(groups)
-        self.sprite_type = 'light'
+        self.__sprite_type = 'light'
 
-        self.mask_circle_32 = load_sprite('/mask/circle_32.png')
+        self.__mask_circle_32 = load_sprite('/mask/circle_32.png')
         self.image = self.mask_circle_32.copy()
         self.image.set_alpha(0)  # para não desenhar a partícula ainda não configurada
         self.rect = self.image.get_rect(center=pos)
 
-        self.original_diameter = diameter
-        self.size = (self.original_diameter, self.original_diameter)
-        self.color = color
-        self.diff = 0
-        self.shrink_mag = shrink_mag
-        self.grow_mag = grow_mag
+        self.__original_diameter = diameter
+        self.__size = (self.original_diameter, self.original_diameter)
+        self.__color = color
+        self.__diff = 0
+        self.__shrink_mag = shrink_mag
+        self.__grow_mag = grow_mag
+
+    @property
+    def sprite_type(self):
+        return self.__sprite_type
+
+    @property
+    def mask_circle(self):
+        return self.__mask_circle_32
+
+    @property
+    def original_diameter(self):
+        return self.__original_diameter
+
+    @property
+    def size(self):
+        return self.__size
+
+    @property
+    def color(self):
+        return self.__color
+
+    @property
+    def diff(self):
+        return self.__diff
+
+    @property
+    def shrink_mag(self):
+        return self.__shrink_mag
+
+    @property
+    def grow_mag(self):
+        return self.__grow_mag
 
     def animate(self):
         if self.inner_timer % 10 == 0:
@@ -136,13 +200,41 @@ class LightParticle(Particle):
 class BloodSource(ParticleSource):
     def __init__(self, pos, groups, obstacle_sprites, direction, blood_speed=32, min_particles=8, max_particles=12):
         super().__init__(pos, groups)
-        self.obstacle_sprites = obstacle_sprites
-        self.pos = pos
-        self.direction = direction
-        self.offset = 25
-        self.blood_speed = blood_speed
-        self.min_particles = min_particles
-        self.max_particles = max_particles
+        self.__obstacle_sprites = obstacle_sprites
+        self.__pos = pos
+        self.__direction = direction
+        self.__offset = 25
+        self.__blood_speed = blood_speed
+        self.__min_particles = min_particles
+        self.__max_particles = max_particles
+
+    @property
+    def obstacle_sprites(self):
+        return self.__obstacle_sprites
+
+    @property
+    def pos(self):
+        return self.__pos
+
+    @property
+    def direction(self):
+        return self.__direction
+
+    @property
+    def offset(self):
+        return self.__offset
+
+    @property
+    def blood_speed(self):
+        return self.__blood_speed
+
+    @property
+    def min_particles(self):
+        return self.__min_particles
+
+    @property
+    def max_particles(self):
+        return self.__max_particles
 
     def update(self):
         for i in range(random.randint(self.min_particles, self.max_particles)):
@@ -157,18 +249,46 @@ class BloodSource(ParticleSource):
 class BloodParticle(Particle):
     def __init__(self, pos, groups, obstacle_sprites, direction, color='#e43b44', speed=32):
         super().__init__(groups)
-        self.sprite_type = 'on_ground'
-        self.obstacle_sprites = obstacle_sprites
+        self.__sprite_type = 'on_ground'
+        self.__obstacle_sprites = obstacle_sprites
 
-        self.mask_circle_32 = load_sprite('/mask/circle_32.png')
+        self.__mask_circle_32 = load_sprite('/mask/circle_32.png')
         self.image = self.mask_circle_32.copy()
         self.image.set_alpha(0)  # para não desenhar a partícula ainda não configurada
         self.rect = self.image.get_rect(center=pos)
 
-        self.direction = direction
-        self.size = 32 * random.randint(25, 150) / 100
-        self.color = color
-        self.speed = speed * random.randint(100, 150) / 100
+        self.__direction = direction
+        self.__size = 32 * random.randint(25, 150) / 100
+        self.__color = color
+        self.__speed = speed * random.randint(100, 150) / 100
+
+    @property
+    def sprite_type(self):
+        return self.__sprite_type
+
+    @property
+    def obstacle_sprites(self):
+        return self.__obstacle_sprites
+
+    @property
+    def mask_circle(self):
+        return self.__mask_circle_32
+
+    @property
+    def direction(self):
+        return self.__direction
+
+    @property
+    def size(self):
+        return self.__size
+
+    @property
+    def color(self):
+        return self.__color
+
+    @property
+    def speed(self):
+        return self.__speed
 
     def animate(self):
         # diminuir e mover a partícula
