@@ -1,7 +1,7 @@
 import json
 import random
 
-from code.settings import *
+from code.settings import GAME_PATH
 
 
 class WaveManager:
@@ -11,7 +11,7 @@ class WaveManager:
 
         self.__timer = 0
         self.__tick_index = 0
-        self.__max_time = WAVE_TIME
+        self.__max_time = 5400  # 1 minuto e 30 segundos
 
         self.__spawn_positions = ((200, 200), (500, 500))
 
@@ -46,3 +46,17 @@ class WaveManager:
     @property
     def timer(self):
         return self.__timer
+
+    @property
+    def tick_index(self):
+        return self.__tick_index
+
+    @property
+    def max_time(self):
+        return self.__max_time
+
+    @property
+    def spawn_positions(self):
+        return self.__spawn_positions
+
+
