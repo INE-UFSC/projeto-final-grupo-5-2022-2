@@ -10,7 +10,7 @@ class Player(Entity):
         super().__init__(groups, 'player')
         self.image = load_sprite('/test/player.png')
         self.rect = self.image.get_rect(topleft=pos)
-        self.hitbox = self.rect.inflate(0, -26)
+        self.__hitbox = self.rect.inflate(0, -26)
 
         self.__health = 3
         self.__max_health = 7
@@ -120,6 +120,14 @@ class Player(Entity):
         self.staff.animate(self)
         self.move(self.__move_speed)
         self.cooldowns()
+
+    @property
+    def hitbox(self):
+        return self.__hitbox
+
+    @hitbox.setter
+    def hitbox(self, hitbox):
+        self.__hitbox = hitbox
 
     @property
     def attacks(self):
