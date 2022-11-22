@@ -40,11 +40,6 @@ class Room:
                 elif col == 'e':
                     self.spawn_enemy('enemy', (x, y))
 
-                elif col == 'p':
-                    self.__player = Player((x, y), )
-                elif col == 'e':
-                    self.spawn_enemy('enemy', (x, y))
-
     def spawn_enemy(self, name, pos):
         Enemy(name, pos, [self.__group_manager.visible_sprites, self.__group_manager.attackable_sprites],
               self.__group_manager.obstacle_sprites)
