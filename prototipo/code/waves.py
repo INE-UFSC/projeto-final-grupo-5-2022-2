@@ -46,3 +46,17 @@ class WaveManager:
     @property
     def timer(self):
         return self.__timer
+
+    @property
+    def tick_index(self):
+        return self.__tick_index
+
+    @property
+    def max_time(self):
+        return self.__max_time
+
+    @property
+    def spawn_positions(self):
+        return self.__spawn_positions
+
+

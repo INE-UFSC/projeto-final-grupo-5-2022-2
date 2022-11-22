@@ -9,8 +9,8 @@ class Player(Entity):
     def __init__(self, groups, attack_groups, obstacle_sprites):
         super().__init__(groups, 'player')
         self.image = load_sprite('/test/player.png')
-        self.rect = self.image.get_rect(topleft=(300,300))
-        self.hitbox = self.rect.inflate(0, -26)
+        self.rect = self.image.get_rect(topleft=(300, 300))
+        self.__hitbox = self.rect.inflate(0, -26)
 
         self.__health = 3
         self.__max_health = 7
@@ -25,7 +25,7 @@ class Player(Entity):
         self.__upgrade_list = []
 
         # movimento
-        self.obstacle_sprites = obstacle_sprites
+        self.__obstacle_sprites = obstacle_sprites
         self.__speed = 5
 
         # ataques
@@ -47,18 +47,18 @@ class Player(Entity):
 
         # movimento vertical
         if keys[pygame.K_w]:
-            self._direction.y = -1
+            self.direction.y = -1
         elif keys[pygame.K_s]:
-            self._direction.y = 1
+            self.direction.y = 1
         else:
-            self._direction.y = 0
+            self.direction.y = 0
         # movimento horizontal
         if keys[pygame.K_d]:
-            self._direction.x = 1
+            self.direction.x = 1
         elif keys[pygame.K_a]:
-            self._direction.x = -1
+            self.direction.x = -1
         else:
-            self._direction.x = 0
+            self.direction.x = 0
 
         # ataques
         attack_keys = (mouse[0], mouse[2], keys[pygame.K_q])
@@ -122,6 +122,14 @@ class Player(Entity):
         self.cooldowns()
 
     @property
+    def hitbox(self):
+        return self.__hitbox
+
+    @hitbox.setter
+    def hitbox(self, hitbox):
+        self.__hitbox = hitbox
+
+    @property
     def attacks(self):
         return self.__attacks
 
@@ -168,6 +176,30 @@ class Player(Entity):
     @property
     def upgrade_points(self):
         return self.__upgrade_points
+
+    @property
+    def obstacle_sprites(self):
+        return self.__obstacle_sprites
+
+    @obstacle_sprites.setter
+    def obstacle_sprites(self, obstacle_sprites):
+        self.__obstacle_sprites = obstacle_sprites
+
+    @property
+    def speed(self):
+        return self.__speed
+
+    @speed.setter
+    def speed(self, speed):
+        self.__speed = speed
+
+    @property
+    def upgrade_list(self):
+        return self.__upgrade_list
+
+    @property
+    def level_ip_ex_increment(self):
+        return self.__level_up_exp_increment
 
 
 class Staff(pygame.sprite.Sprite):

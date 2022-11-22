@@ -16,14 +16,14 @@ class EnemyDamageArea(Entity):
         super().__init__(groups, 'enemy_damage_area')
         self.image = surface
         self.rect = self.image.get_rect(topleft=pos)
-        self.hitbox = self.rect
+        self.__hitbox = self.rect
 
-        self._damage = damage
-        self._speed = speed
-        self._direction = direction
-        self._destroy_on_impact = destroy_on_impact
-        self._obstacle_sprites = obstacle_sprites
-        self._particle_spawners = particle_spawners
+        self.__damage = damage
+        self.__speed = speed
+        self.direction = direction
+        self.__destroy_on_impact = destroy_on_impact
+        self.__obstacle_sprites = obstacle_sprites
+        self.__particle_spawners = particle_spawners
 
         self.__blood_on_kill = blood_on_kill
         self.__fade_out_step = fade_out_step
@@ -32,35 +32,59 @@ class EnemyDamageArea(Entity):
 
         self.__destroy_timer = 0
 
-        self.hit_sound = hit_sound
+        self.__hit_sound = hit_sound
 
     @property
     def hitbox(self):
-        return self._hitbox
+        return self.__hitbox
 
     @hitbox.setter
     def hitbox(self, value):
-        self._hitbox = value
+        self.__hitbox = value
 
     @property
     def damage(self):
-        return self._damage
+        return self.__damage
 
     @property
     def speed(self):
-        return self._speed
+        return self.__speed
 
     @property
     def destroy_on_impact(self):
-        return self._destroy_on_impact
+        return self.__destroy_on_impact
 
     @property
     def obstacle_sprites(self):
-        return self._obstacle_sprites
+        return self.__obstacle_sprites
 
     @property
     def particle_spawners(self):
-        return self._particle_spawners
+        return self.__particle_spawners
+
+    @property
+    def blood_on_kill(self):
+        return self.__blood_on_kill
+
+    @property
+    def fade_out_step(self):
+        return self.__fade_out_step
+
+    @property
+    def destroy_time(self):
+        return self.__destroy_time
+
+    @property
+    def damage_time(self):
+        return self.__damage_time
+
+    @property
+    def destroy_timer(self):
+        return self.__destroy_timer
+
+    @property
+    def hit_sound(self):
+        return self.__hit_sound
 
     def enemy_collision(self, player, attackable_group):
         if not self.__damage_time > 0:
@@ -76,22 +100,22 @@ class EnemyDamageArea(Entity):
                 if self.hit_sound is not None:
                     self.hit_sound.play()
 
-                target_sprite.damage(self._damage, player)
+                target_sprite.damage(self.__damage, player)
                 if target_sprite.health <= 0:
                     target_sprite.check_death(player)
                     if self.__blood_on_kill:
-                        BloodSource(collision_sprites[0].rect.center, self.groups()[0], self._obstacle_sprites,
-                                    self._direction)
+                        BloodSource(collision_sprites[0].rect.center, self.groups()[0], self.__obstacle_sprites,
+                                    self.direction)
 
-                if self._destroy_on_impact:  # ataque dá dano em só um inimigo
+                if self.__destroy_on_impact:  # ataque dá dano em só um inimigo
                     self.kill()
                     break
 
     def update(self):
         # movimento
         self.image.set_alpha(self.image.get_alpha() - self.__fade_out_step)
-        if self._speed != 0:
-            moved = self.move(self._speed, 'smaller_hitbox')
+        if self.__speed != 0:
+            moved = self.move(self.__speed, 'smaller_hitbox')
             if not moved:
                 # projétil colidiu com algum obstáculo
                 self.kill()
@@ -105,12 +129,12 @@ class EnemyDamageArea(Entity):
         if self.__destroy_timer >= self.__destroy_time:
             self.kill()
 
-        for particle_spawner in self._particle_spawners:
+        for particle_spawner in self.__particle_spawners:
             particle_spawner.rect.center = self.rect.center
 
     def kill(self):
         # apagar os particle spawners
-        for particle_spawner in self._particle_spawners:
+        for particle_spawner in self.__particle_spawners:
             if isinstance(particle_spawner, FireSource):
                 # fazer uma "explosão" de fogo ao destruir
                 for i in range(5, 15):

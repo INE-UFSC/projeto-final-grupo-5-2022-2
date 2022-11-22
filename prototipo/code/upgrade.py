@@ -5,13 +5,25 @@ from code.utils import load_sprite
 
 class Upgrade(ABC):
     def __init__(self, name, description, icon):
-        self.name = name
-        self.description = description
-        self.icon = load_sprite(icon)
+        self.__name = name
+        self.__description = description
+        self.__icon = load_sprite(icon)
 
     @abstractmethod
     def apply(self, player):
         pass
+
+    @property
+    def name(self):
+        return self.__name
+
+    @property
+    def description(self):
+        return self.__description
+
+    @property
+    def icon(self):
+        return self.__icon
 
 
 class HealthUpgrade(Upgrade):
