@@ -11,16 +11,28 @@ from code.waves import WaveManager
 
 class Level:
     def __init__(self):
-        self.__display_surface = pygame.display.get_surface()
         # salas
-        self.__room_list = list([Room(WORLD_MAP)])
-        self.__current_room = self.__room_list[0]
+        self.__room_list = list([Room(ROOM_MAP_1), Room(ROOM_MAP_2)])
+        self.__current_room_index = 0
+
+    @property
+    def current_room(self):
+        return self.__room_list[self.__current_room_index]
+        
+    
+    @current_room.setter
+    def current_room(self, index):
+        self.__current_room_index = index
+            
 
     def toggle_menu(self):
-        self.__current_room.toggle_menu()
+        self.current_room.toggle_menu()
 
     def run(self):
-        self.__current_room.run()
+        self.current_room.run()
+        if self.current_room.player.rect.topleft[0] > WIDTH - 192: # mudar
+            self.__current_room_index += 1
+        
 
 
 class Room:
@@ -30,12 +42,17 @@ class Room:
         self.obstacle_sprites = pygame.sprite.Group()
         self.attack_sprites = pygame.sprite.Group()
         self.attackable_sprites = pygame.sprite.Group()
+        # player
         # mapa
         self.create_map(room_map)
         # waves
         self.__wave_manager = WaveManager('1')
         # ui
         self.ui = UI()
+
+    @property
+    def player(self):
+        return self.__player
 
     def create_map(self, room_map):
         for row_index, row in enumerate(room_map):
@@ -45,34 +62,39 @@ class Room:
                 if col == 'x':
                     Tile((x, y), [self.visible_sprites, self.obstacle_sprites])
                 elif col == 'p':
-                    self.player = Player((x, y), [self.visible_sprites], [self.visible_sprites, self.attack_sprites],
+                    self.__player = Player([self.visible_sprites], [self.visible_sprites, self.attack_sprites],
                                          self.obstacle_sprites)
+                elif col == 'e':
+                    self.spawn_enemy('enemy', (x, y))
+
+                elif col == 'p':
+                    self.__player = Player((x, y), )
                 elif col == 'e':
                     self.spawn_enemy('enemy', (x, y))
 
     def spawn_enemy(self, name, pos):
         Enemy(name, pos, [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites)
         # permite os inimigos colidirem com os outros inimigos e com o player
-        enemy_obstacle_sprites = pygame.sprite.Group(self.player, self.obstacle_sprites, self.attackable_sprites)
+        enemy_obstacle_sprites = pygame.sprite.Group(self.__player, self.obstacle_sprites, self.attackable_sprites)
         for sprite in self.attackable_sprites:
             sprite.obstacle_sprites = enemy_obstacle_sprites
         # permite o player colidir com os inimigos
-        self.player.obstacle_sprites = pygame.sprite.Group(self.obstacle_sprites, self.attackable_sprites)
+        self.__player.obstacle_sprites = pygame.sprite.Group(self.obstacle_sprites, self.attackable_sprites)
 
     def toggle_menu(self):
         self.ui.toggle_menu()
 
     def run(self):
         self.visible_sprites.custom_draw()
-        self.ui.display(self.player, self.__wave_manager.timer)
+        self.ui.display(self.__player, self.__wave_manager.timer)
 
         if not self.ui.is_menu_open:
             self.__wave_manager.update(self.spawn_enemy)
             self.visible_sprites.update()
-            self.visible_sprites.enemy_update(self.player)
+            self.visible_sprites.enemy_update(self.__player)
             # conferir colisão dos ataques com os inimigos
             for attack_sprite in self.attack_sprites:
-                attack_sprite.enemy_collision(self.player, self.attackable_sprites)
+                attack_sprite.enemy_collision(self.__player, self.attackable_sprites)
 
 
 class YSortCameraGroup(pygame.sprite.Group):
