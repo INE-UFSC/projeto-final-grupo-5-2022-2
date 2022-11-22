@@ -10,6 +10,15 @@ class Entity(pygame.sprite.Sprite):
         self._direction = pygame.math.Vector2()
 
     @property
+    def position(self):
+        return self.rect.top_left
+
+    @position.setter
+    def position(self, pos : tuple):
+        self.rect.top_left        = pos
+        self.hitbox.rect.top_left = pos
+
+    @property
     def sprite_type(self):
         return self._sprite_type
     
