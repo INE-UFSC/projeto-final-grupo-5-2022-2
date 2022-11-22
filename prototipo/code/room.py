@@ -1,7 +1,7 @@
 import pygame
 
 from code.group_manager import GroupManager
-from code.waves import WaveManager
+from code.wave_manager import WaveManager
 from code.settings import *
 from code.player import Player
 from code.tile import Tile

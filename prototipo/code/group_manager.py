@@ -1,7 +1,8 @@
 import pygame
 
+from code.camera import YSortCameraGroup
 from code.singleton import Singleton
-from code.y_sort_camera_group import YSortCameraGroup
+
 
 class GroupManager(Singleton):
     def __init__(self) -> None:
