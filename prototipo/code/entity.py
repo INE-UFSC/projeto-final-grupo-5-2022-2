@@ -12,7 +12,7 @@ class Entity(pygame.sprite.Sprite):
     @property
     def sprite_type(self):
         return self.__sprite_type
-    
+
     @sprite_type.setter
     def sprite_type(self, value):
         self.__sprite_type = value
@@ -73,5 +73,3 @@ class Entity(pygame.sprite.Sprite):
             return 255
         else:
             return 0
-
-

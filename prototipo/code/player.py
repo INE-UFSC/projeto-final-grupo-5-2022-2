@@ -181,6 +181,10 @@ class Player(Entity):
     def obstacle_sprites(self):
         return self.__obstacle_sprites
 
+    @obstacle_sprites.setter
+    def obstacle_sprites(self, obstacle_sprites):
+        self.__obstacle_sprites = obstacle_sprites
+
     @property
     def speed(self):
         return self.__speed
@@ -196,8 +200,6 @@ class Player(Entity):
     @property
     def level_ip_ex_increment(self):
         return self.__level_up_exp_increment
-
-
 
 
 class Staff(pygame.sprite.Sprite):

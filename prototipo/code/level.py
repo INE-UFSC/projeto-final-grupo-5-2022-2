@@ -61,7 +61,6 @@ class Room:
     def ui(self):
         return self.__ui
 
-
     def create_map(self, room_map):
         for row_index, row in enumerate(room_map):
             for col_index, col in enumerate(row):
@@ -70,34 +69,35 @@ class Room:
                 if col == 'x':
                     Tile((x, y), [self.visible_sprites, self.obstacle_sprites])
                 elif col == 'p':
-                    self.player = Player((x, y), [self.__visible_sprites], [self.__visible_sprites, self.__attack_sprites],
-                                         self.obstacle_sprites)
+                    self.__player = Player((x, y), [self.__visible_sprites],
+                                           [self.__visible_sprites, self.__attack_sprites],
+                                           self.obstacle_sprites)
                 elif col == 'e':
                     self.spawn_enemy('enemy', (x, y))
 
     def spawn_enemy(self, name, pos):
         Enemy(name, pos, [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites)
         # permite os inimigos colidirem com os outros inimigos e com o player
-        enemy_obstacle_sprites = pygame.sprite.Group(self.player, self.__obstacle_sprites, self.__attackable_sprites)
+        enemy_obstacle_sprites = pygame.sprite.Group(self.__player, self.__obstacle_sprites, self.__attackable_sprites)
         for sprite in self.attackable_sprites:
             sprite.obstacle_sprites = enemy_obstacle_sprites
         # permite o player colidir com os inimigos
-        self.player.obstacle_sprites = pygame.sprite.Group(self.__obstacle_sprites, self.__attackable_sprites)
+        self.__player.obstacle_sprites = pygame.sprite.Group(self.__obstacle_sprites, self.__attackable_sprites)
 
     def toggle_menu(self):
         self.ui.toggle_menu()
 
     def run(self):
         self.visible_sprites.custom_draw()
-        self.ui.display(self.player, self.__wave_manager.timer)
+        self.ui.display(self.__player, self.__wave_manager.timer)
 
         if not self.ui.is_menu_open:
             self.__wave_manager.update(self.spawn_enemy)
             self.visible_sprites.update()
-            self.visible_sprites.enemy_update(self.player)
+            self.visible_sprites.enemy_update(self.__player)
             # conferir colisão dos ataques com os inimigos
             for attack_sprite in self.attack_sprites:
-                attack_sprite.enemy_collision(self.player, self.attackable_sprites)
+                attack_sprite.enemy_collision(self.__player, self.attackable_sprites)
 
 
 class YSortCameraGroup(pygame.sprite.Group):

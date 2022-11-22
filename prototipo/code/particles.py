@@ -23,6 +23,7 @@ class ParticleSource(pygame.sprite.Sprite, ABC):
     def sprite_type(self, sprite_type):
         self.__sprite_type = sprite_type
 
+
 class Particle(pygame.sprite.Sprite, ABC):
     def __init__(self, groups):
         super().__init__(groups)
@@ -47,6 +48,10 @@ class FireSource(ParticleSource):
     def offset(self):
         return self.__offset
 
+    @offset.setter
+    def offset(self, offset):
+        self.__offset = offset
+
     def update(self):
         # criar as partículas de fogo
         for i in range(random.randint(1, 3)):
@@ -61,7 +66,7 @@ class FireParticle(Particle):
         self.__sprite_type = 'particle'
 
         self.__mask_circle_32 = load_sprite('/mask/circle_32.png')
-        self.image = self.mask_circle_32.copy()
+        self.image = self.__mask_circle_32.copy()
         self.image.set_alpha(0)  # para não desenhar a partícula ainda não configurada
         self.rect = self.image.get_rect(center=pos)
 
@@ -89,28 +94,27 @@ class FireParticle(Particle):
     def color_index(self):
         return self.__color_index
 
-
     def animate(self):
         if self.inner_timer % 4 == 0:
             # diminuir e mover a partícula
-            self.size = self.size - random.randint(1, 3)
+            self.__size = self.__size - random.randint(1, 3)
             self.rect.centery -= random.randint(1, 4)
 
-        if self.color_index < len(self.colors) - 1:
+        if self.__color_index < len(self.colors) - 1:
             # não permitir a cor inicial ficar por muito tempo
-            if self.size < 14 and self.color_index == 0:
-                self.color_index += 1
+            if self.__size < 14 and self.__color_index == 0:
+                self.__color_index += 1
 
             # lógica de próxima cor
             if random.randint(0, 4) == 2:
-                self.color_index += 1
+                self.__color_index += 1
 
-        if self.size <= 4:
+        if self.__size <= 4:
             self.kill()
 
-        self.image = pygame.transform.scale(self.mask_circle_32, (self.size, self.size))
+        self.image = pygame.transform.scale(self.__mask_circle_32, (self.__size, self.__size))
         circle = pygame.Surface(self.image.get_size())
-        circle.fill(self.colors[self.color_index])
+        circle.fill(self.colors[self.__color_index])
         self.rect = circle.get_rect(center=self.rect.center)
         self.image.set_alpha(255)
         self.image.blit(circle, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
@@ -139,7 +143,7 @@ class LightParticle(Particle):
         self.__sprite_type = 'light'
 
         self.__mask_circle_32 = load_sprite('/mask/circle_32.png')
-        self.image = self.mask_circle_32.copy()
+        self.image = self.__mask_circle_32.copy()
         self.image.set_alpha(0)  # para não desenhar a partícula ainda não configurada
         self.rect = self.image.get_rect(center=pos)
 
@@ -185,11 +189,11 @@ class LightParticle(Particle):
     def animate(self):
         if self.inner_timer % 10 == 0:
             sin = math.sin(self.inner_timer / 10)
-            self.diff = sin * self.shrink_mag if sin < 0 else sin * self.grow_mag
-        new_diameter = max(1, self.original_diameter + self.diff)
-        self.size = (new_diameter, new_diameter)
+            self.__diff = sin * self.shrink_mag if sin < 0 else sin * self.grow_mag
+        new_diameter = max(1, self.original_diameter + self.__diff)
+        self.__size = (new_diameter, new_diameter)
 
-        self.image = pygame.transform.scale(self.mask_circle_32, self.size)
+        self.image = pygame.transform.scale(self.__mask_circle_32, self.__size)
         circle = pygame.Surface(self.image.get_size())
         circle.fill(self.color)
         self.rect = circle.get_rect(center=self.rect.center)
@@ -253,7 +257,7 @@ class BloodParticle(Particle):
         self.__obstacle_sprites = obstacle_sprites
 
         self.__mask_circle_32 = load_sprite('/mask/circle_32.png')
-        self.image = self.mask_circle_32.copy()
+        self.image = self.__mask_circle_32.copy()
         self.image.set_alpha(0)  # para não desenhar a partícula ainda não configurada
         self.rect = self.image.get_rect(center=pos)
 
@@ -293,22 +297,22 @@ class BloodParticle(Particle):
     def animate(self):
         # diminuir e mover a partícula
         if self.inner_timer % 2 == 0:
-            if self.inner_timer >= 5 and self.speed > 0:
-                self.size = max(1, self.size - random.randint(1, 2))
-                self.speed = max(0, self.speed - random.randint(2, 12))
+            if self.inner_timer >= 5 and self.__speed > 0:
+                self.__size = max(1, self.__size - random.randint(1, 2))
+                self.__speed = max(0, self.__speed - random.randint(2, 12))
             else:
-                self.speed = max(0, self.speed - random.randint(4, 16))
+                self.__speed = max(0, self.__speed - random.randint(4, 16))
 
-            self.rect.center += self.direction * self.speed
+            self.rect.center += self.direction * self.__speed
 
         # calcular próximo alpha
         new_alpha = self.image.get_alpha() - 1 if self.inner_timer > 100 else 255
 
         # destruição
-        if self.size <= 4 or new_alpha == 0:
+        if self.__size <= 4 or new_alpha == 0:
             self.kill()
 
-        self.image = pygame.transform.scale(self.mask_circle_32, (self.size, self.size))
+        self.image = pygame.transform.scale(self.__mask_circle_32, (self.__size, self.__size))
         self.image.set_alpha(new_alpha)
         circle = pygame.Surface(self.image.get_size())
         circle.fill(self.color)
