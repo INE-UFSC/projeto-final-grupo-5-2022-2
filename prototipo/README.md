@@ -6,6 +6,18 @@ py main.py
 ```
 
 ___
+# To-Do
+## Refatoração
+- 
+- [ ] Singleton para as settings
+  - [ ] Tirar variáveis soltas no meio do código que deveriam estar nos settings (tipo algumas soltas no UI.py da posição dos botões)
+- [ ] Renomear waves.py para wave_manager.py
+- [ ] Singleton para carregar todos os sprites de uma só vez.
+- [ ] Dividir melhor a ui.py
+  - Criar uma pasta para os elementos da UI
+- [ ] Tirar o Game do main.py e colocar ele em um arquivo próprio
+- [ ] Alterar lógica de instanciação de sprites para algo mais intuitivo
+___
 
 # To-Do para o protótipo
 
@@ -56,7 +68,7 @@ disponível [aqui](https://docs.google.com/document/d/189AMDekPZeVRerxjPzfzko3lh
 
 - [ ] Arrumar a visibilidade dos atributos (transformar em privado) nas classes restantes
 
-- [ ] Adicionar um crosshair para ajudar o Player a mirar
+- [x] Adicionar um crosshair para ajudar o Player a mirar
 
 - [ ] Fazer os inimigos desviarem de paredes ao se movimentar em direção do Player
 
