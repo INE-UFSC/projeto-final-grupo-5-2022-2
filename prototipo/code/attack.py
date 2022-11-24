@@ -36,6 +36,7 @@ class Attack(ABC):
 
     def use(self, player, key):
         if self.__can_attack and key:
+            player.staff.toggle_animation()
             self.create(player)
             self.block()
 
@@ -235,6 +236,7 @@ class AreaAttack(Attack):
             else:
                 # criar o ataque
                 if self.__attack_started:
+                    player.staff.toggle_animation()
                     self.create(player)
                     self.block()
                     self.__attack_started = False

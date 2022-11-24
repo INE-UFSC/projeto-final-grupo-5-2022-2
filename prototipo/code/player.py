@@ -2,7 +2,6 @@ import sys
 
 from code.attack import *
 from code.entity import Entity
-from code.sprite_manager import SpriteManager
 
 
 class Player(Entity):
@@ -230,8 +229,12 @@ class Player(Entity):
 class Staff(pygame.sprite.Sprite):
     def __init__(self, groups):
         super().__init__(groups)
-        self.__sprite_type = 'player'
-        self.image = SpriteManager().get_sprite('/test/staff.png')
+        self.__sprite_type = 'staff'
+        self.__animation = get_animation('/staff')
+        self.__frame_index = 0
+        self.__animation_speed = 0.2
+        self.__animate = False
+        self.image = self.__animation[0]
         self.rect = self.image.get_rect()
         self.__original_rect = self.rect
 
@@ -239,8 +242,22 @@ class Staff(pygame.sprite.Sprite):
     def sprite_type(self):
         return self.__sprite_type
 
+    def toggle_animation(self):
+        self.__animate = True
+        self.__light = LightSource(self.rect.center, self.groups())
+
     def animate(self, player):
-        self.rect.center = player.rect.center + pygame.math.Vector2(25, 10)
+        if self.__animate:
+            self.__light.rect.center = self.rect.center
+            self.__frame_index += self.__animation_speed
+            if self.__frame_index >= len(self.__animation):
+                self.__frame_index = 0
+                self.__animate = False
+                self.__light.kill()
+        else:
+            self.__frame_index = 1 - self.__animation_speed
+        self.image = self.__animation[int(self.__frame_index)]
+        self.rect.center = player.rect.center + pygame.math.Vector2(20, -10)
         # atualizar posição do cajado
         mouse_pos = pygame.mouse.get_pos()
         dist = math.sqrt(
