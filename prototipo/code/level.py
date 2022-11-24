@@ -22,12 +22,16 @@ class Level:
     def current_room(self):
         return self.__room_list[self.__current_room_index]
         
-    
-    @current_room.setter
-    def current_room(self, index):
-        self.__current_room_index = index
-        self.__current_room.create_map()
+    def next_room(self):
+        if self.__current_room_index < len(self.__room_list) - 1:
+            self.__current_room_index += 1
+            self.__group_manager.clear_all_groups()
+            self.current_room.create_map()
+        else:
+            self.end_level()
             
+    def end_level(self):
+        print("Level end")
 
     def toggle_menu(self):
         self.current_room.toggle_menu()
@@ -35,6 +39,6 @@ class Level:
     def run(self):
         self.current_room.run()
         if self.current_room.player.rect.topleft[0] > WIDTH - 192: # mudar
-            self.__current_room_index += 1
+            self.next_room()
         
 

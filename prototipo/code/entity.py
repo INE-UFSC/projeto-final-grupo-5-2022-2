@@ -11,12 +11,12 @@ class Entity(pygame.sprite.Sprite):
 
     @property
     def position(self):
-        return self.rect.top_left
+        return self.rect.topleft
 
     @position.setter
     def position(self, pos : tuple):
-        self.rect.top_left        = pos
-        self.hitbox.rect.top_left = pos
+        self.rect.topleft = pos
+        self.hitbox.center = self.rect.center
 
     @property
     def sprite_type(self):
