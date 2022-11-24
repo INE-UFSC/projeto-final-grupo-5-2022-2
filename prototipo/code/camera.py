@@ -1,5 +1,8 @@
 import pygame
 
+from code.settings import TILESIZE
+from code.sprite_manager import SpriteManager
+
 
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self):
@@ -7,8 +10,10 @@ class YSortCameraGroup(pygame.sprite.Group):
         self.__display_surface = pygame.display.get_surface()
         self.__back_sprite_types = ['on_ground']
         self.__front_sprite_types = ['light']
+        self.__background = pygame.Surface((TILESIZE, TILESIZE))
 
     def custom_draw(self):
+        self.__display_surface.blit(self.__background, (0, 0))
         # separar os sprites que devem sempre ir atrás dos outros e sempre na frente
         # alguns sprites que necessariamente devem ir atrás são as partículas de sangue, que devem ficar
         # atrás de tudo por "estar no chão"
@@ -35,3 +40,6 @@ class YSortCameraGroup(pygame.sprite.Group):
                          if sprite.sprite_type == 'enemy']
         for enemy in enemy_sprites:
             enemy.enemy_update(player)
+
+    def set_background(self, room_name):
+        self.__background = SpriteManager().get_sprite(f'/backgrounds/{room_name}.png')

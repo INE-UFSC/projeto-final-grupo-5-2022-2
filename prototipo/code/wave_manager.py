@@ -6,7 +6,7 @@ from code.settings import *
 
 class WaveManager:
     def __init__(self, room_name):
-        with open(f'{GAME_PATH}/rooms/{room_name}.json', 'r', encoding='UTF-8') as file:
+        with open(f'{GAME_PATH}/rooms/{room_name}/wave.json', 'r', encoding='UTF-8') as file:
             self.__wave_data = json.load(file)[0]
 
         self.__timer = 0
@@ -58,5 +58,3 @@ class WaveManager:
     @property
     def spawn_positions(self):
         return self.__spawn_positions
-
-

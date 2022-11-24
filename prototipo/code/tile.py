@@ -1,17 +1,24 @@
 import pygame
 
-from code.utils import load_sprite
+from code.settings import *
+from code.sprite_manager import SpriteManager
 
 
 class Tile(pygame.sprite.Sprite):
-    def __init__(self, pos, groups):
+    def __init__(self, pos, groups, tile_number=''):
         super().__init__(groups)
         self.__sprite_type = 'tile'
-        self.__image = load_sprite('/test/rock.png')
+        if len(tile_number) != 0:
+            self.__image = SpriteManager().get_sprite(f'/objects/{tile_number}.png')
+        else:
+            self.__image = pygame.Surface((TILESIZE, TILESIZE))
         self.__rect = self.image.get_rect(topleft=pos)
-        self.__hitbox = self.rect.inflate(0, -16)
-        self.__smaller_hitbox = self.rect.inflate(-16, -26)
-        self.__smaller_hitbox.y = self.rect.y
+        x_offset = X_OFFSET.get(tile_number, -16)
+        y_offset = Y_OFFSET.get(tile_number, -16)
+        self.__hitbox = self.rect.inflate(x_offset, y_offset)
+        self.__hitbox.bottom = self.__rect.bottom
+        self.__smaller_hitbox = self.rect.inflate(-16 + x_offset, -10 + y_offset)
+        self.__smaller_hitbox.center = self.rect.center
 
     @property
     def sprite_type(self):

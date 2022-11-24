@@ -1,8 +1,11 @@
 import sys
+
 import pygame
 
-from code.settings import *
 from code.level import Level
+from code.settings import *
+from code.sprite_manager import SpriteManager
+
 
 class Game:
     def __init__(self):
@@ -10,6 +13,7 @@ class Game:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption('Jornada à sala ALOCAR')
         self.clock = pygame.time.Clock()
+        SpriteManager()  # carregar os sprites
         # level
         self.level = Level()
 

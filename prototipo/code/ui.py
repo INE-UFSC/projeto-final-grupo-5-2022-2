@@ -4,7 +4,6 @@ import pygame
 
 from code.settings import *
 from code.upgrade import *
-from code.utils import load_sprite
 
 
 class UI:
@@ -13,7 +12,7 @@ class UI:
         self.__font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
         self.__timer_font = pygame.font.Font(UI_FONT, UI_FONT_SIZE + 6)
 
-        self.__health_sprite = load_sprite('/test/heart.png')
+        self.__health_sprite = SpriteManager().get_sprite('/test/heart.png')
         self.__exp_bar_rect = pygame.Rect(0, 0, EXP_BAR_WIDTH, BAR_HEIGHT)
         self.__exp_bar_rect.topright = (self.display_surface.get_size()[0] - 20, 10)
 
@@ -23,36 +22,36 @@ class UI:
                                      'firerate': FireRateUpgrade(), 'speed': SpeedUpgrade()}
 
         pygame.mouse.set_visible(False)
-        self.__cursor = load_sprite('/cursor.png')
-        
+        self.__cursor = SpriteManager().get_sprite('/cursor.png')
+
     @property
     def display_surface(self):
         return self.__display_surface
-    
+
     @property
     def font(self):
         return self.__font
-    
+
     @property
     def timer_font(self):
         return self.__timer_font
-    
+
     @property
     def health_sprite(self):
         return self.__health_sprite
-    
+
     @property
     def exp_bar_react(self):
         return self.__exp_bar_rect
-    
+
     @property
     def is_menu_open(self):
         return self.__is_menu_open
-    
+
     @property
     def upgrade_botton_list(self):
         return self.__upgrade_button_list
-    
+
     @property
     def avalaible_upgrade(self):
         return self.__available_upgrades

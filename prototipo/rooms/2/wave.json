@@ -1,0 +1,18 @@
+[
+  {
+    "ticks": [
+      {
+        "timer": 0,
+        "every": 30
+      }
+    ],
+    "spawns": [
+      {
+        "enemies": "enemy",
+        "locations": "random",
+        "after": 0,
+        "before": 9999
+      }
+    ]
+  }
+]
