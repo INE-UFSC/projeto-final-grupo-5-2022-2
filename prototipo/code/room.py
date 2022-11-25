@@ -14,11 +14,12 @@ class Room:
     def __init__(self, room_name):
         self.__ui = UI()
         self.__group_manager = GroupManager()
+        self.__wave_manager = WaveManager()
         self.change_to(room_name)
 
     def change_to(self, room_name):
         self.__group_manager.clear_all_groups()
-        self.__wave_manager = WaveManager(room_name)
+        self.__wave_manager.change_to_wave(room_name)
         self.create_map(room_name)
 
     @property

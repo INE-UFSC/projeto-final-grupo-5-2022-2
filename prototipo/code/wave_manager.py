@@ -1,4 +1,3 @@
-import json
 import random
 
 from code.resources import Resources
@@ -6,16 +5,22 @@ from code.settings import *
 
 
 class WaveManager:
-    def __init__(self, room_name):
-        self.__wave_data = Resources().get_wave(room_name)
-
+    def __init__(self):
+        self.__wave_data = None
         self.__timer = 0
         self.__tick_index = 0
         self.__max_time = WAVE_TIME
-
         self.__spawn_positions = ((200, 200), (500, 500))
 
+    def change_to_wave(self, room_name):
+        self.__wave_data = Resources().get_wave(room_name)
+        self.__timer = 0
+        self.__tick_index = 0
+
     def update(self, spawn_enemy):
+        if self.__wave_data is None:
+            return
+
         if self.__timer >= self.__max_time:
             return
 
