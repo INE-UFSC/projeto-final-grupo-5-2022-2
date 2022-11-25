@@ -7,7 +7,7 @@ import pygame.transform
 from code.damage_area import EnemyDamageArea
 from code.particles import FireSource, LightSource
 from code.resources import Resources
-from code.utils import *
+from code.settings import WHITE
 
 
 class Attack(ABC):
@@ -26,9 +26,9 @@ class Attack(ABC):
         self.__attack_time = 0
 
         if cast_sound != '':
-            self.__cast_sound = load_sound(cast_sound)
+            self.__cast_sound = Resources().get_sound(cast_sound)
         if hit_sound != '':
-            self.__hit_sound = load_sound(hit_sound)
+            self.__hit_sound = Resources().get_sound(hit_sound)
 
     @property
     def icon(self):

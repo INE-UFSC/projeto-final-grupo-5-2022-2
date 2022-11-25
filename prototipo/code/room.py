@@ -3,10 +3,10 @@ import pygame
 from code.enemy import Enemy
 from code.group_manager import GroupManager
 from code.player import Player
+from code.resources import Resources
 from code.settings import *
 from code.tile import Tile
 from code.ui import UI
-from code.utils import load_objects
 from code.wave_manager import WaveManager
 
 
@@ -41,9 +41,9 @@ class Room:
         for i in range(0, HEIGHT - TILESIZE, TILESIZE):  # vertical
             Tile((-TILESIZE, i), [self.__group_manager.obstacle_sprites], '')
             Tile((WIDTH, i), [self.__group_manager.obstacle_sprites], '')
-        # objetos
-        objects = load_objects(room_name)
-        for row_index, row in enumerate(objects):
+        # tiles
+        tiles = Resources().get_tilemap(room_name)
+        for row_index, row in enumerate(tiles):
             for col_index, col in enumerate(row):
                 x = col_index * TILESIZE
                 y = row_index * TILESIZE

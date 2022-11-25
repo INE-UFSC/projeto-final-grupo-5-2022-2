@@ -1,4 +1,6 @@
+import json
 import os
+from csv import reader
 
 import pygame
 
@@ -10,19 +12,59 @@ class Resources(Singleton):
     def __init__(self):
         if not self._initialized:
             self.__cache = {}
-            self.__load_all_sprites()
+            self.__load_resources()
             self._initialized = True
 
-    def __load_all_sprites(self):
-        graphics_path = os.path.join(GAME_PATH, 'graphics')
-        for root, dirs, files in os.walk(graphics_path):
+    def __load_resources(self):
+        extensions = {'.png': self.__load_image,
+                      '.ogg': self.__load_sound,
+                      '.csv': self.__load_tilemap,
+                      '.json': self.__load_wave}
+        for root, dirs, files in os.walk(GAME_PATH):
             for file in files:
-                if file.endswith('.png'):
+                name, extension = os.path.splitext(file)
+                if extension in extensions.keys():
                     full_path = os.path.join(root, file)
-                    relative_dir = full_path[full_path.rindex('graphics') + 8:].replace('\\', '/')
-                    self.__cache[relative_dir] = pygame.image.load(full_path).convert_alpha()
-        print(f'[{pygame.time.get_ticks()}] Sprites carregados')
+                    relative_path = '/' + os.path.relpath(full_path, GAME_PATH).replace('\\', '/')
+                    self.__cache[relative_path] = extensions[extension](full_path)
+        print(f'[{pygame.time.get_ticks()}] Recursos carregados')
+
+    def __load_image(self, path):
+        return pygame.image.load(path).convert_alpha()
+
+    def __load_sound(self, path):
+        return pygame.mixer.Sound(path)
+
+    def __load_tilemap(self, path):
+        tiles = list()
+        with open(path) as csv_file:
+            layout = reader(csv_file, delimiter=',')
+            for row in layout:
+                tiles.append(row)
+            return tiles
+
+    def __load_wave(self, path):
+        with open(path, 'r', encoding='UTF-8') as file:
+            return json.load(file)[0]
 
     def get_sprite(self, file):
         file_dir = file.replace('\\', '/')
-        return self.__cache[file_dir]
+        return self.__cache[f'/graphics{file_dir}']
+
+    def get_animation(self, folder_name):
+        surface_list = []
+        for _, __, img_files in os.walk(f'{GAME_PATH}/graphics/{folder_name}'):
+            for image in img_files:
+                image_surf = self.get_sprite(f'{folder_name}/{image}')
+                surface_list.append(image_surf)
+        return surface_list
+
+    def get_sound(self, file):
+        file_dir = file.replace('\\', '/')
+        return self.__cache[f'/audio/{file_dir}']
+
+    def get_tilemap(self, room_name):
+        return self.__cache[f'/rooms/{room_name}/tiles.csv']
+
+    def get_wave(self, room_name):
+        return self.__cache[f'/rooms/{room_name}/wave.json']

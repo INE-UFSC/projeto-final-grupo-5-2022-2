@@ -10,7 +10,7 @@ class Player(Entity):
         # importar animações
         self.__animations = {'up': [], 'down': [], 'left': [], 'right': []}
         for animation in self.__animations.keys():
-            self.__animations[animation] = get_animation(f'/player/{animation}')
+            self.__animations[animation] = Resources().get_animation(f'/player/{animation}')
         self.__state = 'down'
         self.__frame_index = 0
         self.__animation_speed = 0.2
@@ -230,7 +230,7 @@ class Staff(pygame.sprite.Sprite):
     def __init__(self, groups):
         super().__init__(groups)
         self.__sprite_type = 'staff'
-        self.__animation = get_animation('/staff')
+        self.__animation = Resources().get_animation('/staff')
         self.__frame_index = 0
         self.__animation_speed = 0.2
         self.__animate = False

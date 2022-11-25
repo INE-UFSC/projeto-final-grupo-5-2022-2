@@ -1,13 +1,13 @@
 import json
 import random
 
+from code.resources import Resources
 from code.settings import *
 
 
 class WaveManager:
     def __init__(self, room_name):
-        with open(f'{GAME_PATH}/rooms/{room_name}/wave.json', 'r', encoding='UTF-8') as file:
-            self.__wave_data = json.load(file)[0]
+        self.__wave_data = Resources().get_wave(room_name)
 
         self.__timer = 0
         self.__tick_index = 0
