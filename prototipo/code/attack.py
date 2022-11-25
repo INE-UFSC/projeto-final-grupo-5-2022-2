@@ -109,7 +109,7 @@ class Attack(ABC):
 
 class FireballAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
-        super().__init__('/test/icon_fireball.png', attack_groups, obstacle_sprites, damage=1, cooldown=75,
+        super().__init__('/icons/fireball_attack.png', attack_groups, obstacle_sprites, damage=1, cooldown=75,
                          cast_sound='fireball_cast.ogg', hit_sound='fireball_hit.ogg')
         self.cast_sound.set_volume(0.2)
         self.hit_sound.set_volume(0.1)
@@ -134,7 +134,7 @@ class FireballAttack(Attack):
 
 class SliceAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
-        super().__init__('/test/icon_slice.png', attack_groups, obstacle_sprites, damage=100, cooldown=120,
+        super().__init__('/icons/slice_attack.png', attack_groups, obstacle_sprites, damage=100, cooldown=120,
                          cast_sound='slice_cast.ogg', hit_sound='slice_hit.ogg')
         self.image = Resources().get_sprite('/test/slice.png')
         self.cast_sound.set_volume(0.1)
