@@ -199,7 +199,7 @@ class SliceAttack(Attack):
 
 class AreaAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
-        super().__init__('/icon/area_attack.png', attack_groups, obstacle_sprites, damage=100, cooldown=240,
+        super().__init__('/icons/area_attack.png', attack_groups, obstacle_sprites, damage=100, cooldown=240,
                          cast_sound='area_cast.ogg')
         self.cast_sound.set_volume(0.5)
 
