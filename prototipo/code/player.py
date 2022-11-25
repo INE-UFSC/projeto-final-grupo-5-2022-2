@@ -2,15 +2,22 @@ import sys
 
 from code.attack import *
 from code.entity import Entity
-from code.utils import load_sprite
 
 
 class Player(Entity):
     def __init__(self, groups, attack_groups, obstacle_sprites):
         super().__init__(groups, 'player')
-        self.image = load_sprite('/test/player.png')
+        # importar animações
+        self.__animations = {'up': [], 'down': [], 'left': [], 'right': []}
+        for animation in self.__animations.keys():
+            self.__animations[animation] = Resources().get_animation(f'/player/{animation}')
+        self.__state = 'down'
+        self.__frame_index = 0
+        self.__animation_speed = 0.2
+
+        self.image = self.__animations['down'][0]
         self.rect = self.image.get_rect(topleft=(300, 300))
-        self.__hitbox = self.rect.inflate(0, -26)
+        self.__hitbox = self.rect.inflate(-16, -26)
 
         self.__health = 3
         self.__max_health = 7
@@ -48,15 +55,19 @@ class Player(Entity):
         # movimento vertical
         if keys[pygame.K_w]:
             self.direction.y = -1
+            self.__state = 'up'
         elif keys[pygame.K_s]:
             self.direction.y = 1
+            self.__state = 'down'
         else:
             self.direction.y = 0
         # movimento horizontal
         if keys[pygame.K_d]:
             self.direction.x = 1
+            self.__state = 'right'
         elif keys[pygame.K_a]:
             self.direction.x = -1
+            self.__state = 'left'
         else:
             self.direction.x = 0
 
@@ -75,6 +86,19 @@ class Player(Entity):
                 self.__vulnerable = True
 
     def animate(self):
+        animation = self.__animations[self.__state]
+        if self.direction.x == 0 and self.direction.y == 0:
+            self.__frame_index = 1 - self.__animation_speed
+            # para reproduzir o próximo frame instantaneamente após
+            # começar a mover
+        else:
+            self.__frame_index += self.__animation_speed
+            if self.__frame_index >= len(animation):
+                self.__frame_index = 0
+        self.image = animation[int(self.__frame_index)]
+        self.rect = self.image.get_rect(center=self.hitbox.center)
+
+        # animação de vulnerabilidade
         if not self.__vulnerable:
             alpha = self.wave_value()
             self.image.set_alpha(alpha)
@@ -205,8 +229,12 @@ class Player(Entity):
 class Staff(pygame.sprite.Sprite):
     def __init__(self, groups):
         super().__init__(groups)
-        self.__sprite_type = 'player'
-        self.image = load_sprite('/test/staff.png')
+        self.__sprite_type = 'staff'
+        self.__animation = Resources().get_animation('/staff')
+        self.__frame_index = 0
+        self.__animation_speed = 0.2
+        self.__animate = False
+        self.image = self.__animation[0]
         self.rect = self.image.get_rect()
         self.__original_rect = self.rect
 
@@ -214,8 +242,22 @@ class Staff(pygame.sprite.Sprite):
     def sprite_type(self):
         return self.__sprite_type
 
+    def toggle_animation(self):
+        self.__animate = True
+        self.__light = LightSource(self.rect.center, self.groups())
+
     def animate(self, player):
-        self.rect.center = player.rect.center + pygame.math.Vector2(25, 10)
+        if self.__animate:
+            self.__light.rect.center = self.rect.center
+            self.__frame_index += self.__animation_speed
+            if self.__frame_index >= len(self.__animation):
+                self.__frame_index = 0
+                self.__animate = False
+                self.__light.kill()
+        else:
+            self.__frame_index = 1 - self.__animation_speed
+        self.image = self.__animation[int(self.__frame_index)]
+        self.rect.center = player.rect.center + pygame.math.Vector2(20, -10)
         # atualizar posição do cajado
         mouse_pos = pygame.mouse.get_pos()
         dist = math.sqrt(

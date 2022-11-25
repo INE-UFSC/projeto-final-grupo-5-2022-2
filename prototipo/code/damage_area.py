@@ -10,7 +10,7 @@ from code.settings import TILESIZE
 class EnemyDamageArea(Entity):
     def __init__(self, pos, groups, obstacle_sprites, damage=0, speed=0, direction=pygame.math.Vector2(),
                  destroy_on_impact=False,
-                 surface=pygame.Surface((TILESIZE, TILESIZE)), destroy_time=6000, damage_time=0, particle_spawners=[],
+                 surface=pygame.Surface((TILESIZE, TILESIZE)), destroy_time=60, damage_time=0, particle_spawners=[],
                  hit_sound=None,
                  blood_on_kill=False, fade_out_step=0):
         super().__init__(groups, 'enemy_damage_area')

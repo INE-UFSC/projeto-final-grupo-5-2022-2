@@ -6,7 +6,6 @@ from code.singleton import Singleton
 
 class GroupManager(Singleton):
     def __init__(self) -> None:
-        super().__init__()
         self.__visible_sprites = YSortCameraGroup()
         self.__obstacle_sprites = pygame.sprite.Group()
         self.__attack_sprites = pygame.sprite.Group()

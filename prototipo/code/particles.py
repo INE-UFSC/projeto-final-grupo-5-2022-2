@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 import pygame
 import pygame.sprite
 
-from code.utils import load_sprite
+from code.resources import Resources
 
 
 class ParticleSource(pygame.sprite.Sprite, ABC):
@@ -65,7 +65,7 @@ class FireParticle(Particle):
         super().__init__(groups)
         self.__sprite_type = 'particle'
 
-        self.__mask_circle_32 = load_sprite('/mask/circle_32.png')
+        self.__mask_circle_32 = Resources().get_sprite('/masks/circle_32.png')
         self.image = self.__mask_circle_32.copy()
         self.image.set_alpha(0)  # para não desenhar a partícula ainda não configurada
         self.rect = self.image.get_rect(center=pos)
@@ -142,7 +142,7 @@ class LightParticle(Particle):
         super().__init__(groups)
         self.__sprite_type = 'light'
 
-        self.__mask_circle_32 = load_sprite('/mask/circle_32.png')
+        self.__mask_circle_32 = Resources().get_sprite('/masks/circle_32.png')
         self.image = self.__mask_circle_32.copy()
         self.image.set_alpha(0)  # para não desenhar a partícula ainda não configurada
         self.rect = self.image.get_rect(center=pos)
@@ -256,7 +256,7 @@ class BloodParticle(Particle):
         self.__sprite_type = 'on_ground'
         self.__obstacle_sprites = obstacle_sprites
 
-        self.__mask_circle_32 = load_sprite('/mask/circle_32.png')
+        self.__mask_circle_32 = Resources().get_sprite('/masks/circle_32.png')
         self.image = self.__mask_circle_32.copy()
         self.image.set_alpha(0)  # para não desenhar a partícula ainda não configurada
         self.rect = self.image.get_rect(center=pos)
