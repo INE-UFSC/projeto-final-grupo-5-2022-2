@@ -8,21 +8,24 @@ class Tile(pygame.sprite.Sprite):
     def __init__(self, pos, groups, tile_number=''):
         super().__init__(groups)
         self.__sprite_type = 'tile'
-        if len(tile_number) != 0:
-            self.__image = SpriteManager().get_sprite(f'/objects/{tile_number}.png')
-        else:
-            self.__image = pygame.Surface((TILESIZE, TILESIZE))
+        self.__tile_number = tile_number
+        # TODO: Ajustar a parte do offset
+        self.__image = SpriteManager().get_sprite(f'/objects/{self.__tile_number}.png') if len(
+            self.__tile_number) > 0 else pygame.Surface((TILESIZE, TILESIZE))
         self.__rect = self.image.get_rect(topleft=pos)
-        x_offset = X_OFFSET.get(tile_number, -16)
-        y_offset = Y_OFFSET.get(tile_number, -16)
-        self.__hitbox = self.rect.inflate(x_offset, y_offset)
+        self.__hitbox = self.rect.inflate(X_OFFSET.get(self.__tile_number, -16), Y_OFFSET.get(self.__tile_number, -16))
         self.__hitbox.bottom = self.__rect.bottom
-        self.__smaller_hitbox = self.rect.inflate(-16 + x_offset, -10 + y_offset)
+        small_hitbox_offset = SMALL_HITBOX_OFFSET.get(self.__tile_number, 0)
+        self.__smaller_hitbox = self.rect.inflate(-16 + small_hitbox_offset, -10 + small_hitbox_offset)
         self.__smaller_hitbox.center = self.rect.center
 
     @property
     def sprite_type(self):
         return self.__sprite_type
+
+    @property
+    def tile_number(self):
+        return self.__tile_number
 
     @property
     def image(self):
