@@ -24,5 +24,6 @@ class Level:
 
     def run(self):
         self.__room.run()
+        # TODO: conferir se a wave já terminou
         if self.__room.player.rect.topleft[0] > WIDTH - 192:  # mudar
             self.next_room()
