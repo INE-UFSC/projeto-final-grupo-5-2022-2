@@ -26,3 +26,9 @@ class GroupManager(Singleton):
     @property
     def attackable_sprites(self):
         return self.__attackable_sprites
+
+    def clear_all_groups(self):
+        self.__visible_sprites.empty()
+        self.__obstacle_sprites.empty()
+        self.__attack_sprites.empty()
+        self.__attackable_sprites.empty()
