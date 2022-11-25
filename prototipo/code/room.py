@@ -34,7 +34,14 @@ class Room:
         # else:
         # TODO: adicionar o jogador atual nos grupos da próxima sala
 
-        # TODO: Fazer a parede que não deixa o player passar
+        # parede invisível ao redor da sala
+        for i in range(0, WIDTH, TILESIZE):  # horizontal
+            Tile((i, -TILESIZE), [self.__group_manager.obstacle_sprites], '')
+            Tile((i, HEIGHT), [self.__group_manager.obstacle_sprites], '')
+        for i in range(0, HEIGHT - TILESIZE, TILESIZE):  # vertical
+            Tile((-TILESIZE, i), [self.__group_manager.obstacle_sprites], '')
+            Tile((WIDTH, i), [self.__group_manager.obstacle_sprites], '')
+        # objetos
         objects = load_objects(room_name)
         for row_index, row in enumerate(objects):
             for col_index, col in enumerate(row):
