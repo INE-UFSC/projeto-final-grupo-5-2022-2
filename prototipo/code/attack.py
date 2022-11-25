@@ -6,13 +6,13 @@ import pygame.transform
 
 from code.damage_area import EnemyDamageArea
 from code.particles import FireSource, LightSource
-from code.sprite_manager import SpriteManager
+from code.resources import Resources
 from code.utils import *
 
 
 class Attack(ABC):
     def __init__(self, icon, attack_groups, obstacle_sprites, damage=1, cooldown=0, cast_sound='', hit_sound=''):
-        self.__icon = SpriteManager().get_sprite(icon)
+        self.__icon = Resources().get_sprite(icon)
 
         self.__attack_groups = attack_groups
         self.__obstacle_sprites = obstacle_sprites
@@ -116,7 +116,7 @@ class FireballAttack(Attack):
 
     def create(self, player):
         pos = (player.staff.rect.x, player.staff.rect.y)
-        sprite = SpriteManager().get_sprite('/test/fireball.png')
+        sprite = Resources().get_sprite('/test/fireball.png')
         # calcular direção do projétil
         mouse_pos = pygame.mouse.get_pos()
         angle = math.atan2(pos[1] - mouse_pos[1], pos[0] - mouse_pos[0])
@@ -136,7 +136,7 @@ class SliceAttack(Attack):
     def __init__(self, attack_groups, obstacle_sprites):
         super().__init__('/test/icon_slice.png', attack_groups, obstacle_sprites, damage=100, cooldown=120,
                          cast_sound='slice_cast.ogg', hit_sound='slice_hit.ogg')
-        self.image = SpriteManager().get_sprite('/test/slice.png')
+        self.image = Resources().get_sprite('/test/slice.png')
         self.cast_sound.set_volume(0.1)
         self.hit_sound.set_volume(0.1)
 
@@ -210,7 +210,7 @@ class AreaAttack(Attack):
         self.cast_sound.play()
         # pegar a posição do mouse 
         pos = pygame.mouse.get_pos()
-        sprite = SpriteManager().get_sprite('/test/area.png').copy()
+        sprite = Resources().get_sprite('/test/area.png').copy()
         # criar o ataque
         damage_area = EnemyDamageArea(pos, self.attack_groups, self.obstacle_sprites, damage=self.damage,
                                       surface=sprite, destroy_time=60, damage_time=1, fade_out_step=4.25)

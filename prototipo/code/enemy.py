@@ -1,14 +1,14 @@
 import pygame
 
 from code.entity import Entity
-from code.sprite_manager import SpriteManager
+from code.resources import Resources
 
 
 class Enemy(Entity):
     def __init__(self, monster_name, pos, groups, obstacle_sprites):
         super().__init__(groups, 'enemy')
 
-        self.image = SpriteManager().get_sprite('/test/enemy.png').copy()
+        self.image = Resources().get_sprite('/test/enemy.png').copy()
 
         self.rect = self.image.get_rect(topleft=pos)
         self.__hitbox = self.rect.inflate(0, -26)

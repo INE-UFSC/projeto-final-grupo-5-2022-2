@@ -1,13 +1,13 @@
 from abc import abstractmethod, ABC
 
-from code.sprite_manager import SpriteManager
+from code.resources import Resources
 
 
 class Upgrade(ABC):
     def __init__(self, name, description, icon):
         self.__name = name
         self.__description = description
-        self.__icon = SpriteManager().get_sprite(icon)
+        self.__icon = Resources().get_sprite(icon)
 
     @abstractmethod
     def apply(self, player):

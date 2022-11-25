@@ -4,7 +4,7 @@ from os import walk
 import pygame
 
 from code.settings import *
-from code.sprite_manager import SpriteManager
+from code.resources import Resources
 
 
 def load_sound(file):
@@ -24,6 +24,6 @@ def get_animation(folder_name):
     surface_list = []
     for _, __, img_files in walk(f'{GAME_PATH}/graphics/{folder_name}'):
         for image in img_files:
-            image_surf = SpriteManager().get_sprite(f'{folder_name}/{image}')
+            image_surf = Resources().get_sprite(f'{folder_name}/{image}')
             surface_list.append(image_surf)
     return surface_list

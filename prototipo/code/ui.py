@@ -12,7 +12,7 @@ class UI:
         self.__font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
         self.__timer_font = pygame.font.Font(UI_FONT, UI_FONT_SIZE + 6)
 
-        self.__health_sprite = SpriteManager().get_sprite('/test/heart.png')
+        self.__health_sprite = Resources().get_sprite('/test/heart.png')
         self.__exp_bar_rect = pygame.Rect(0, 0, EXP_BAR_WIDTH, BAR_HEIGHT)
         self.__exp_bar_rect.topright = (self.display_surface.get_size()[0] - 20, 10)
 
@@ -22,7 +22,7 @@ class UI:
                                      'firerate': FireRateUpgrade(), 'speed': SpeedUpgrade()}
 
         pygame.mouse.set_visible(False)
-        self.__cursor = SpriteManager().get_sprite('/cursor.png')
+        self.__cursor = Resources().get_sprite('/cursor.png')
 
     @property
     def display_surface(self):

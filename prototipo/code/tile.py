@@ -1,7 +1,7 @@
 import pygame
 
 from code.settings import *
-from code.sprite_manager import SpriteManager
+from code.resources import Resources
 
 
 class Tile(pygame.sprite.Sprite):
@@ -10,7 +10,7 @@ class Tile(pygame.sprite.Sprite):
         self.__sprite_type = 'tile'
         self.__tile_number = tile_number
         # TODO: Ajustar a parte do offset
-        self.__image = SpriteManager().get_sprite(f'/objects/{self.__tile_number}.png') if len(
+        self.__image = Resources().get_sprite(f'/objects/{self.__tile_number}.png') if len(
             self.__tile_number) > 0 else pygame.Surface((TILESIZE, TILESIZE))
         self.__rect = self.image.get_rect(topleft=pos)
         self.__hitbox = self.rect.inflate(X_OFFSET.get(self.__tile_number, -16), Y_OFFSET.get(self.__tile_number, -16))

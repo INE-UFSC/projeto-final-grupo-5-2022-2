@@ -6,7 +6,7 @@ from code.settings import GAME_PATH
 from code.singleton import Singleton
 
 
-class SpriteManager(Singleton):
+class Resources(Singleton):
     def __init__(self):
         if not self._initialized:
             self.__cache = {}

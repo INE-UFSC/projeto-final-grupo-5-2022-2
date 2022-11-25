@@ -1,7 +1,7 @@
 import pygame
 
 from code.settings import TILESIZE
-from code.sprite_manager import SpriteManager
+from code.resources import Resources
 
 
 class YSortCameraGroup(pygame.sprite.Group):
@@ -42,4 +42,4 @@ class YSortCameraGroup(pygame.sprite.Group):
             enemy.enemy_update(player)
 
     def set_background(self, room_name):
-        self.__background = SpriteManager().get_sprite(f'/backgrounds/{room_name}.png')
+        self.__background = Resources().get_sprite(f'/backgrounds/{room_name}.png')
