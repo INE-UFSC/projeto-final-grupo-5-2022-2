@@ -1,8 +1,7 @@
 import math
+import pygame
 import random
 from abc import ABC, abstractmethod
-
-import pygame.transform
 
 from code.damage_area import EnemyDamageArea
 from code.particles import FireSource, LightSource
@@ -116,7 +115,7 @@ class FireballAttack(Attack):
 
     def create(self, player):
         pos = (player.staff.rect.x, player.staff.rect.y)
-        sprite = Resources().get_sprite('/test/fireball.png')
+        sprite = Resources().get_sprite('/attacks/fireball.png')
         # calcular direção do projétil
         mouse_pos = pygame.mouse.get_pos()
         angle = math.atan2(pos[1] - mouse_pos[1], pos[0] - mouse_pos[0])

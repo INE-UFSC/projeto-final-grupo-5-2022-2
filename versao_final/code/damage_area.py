@@ -1,6 +1,5 @@
-import random
-
 import pygame
+import random
 
 from code.entity import Entity
 from code.particles import FireSource, BloodSource
@@ -116,6 +115,10 @@ class EnemyDamageArea(Entity):
         self.image.set_alpha(self.image.get_alpha() - self.__fade_out_step)
         if self.__speed != 0:
             moved = self.move(self.__speed, 'smaller_hitbox')
+
+            for particle_spawner in self.__particle_spawners:
+                particle_spawner.rect.center = self.rect.center + self.direction * self.speed
+
             if not moved:
                 # projétil colidiu com algum obstáculo
                 self.kill()
@@ -128,9 +131,6 @@ class EnemyDamageArea(Entity):
         self.__destroy_timer += 1
         if self.__destroy_timer >= self.__destroy_time:
             self.kill()
-
-        for particle_spawner in self.__particle_spawners:
-            particle_spawner.rect.center = self.rect.center
 
     def kill(self):
         # apagar os particle spawners
