@@ -6,7 +6,6 @@ from code.singleton import Singleton
 
 class GroupManager(Singleton):
     def __init__(self) -> None:
-        super().__init__()
         self.__visible_sprites = YSortCameraGroup()
         self.__obstacle_sprites = pygame.sprite.Group()
         self.__attack_sprites = pygame.sprite.Group()
@@ -27,3 +26,9 @@ class GroupManager(Singleton):
     @property
     def attackable_sprites(self):
         return self.__attackable_sprites
+
+    def clear_all_groups(self):
+        self.__visible_sprites.empty()
+        self.__obstacle_sprites.empty()
+        self.__attack_sprites.empty()
+        self.__attackable_sprites.empty()

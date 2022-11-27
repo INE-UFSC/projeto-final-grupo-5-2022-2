@@ -3,6 +3,7 @@ import pygame
 from code.enemy import Enemy
 from code.group_manager import GroupManager
 from code.player import Player
+from code.resources import Resources
 from code.settings import *
 from code.tile import Tile
 from code.ui import UI
@@ -10,35 +11,48 @@ from code.wave_manager import WaveManager
 
 
 class Room:
-    def __init__(self, room_map, player):
-        # sprites
-        self.__group_manager = GroupManager()
-        # mapa
-        self.__room_map = room_map
-        # waves
-        self.__wave_manager = WaveManager('1')
-        # ui
+    def __init__(self, room_name):
         self.__ui = UI()
-        # player
-        self.__player = player
+        self.__group_manager = GroupManager()
+        self.__wave_manager = WaveManager()
+        self.change_to(room_name)
+
+    def change_to(self, room_name):
+        self.__group_manager.clear_all_groups()
+        self.__wave_manager.change_to_wave(room_name)
+        self.create_map(room_name)
 
     @property
     def player(self):
         return self.__player
 
-    def create_map(self):
-        for row_index, row in enumerate(self.__room_map):
+    def create_map(self, room_name):
+        self.__group_manager.visible_sprites.set_background(room_name)
+
+        # TODO: posicionar o player
+        if not hasattr(self, 'player'):
+            self.__player = Player([self.__group_manager.visible_sprites],
+                                   [self.__group_manager.visible_sprites, self.__group_manager.attack_sprites],
+                                   self.__group_manager.obstacle_sprites)
+        else:
+            self.__group_manager.visible_sprites.add(self.__player)
+            self.__group_manager.visible_sprites.add(self.__player.staff)
+
+        # parede invisível ao redor da sala
+        for i in range(0, WIDTH, TILESIZE):  # horizontal
+            Tile((i, -TILESIZE), [self.__group_manager.obstacle_sprites], '')
+            Tile((i, HEIGHT), [self.__group_manager.obstacle_sprites], '')
+        for i in range(0, HEIGHT - TILESIZE, TILESIZE):  # vertical
+            Tile((-TILESIZE, i), [self.__group_manager.obstacle_sprites], '')
+            Tile((WIDTH, i), [self.__group_manager.obstacle_sprites], '')
+        # tiles
+        tiles = Resources().get_tilemap(room_name)
+        for row_index, row in enumerate(tiles):
             for col_index, col in enumerate(row):
                 x = col_index * TILESIZE
                 y = row_index * TILESIZE
-                if col == 'x':
-                    Tile((x, y), [self.__group_manager.visible_sprites, self.__group_manager.obstacle_sprites])
-                elif col == 'p':
-                    self.__player = Player([self.__group_manager.visible_sprites],
-                                           [self.__group_manager.visible_sprites, self.__group_manager.attack_sprites],
-                                           self.__group_manager.obstacle_sprites)
-                elif col == 'e':
-                    self.spawn_enemy('enemy', (x, y))
+                if col != '-1':
+                    Tile((x, y), [self.__group_manager.visible_sprites, self.__group_manager.obstacle_sprites], col)
 
     def spawn_enemy(self, name, pos):
         Enemy(name, pos, [self.__group_manager.visible_sprites, self.__group_manager.attackable_sprites],

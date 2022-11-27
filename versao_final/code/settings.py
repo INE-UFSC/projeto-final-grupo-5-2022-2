@@ -25,6 +25,17 @@ EXP_BAR_WIDTH = 176
 EXP_BAR_COLOR = '#0099db'
 STAT_BAR_WIDTH = 384
 
+X_OFFSET = {
+    '': 0,
+    '0': -16
+}
+Y_OFFSET = {
+    '': 0,
+    '0': -40
+}
+SMALL_HITBOX_OFFSET = {
+    '': -50
+}
 ROOM_MAP_1 = [
     ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'],
     ['x', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'x'],
