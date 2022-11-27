@@ -11,11 +11,11 @@ ___
 - 
 - [ ] Singleton para as settings
   - [ ] Tirar variáveis soltas no meio do código que deveriam estar nos settings (tipo algumas soltas no UI.py da posição dos botões)
-- [ ] Renomear waves.py para wave_manager.py
-- [ ] Singleton para carregar todos os sprites de uma só vez.
+- [x] Renomear waves.py para wave_manager.py
+- [x] Singleton para carregar todos os sprites de uma só vez.
 - [ ] Dividir melhor a ui.py
   - Criar uma pasta para os elementos da UI
-- [ ] Tirar o Game do main.py e colocar ele em um arquivo próprio
+- [x] Tirar o Game do main.py e colocar ele em um arquivo próprio
 - [ ] Alterar lógica de instanciação de sprites para algo mais intuitivo
 ___
 
@@ -86,7 +86,7 @@ um sprite 16x16 é aumentado para 64x64
 
 - [ ] Menus
 - [ ] Ataques do player
-- [ ] Player
+- [x] Player
 - [ ] Mapa e seus obstáculos
 - [ ] Inimigos
 - [ ] HUD
