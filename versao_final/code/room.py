@@ -1,6 +1,5 @@
 import pygame
 
-from code.enemy import Enemy
 from code.group_manager import GroupManager
 from code.player import Player
 from code.resources import Resources
@@ -54,9 +53,9 @@ class Room:
                 if col != '-1':
                     Tile((x, y), [self.__group_manager.visible_sprites, self.__group_manager.obstacle_sprites], col)
 
-    def spawn_enemy(self, name, pos):
-        Enemy(name, pos, [self.__group_manager.visible_sprites, self.__group_manager.attackable_sprites],
-              self.__group_manager.obstacle_sprites)
+    def spawn_enemy(self, enemy_class, pos):
+        enemy_class(pos, [self.__group_manager.visible_sprites, self.__group_manager.attackable_sprites],
+                    self.__group_manager.obstacle_sprites)
         # permite os inimigos colidirem com os outros inimigos e com o player
         enemy_obstacle_sprites = pygame.sprite.Group(self.__player, self.__group_manager.obstacle_sprites,
                                                      self.__group_manager.attackable_sprites)

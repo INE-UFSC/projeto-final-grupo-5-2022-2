@@ -55,7 +55,7 @@ class Resources(Singleton):
         surface_list = []
         for _, __, img_files in os.walk(f'{GAME_PATH}/graphics/{folder_name}'):
             for image in img_files:
-                image_surf = self.get_sprite(f'{folder_name}/{image}')
+                image_surf = self.get_sprite(f'{folder_name}/{image}').copy()
                 surface_list.append(image_surf)
         return surface_list
 

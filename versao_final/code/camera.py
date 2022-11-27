@@ -1,7 +1,7 @@
 import pygame
 
-from code.settings import TILESIZE
 from code.resources import Resources
+from code.settings import TILESIZE
 
 
 class YSortCameraGroup(pygame.sprite.Group):
@@ -19,15 +19,12 @@ class YSortCameraGroup(pygame.sprite.Group):
         # atrás de tudo por "estar no chão"
         # a maioria dos sprites fica no meio
         # um sprite que necessariamente deve ir na frente são as partículas de luz
-        back_sprites = list(filter(
-            lambda sprite: sprite.sprite_type in self.__back_sprite_types, self.sprites()))
-        middle_sprites = list(
-            filter(lambda sprite: sprite.sprite_type not in self.__back_sprite_types + self.__front_sprite_types,
-                   self.sprites()))
-        front_sprites = list(filter(
-            lambda sprite: sprite.sprite_type in self.__front_sprite_types, self.sprites()))
+        back_sprites = (sprite for sprite in self.sprites() if sprite.sprite_type in self.__back_sprite_types)
+        middle_sprites = (sprite for sprite in self.sprites() if
+                          sprite.sprite_type not in self.__back_sprite_types + self.__front_sprite_types)
+        front_sprites = (sprite for sprite in self.sprites() if sprite.sprite_type in self.__front_sprite_types)
         # desenhar os sprites na ordem
-        sprite_lists = [back_sprites, middle_sprites, front_sprites]
+        sprite_lists = (back_sprites, middle_sprites, front_sprites)
         for sprite_list in sprite_lists:
             for sprite in sorted(sprite_list, key=lambda sprite: sprite.rect.centery):
                 self.__display_surface.blit(sprite.image, sprite.rect)

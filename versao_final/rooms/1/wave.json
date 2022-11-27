@@ -12,13 +12,13 @@
     ],
     "spawns": [
       {
-        "enemies": "enemy/enemy/enemy",
+        "enemies": "bat/bat/bat",
         "locations": "random/previous/previous",
         "after": 0,
         "before": 9999
       },
       {
-        "enemies": "enemy/enemy",
+        "enemies": "bat/bat",
         "locations": "random/random",
         "after": 0,
         "before": 9999

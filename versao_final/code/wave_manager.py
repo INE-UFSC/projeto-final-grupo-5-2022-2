@@ -1,11 +1,13 @@
 import random
 
+from code.enemies.bat import Bat
 from code.resources import Resources
 from code.settings import *
 
 
 class WaveManager:
     def __init__(self):
+        self.__enemy_classes = {'bat': Bat}  # TODO: passar para o singleton dos settings
         self.__wave_data = None
         self.__timer = 0
         self.__tick_index = 0
@@ -18,10 +20,7 @@ class WaveManager:
         self.__tick_index = 0
 
     def update(self, spawn_enemy):
-        if self.__wave_data is None:
-            return
-
-        if self.__timer >= self.__max_time:
+        if self.__wave_data is None or self.__timer >= self.__max_time:
             return
 
         self.__timer += 1
@@ -34,19 +33,18 @@ class WaveManager:
         tick = self.__wave_data['ticks'][self.__tick_index]['every']
         # spawn de inimigos
         if self.__timer % tick == 0:
-            available_spawns = list(
-                filter(lambda spawn: spawn['after'] <= self.__timer <= spawn['before'],
-                       self.__wave_data['spawns']))
+            available_spawns = [spawn for spawn in self.__wave_data['spawns'] if
+                                spawn['after'] <= self.__timer <= spawn['before']]
             chosen_spawn = random.choice(available_spawns)
             enemies = chosen_spawn['enemies'].split('/')
             locations = chosen_spawn['locations'].split('/')
-            for enemy, location in zip(enemies, locations):
+            for enemy_name, location in zip(enemies, locations):
                 # as localizações possíveis atualmente são:
                 # random - escolhe uma posiçaõ aleatoriamente
                 # previous - spawna na mesma posição do anterior
                 if location == 'random':
                     spawn_position = random.choice(self.__spawn_positions)
-                spawn_enemy(enemy, spawn_position)
+                spawn_enemy(self.__enemy_classes[enemy_name], spawn_position)
 
     @property
     def timer(self):

@@ -8,7 +8,7 @@
     ],
     "spawns": [
       {
-        "enemies": "enemy",
+        "enemies": "bat",
         "locations": "random",
         "after": 0,
         "before": 9999
