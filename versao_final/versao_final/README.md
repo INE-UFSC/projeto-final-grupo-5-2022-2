@@ -1,1 +1,0 @@
-Esse diretório será utilizado para a última etapa do projeto, na qual a versão final será desenvolvida.
