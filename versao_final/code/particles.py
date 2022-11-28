@@ -295,6 +295,9 @@ class BloodParticle(Particle):
         return self.__speed
 
     def animate(self):
+        if self.__speed == 0:
+            return
+
         # diminuir e mover a partícula
         if self.inner_timer % 2 == 0:
             if self.inner_timer >= 5 and self.__speed > 0:
@@ -305,16 +308,37 @@ class BloodParticle(Particle):
 
             self.rect.center += self.direction * self.__speed
 
-        # calcular próximo alpha
-        new_alpha = self.image.get_alpha() - 1 if self.inner_timer > 100 else 255
-
         # destruição
-        if self.__size <= 4 or new_alpha == 0:
+        if self.__size <= 4:
             self.kill()
 
         self.image = pygame.transform.scale(self.__mask_circle_32, (self.__size, self.__size))
-        self.image.set_alpha(new_alpha)
         circle = pygame.Surface(self.image.get_size())
         circle.fill(self.color)
         self.rect = circle.get_rect(center=self.rect.center)
         self.image.blit(circle, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+
+
+class AnimationParticle(Particle):
+    def __init__(self, pos, groups, animation, animation_speed, destroy_on_end=False):
+        super().__init__(groups)
+        self.__sprite_type = 'particle'
+        self.__animation = animation
+        self.__animation_speed = animation_speed
+        self.__frame_index = 0
+        self.__destroy_on_end = destroy_on_end
+        self.image = self.__animation[0]
+        self.rect = self.image.get_rect(center=pos)
+
+    @property
+    def sprite_type(self):
+        return self.__sprite_type
+
+    def animate(self):
+        self.__frame_index += self.__animation_speed
+        if self.__frame_index >= len(self.__animation):
+            if self.__destroy_on_end:
+                self.kill()
+            self.__frame_index = 0
+        self.image = self.__animation[int(self.__frame_index)]
+        self.rect = self.image.get_rect(center=self.rect.center)

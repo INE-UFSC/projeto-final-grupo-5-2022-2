@@ -1,10 +1,12 @@
 import math
-import pygame
 import random
 from abc import ABC, abstractmethod
 
+import pygame
+
 from code.damage_area import EnemyDamageArea
-from code.particles import FireSource, LightSource
+from code.group_manager import GroupManager
+from code.particles import FireSource, LightSource, AnimationParticle
 from code.resources import Resources
 from code.settings import WHITE
 
@@ -213,13 +215,16 @@ class AreaAttack(Attack):
         # criar o ataque
         damage_area = EnemyDamageArea(pos, self.attack_groups, self.obstacle_sprites, damage=self.damage,
                                       surface=sprite, destroy_time=60, damage_time=1, fade_out_step=4.25)
-        damage_area.rect = sprite.get_rect(center=pos)
+        damage_area.sprite_type = 'on_ground'
         # criar partículas
-        particle_spawner = FireSource((player.staff.rect.centerx, player.staff.rect.y + 15), self.attack_groups[0])
+        explosion_animation = Resources().get_animation('/attacks/explosion')
+        explosion_pos = (damage_area.rect.centerx, damage_area.rect.centery - damage_area.image.get_height() // 2)
+        AnimationParticle(explosion_pos, self.attack_groups[0], explosion_animation, 0.2, destroy_on_end=True)
+        fire_source = FireSource((player.staff.rect.centerx, player.staff.rect.y + 15), self.attack_groups[0])
         for i in range(5, 15):
-            particle_spawner.offset = random.randint(16, 32)
-            particle_spawner.update()
-        particle_spawner.kill()
+            fire_source.offset = random.randint(16, 32)
+            fire_source.update()
+        fire_source.kill()
 
     def use(self, player, key):
         # reescrever o use para mostrar a área de dano enquanto o jogador está segurando Q

@@ -1,5 +1,6 @@
-import pygame
 import random
+
+import pygame
 
 from code.entity import Entity
 from code.particles import FireSource, BloodSource
@@ -9,12 +10,13 @@ from code.settings import TILESIZE
 class EnemyDamageArea(Entity):
     def __init__(self, pos, groups, obstacle_sprites, damage=0, speed=0, direction=pygame.math.Vector2(),
                  destroy_on_impact=False,
-                 surface=pygame.Surface((TILESIZE, TILESIZE)), destroy_time=60, damage_time=0, particle_spawners=[],
+                 surface=pygame.Surface((TILESIZE, TILESIZE)), destroy_time=60, damage_time=0,
+                 particle_spawners=[],
                  hit_sound=None,
                  blood_on_kill=False, fade_out_step=0):
         super().__init__(groups, 'enemy_damage_area')
         self.image = surface
-        self.rect = self.image.get_rect(topleft=pos)
+        self.rect = self.image.get_rect(center=pos)
         self.__hitbox = self.rect
 
         self.__damage = damage
@@ -105,6 +107,7 @@ class EnemyDamageArea(Entity):
                     if self.__blood_on_kill:
                         BloodSource(collision_sprites[0].rect.center, self.groups()[0], self.__obstacle_sprites,
                                     self.direction)
+                        # GroupManager().visible_sprites.shake()
 
                 if self.__destroy_on_impact:  # ataque dá dano em só um inimigo
                     self.kill()
@@ -115,13 +118,12 @@ class EnemyDamageArea(Entity):
         self.image.set_alpha(self.image.get_alpha() - self.__fade_out_step)
         if self.__speed != 0:
             moved = self.move(self.__speed, 'smaller_hitbox')
-
-            for particle_spawner in self.__particle_spawners:
-                particle_spawner.rect.center = self.rect.center + self.direction * self.speed
-
             if not moved:
                 # projétil colidiu com algum obstáculo
                 self.kill()
+
+            for particle_spawner in self.__particle_spawners:
+                particle_spawner.rect.center = self.rect.center + self.direction * self.speed
 
         # tempo enquanto vai dar dano
         if self.__damage_time > 0:
