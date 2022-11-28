@@ -42,7 +42,7 @@ class YSortCameraGroup(pygame.sprite.Group):
         # desenhar os sprites na ordem
         sprite_lists = (back_sprites, middle_sprites, front_sprites)
         for sprite_list in sprite_lists:
-            for sprite in sorted(sprite_list, key=lambda sprite: sprite.rect.centery):
+            for sprite in sorted(sprite_list, key=lambda sprite: sprite.rect.bottom):
                 self.__display_surface.blit(sprite.image, sprite.rect.topleft + self.__screen_shake)
 
     def enemy_update(self, player):
