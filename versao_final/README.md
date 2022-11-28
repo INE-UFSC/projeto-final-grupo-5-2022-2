@@ -46,7 +46,7 @@ disponível [aqui](https://docs.google.com/document/d/189AMDekPZeVRerxjPzfzko3lh
 - [ ] Adicionar uma animação de morte aos inimigos
     - Eu estava pensando em algo tipo uma explosãozinha
 - [ ] Corrigir bug em que a luz do cajado não é destruída ao fazer dois ataques rapidamente
-- [ ] Corrigir bug em que o cajado é desenhado na frente dos tiles
+- [x] Corrigir bug em que o cajado é desenhado na frente dos tiles
 - [x] Separar as classes Level e Room baseado no diagrama
     - O level só controlaria a room atual, e as rooms seriam responsáveis por criar e manter o mapa
 - [x] Adicionar um crosshair para ajudar o Player a mirar
