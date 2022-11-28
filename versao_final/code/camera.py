@@ -13,7 +13,7 @@ class YSortCameraGroup(pygame.sprite.Group):
         self.__back_sprite_types = ['on_ground']
         self.__front_sprite_types = ['light', 'staff']
         self.__background = pygame.Surface((TILESIZE, TILESIZE))
-        # self.__background_shadow = Resources().get_sprite('/backgrounds/shadow_overlay.png')
+        self.__background_shadow = Resources().get_sprite('/backgrounds/shadow_overlay.png')
         self.__screen_shake = pygame.math.Vector2()
 
     def shake(self):
@@ -29,7 +29,7 @@ class YSortCameraGroup(pygame.sprite.Group):
 
         # fundo
         self.__display_surface.blit(self.__background, self.__screen_shake)
-        # self.__display_surface.blit(self.__background_shadow, self.__screen_shake)
+        self.__display_surface.blit(self.__background_shadow, self.__screen_shake)
         # separar os sprites que devem sempre ir atrás dos outros e sempre na frente
         # alguns sprites que necessariamente devem ir atrás são as partículas de sangue, que devem ficar
         # atrás de tudo por "estar no chão"
