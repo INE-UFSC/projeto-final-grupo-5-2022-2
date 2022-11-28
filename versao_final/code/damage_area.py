@@ -3,6 +3,7 @@ import random
 import pygame
 
 from code.entity import Entity
+from code.group_manager import GroupManager
 from code.particles import FireSource, BloodSource
 from code.settings import TILESIZE
 
@@ -13,7 +14,9 @@ class EnemyDamageArea(Entity):
                  surface=pygame.Surface((TILESIZE, TILESIZE)), destroy_time=60, damage_time=0,
                  particle_spawners=[],
                  hit_sound=None,
-                 blood_on_kill=False, fade_out_step=0):
+                 blood_on_kill=False,
+                 fade_out_step=0,
+                 screen_shake_on_kill=False):
         super().__init__(groups, 'enemy_damage_area')
         self.image = surface
         self.rect = self.image.get_rect(center=pos)
@@ -27,6 +30,7 @@ class EnemyDamageArea(Entity):
         self.__particle_spawners = particle_spawners
 
         self.__blood_on_kill = blood_on_kill
+        self.__screen_shake_on_kill = screen_shake_on_kill
         self.__fade_out_step = fade_out_step
         self.__destroy_time = destroy_time
         self.__damage_time = damage_time if damage_time != 0 else destroy_time
@@ -104,10 +108,12 @@ class EnemyDamageArea(Entity):
                 target_sprite.damage(self.__damage, player)
                 if target_sprite.health <= 0:
                     target_sprite.check_death(player)
+
                     if self.__blood_on_kill:
                         BloodSource(collision_sprites[0].rect.center, self.groups()[0], self.__obstacle_sprites,
                                     self.direction)
-                        # GroupManager().visible_sprites.shake()
+                    if self.__screen_shake_on_kill:
+                        GroupManager().visible_sprites.shake()
 
                 if self.__destroy_on_impact:  # ataque dá dano em só um inimigo
                     self.kill()

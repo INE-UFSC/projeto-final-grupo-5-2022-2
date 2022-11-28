@@ -1,3 +1,5 @@
+import random
+
 import pygame
 
 from code.resources import Resources
@@ -11,9 +13,23 @@ class YSortCameraGroup(pygame.sprite.Group):
         self.__back_sprite_types = ['on_ground']
         self.__front_sprite_types = ['light', 'staff']
         self.__background = pygame.Surface((TILESIZE, TILESIZE))
+        # self.__background_shadow = Resources().get_sprite('/backgrounds/shadow_overlay.png')
+        self.__screen_shake = pygame.math.Vector2()
+
+    def shake(self):
+        self.__screen_shake.x += random.randint(-16, 16)
+        self.__screen_shake.y += random.randint(-16, 16)
 
     def custom_draw(self):
-        self.__display_surface.blit(self.__background, (0, 0))
+        # screen shake
+        if self.__screen_shake != pygame.math.Vector2():
+            self.__screen_shake *= 0.90
+            if -1 <= self.__screen_shake.magnitude() <= 1:
+                self.__screen_shake = pygame.math.Vector2()
+
+        # fundo
+        self.__display_surface.blit(self.__background, self.__screen_shake)
+        # self.__display_surface.blit(self.__background_shadow, self.__screen_shake)
         # separar os sprites que devem sempre ir atrás dos outros e sempre na frente
         # alguns sprites que necessariamente devem ir atrás são as partículas de sangue, que devem ficar
         # atrás de tudo por "estar no chão"
@@ -27,7 +43,7 @@ class YSortCameraGroup(pygame.sprite.Group):
         sprite_lists = (back_sprites, middle_sprites, front_sprites)
         for sprite_list in sprite_lists:
             for sprite in sorted(sprite_list, key=lambda sprite: sprite.rect.centery):
-                self.__display_surface.blit(sprite.image, sprite.rect)
+                self.__display_surface.blit(sprite.image, sprite.rect.topleft + self.__screen_shake)
 
     def enemy_update(self, player):
         # os inimigos possuem um update() chamado enemy_update() que precisa receber o player como

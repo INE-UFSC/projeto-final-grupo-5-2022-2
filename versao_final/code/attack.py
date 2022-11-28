@@ -166,6 +166,7 @@ class SliceAttack(Attack):
             damage_area = EnemyDamageArea(current_pos, self.attack_groups, self.obstacle_sprites, damage=self.damage,
                                           surface=self.image, destroy_time=8, damage_time=1, hit_sound=self.hit_sound,
                                           blood_on_kill=True,
+                                          screen_shake_on_kill=True,
                                           direction=direction)
             damage_area.rect.center = current_pos
 
