@@ -313,6 +313,7 @@ class BloodParticle(Particle):
             self.kill()
 
         self.image = pygame.transform.scale(self.__mask_circle_32, (self.__size, self.__size))
+        self.image.set_alpha(200)
         circle = pygame.Surface(self.image.get_size())
         circle.fill(self.color)
         self.rect = circle.get_rect(center=self.rect.center)
