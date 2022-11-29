@@ -4,8 +4,8 @@ import pygame.sprite
 
 
 class Entity(pygame.sprite.Sprite):
-    def __init__(self, groups, sprite_type):
-        super().__init__(groups)
+    def __init__(self, sprite_type):
+        super().__init__()
         self.__sprite_type = sprite_type
         self.__direction = pygame.math.Vector2()
 

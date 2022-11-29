@@ -1,16 +1,17 @@
 import math
+import pygame
+import pygame.sprite
 import random
 from abc import ABC, abstractmethod
 
-import pygame
-import pygame.sprite
-
+from code.group_manager import GroupManager
 from code.resources import Resources
 
 
 class ParticleSource(pygame.sprite.Sprite, ABC):
-    def __init__(self, pos, groups):
-        super().__init__(groups)
+    def __init__(self, pos):
+        super().__init__()
+        GroupManager().add_to_particles(self)
         self.__sprite_type = 'particle_source'
         self.image = pygame.Surface((1, 1))
         self.rect = self.image.get_rect(center=pos)
@@ -25,8 +26,9 @@ class ParticleSource(pygame.sprite.Sprite, ABC):
 
 
 class Particle(pygame.sprite.Sprite, ABC):
-    def __init__(self, groups):
-        super().__init__(groups)
+    def __init__(self):
+        super().__init__()
+        GroupManager().add_to_particles(self)
         self.display_surface = pygame.display.get_surface()
         self.inner_timer = 0  # um timer interno é mais suave que utilizar os ticks do pygame
 
@@ -40,8 +42,8 @@ class Particle(pygame.sprite.Sprite, ABC):
 
 
 class FireSource(ParticleSource):
-    def __init__(self, pos, groups):
-        super().__init__(pos, groups)
+    def __init__(self, pos):
+        super().__init__(pos)
         self.__offset = 16
 
     @property
@@ -57,12 +59,12 @@ class FireSource(ParticleSource):
         for i in range(random.randint(1, 3)):
             x_offset = random.randint(-self.offset, self.offset)
             y_offset = random.randint(-self.offset, self.offset)
-            FireParticle((self.rect.centerx + x_offset, self.rect.centery + y_offset), self.groups())
+            FireParticle((self.rect.centerx + x_offset, self.rect.centery + y_offset))
 
 
 class FireParticle(Particle):
-    def __init__(self, pos, groups, colors=['#ffffff', '#fee761', '#feae34', '#f77622', '#e43b44', '#3e2731']):
-        super().__init__(groups)
+    def __init__(self, pos, colors=['#ffffff', '#fee761', '#feae34', '#f77622', '#e43b44', '#3e2731']):
+        super().__init__()
         self.__sprite_type = 'particle'
 
         self.__mask_circle_32 = Resources().get_sprite('/masks/circle_32.png')
@@ -121,11 +123,11 @@ class FireParticle(Particle):
 
 
 class LightSource(ParticleSource):
-    def __init__(self, pos, groups, outer_diameter=128, outer_color='#f77622', inner_diameter=96,
+    def __init__(self, pos, outer_diameter=128, outer_color='#f77622', inner_diameter=96,
                  inner_color='#feae34'):
-        super().__init__(pos, groups)
-        self.particles = [LightParticle(pos, groups, outer_diameter, outer_color, 16, 16),
-                          LightParticle(pos, groups, inner_diameter, inner_color, 64, 8)]
+        super().__init__(pos)
+        self.particles = [LightParticle(pos, outer_diameter, outer_color, 16, 16),
+                          LightParticle(pos, inner_diameter, inner_color, 64, 8)]
 
     def kill(self):
         for particle in self.particles:
@@ -138,8 +140,8 @@ class LightSource(ParticleSource):
 
 
 class LightParticle(Particle):
-    def __init__(self, pos, groups, diameter, color, shrink_mag=16, grow_mag=16):
-        super().__init__(groups)
+    def __init__(self, pos, diameter, color, shrink_mag=16, grow_mag=16):
+        super().__init__()
         self.__sprite_type = 'light'
 
         self.__mask_circle_32 = Resources().get_sprite('/masks/circle_32.png')
@@ -202,9 +204,9 @@ class LightParticle(Particle):
 
 
 class BloodSource(ParticleSource):
-    def __init__(self, pos, groups, obstacle_sprites, direction, blood_speed=32, min_particles=8, max_particles=12):
-        super().__init__(pos, groups)
-        self.__obstacle_sprites = obstacle_sprites
+    def __init__(self, pos, direction, blood_speed=32, min_particles=8, max_particles=12):
+        super().__init__(pos)
+        self.__obstacle_sprites = GroupManager().tile_sprites
         self.__pos = pos
         self.__direction = direction
         self.__offset = 25
@@ -246,15 +248,15 @@ class BloodSource(ParticleSource):
             direction.x += random.randint(-self.offset, self.offset) / 100
             direction.y += random.randint(-self.offset, self.offset) / 100
             direction.normalize()
-            BloodParticle(self.pos, self.groups(), self.obstacle_sprites, direction, speed=self.blood_speed)
+            BloodParticle(self.pos, direction, speed=self.blood_speed)
         self.kill()
 
 
 class BloodParticle(Particle):
-    def __init__(self, pos, groups, obstacle_sprites, direction, color='#e43b44', speed=32):
-        super().__init__(groups)
+    def __init__(self, pos, direction, color='#e43b44', speed=32):
+        super().__init__()
         self.__sprite_type = 'on_ground'
-        self.__obstacle_sprites = obstacle_sprites
+        self.__obstacle_sprites = GroupManager().tile_sprites
 
         self.__mask_circle_32 = Resources().get_sprite('/masks/circle_32.png')
         self.image = self.__mask_circle_32.copy()
@@ -321,8 +323,8 @@ class BloodParticle(Particle):
 
 
 class AnimationParticle(Particle):
-    def __init__(self, pos, groups, animation, animation_speed, destroy_on_end=False):
-        super().__init__(groups)
+    def __init__(self, pos, animation, animation_speed, destroy_on_end=False):
+        super().__init__()
         self.__sprite_type = 'particle'
         self.__animation = animation
         self.__animation_speed = animation_speed

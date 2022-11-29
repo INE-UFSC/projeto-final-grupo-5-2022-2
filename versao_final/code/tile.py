@@ -1,12 +1,14 @@
 import pygame
+from code.group_manager import GroupManager
 
-from code.settings import *
 from code.resources import Resources
+from code.settings import *
 
 
 class Tile(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, tile_number=''):
-        super().__init__(groups)
+    def __init__(self, pos, tile_number=''):
+        super().__init__()
+        GroupManager().add_to_tiles(self)
         self.__sprite_type = 'tile'
         self.__tile_number = tile_number
         # TODO: Ajustar a parte do offset

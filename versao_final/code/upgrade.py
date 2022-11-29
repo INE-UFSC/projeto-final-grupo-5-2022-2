@@ -1,5 +1,6 @@
 from abc import abstractmethod, ABC
 
+from code.group_manager import GroupManager
 from code.resources import Resources
 
 
@@ -10,7 +11,7 @@ class Upgrade(ABC):
         self.__icon = Resources().get_sprite(icon)
 
     @abstractmethod
-    def apply(self, player):
+    def apply(self):
         pass
 
     @property
@@ -32,8 +33,8 @@ class HealthUpgrade(Upgrade):
                          'Aumenta a quantidade de vidas em 1',
                          '/icons/health_upgrade.png')
 
-    def apply(self, player):
-        player.give_health(1)
+    def apply(self):
+        GroupManager().player.give_health(1)
 
 
 class DamageUpgrade(Upgrade):
@@ -42,7 +43,8 @@ class DamageUpgrade(Upgrade):
                          'Aumenta o dano da bola de fogo em 20%',
                          '/icons/damage_upgrade.png')
 
-    def apply(self, player):
+    def apply(self):
+        player = GroupManager().player
         player.attacks[0].damage += player.attacks[0].base_damage * 0.20
 
 
@@ -52,8 +54,8 @@ class FireRateUpgrade(Upgrade):
                          'Reduz 5% do cooldown da bola de fogo',
                          '/icons/fire_rate_upgrade.png')
 
-    def apply(self, player):
-        player.attacks[0].cooldown *= 0.95
+    def apply(self):
+        GroupManager().player.attacks[0].cooldown *= 0.95
 
 
 class SpeedUpgrade(Upgrade):
@@ -62,5 +64,6 @@ class SpeedUpgrade(Upgrade):
                          'Aumenta a velocidade em 5%',
                          '/icons/speed_upgrade.png')
 
-    def apply(self, player):
+    def apply(self):
+        player = GroupManager().player
         player.move_speed = player.move_speed + player.base_speed * 0.05

@@ -2,11 +2,17 @@ import sys
 
 from code.attack import *
 from code.entity import Entity
+from code.group_manager import GroupManager
 
 
 class Player(Entity):
-    def __init__(self, groups, attack_groups, obstacle_sprites):
-        super().__init__(groups, 'player')
+    def __init__(self):
+        # cajado (somente desenha o sprite)
+        self.__staff = Staff()
+        # grupos
+        super().__init__('player')
+        self.__group_manager = GroupManager()
+        self.__group_manager.player = self
         # importar animações
         self.__animations = {'up': [], 'down': [], 'left': [], 'right': []}
         for animation in self.__animations.keys():
@@ -32,21 +38,16 @@ class Player(Entity):
         self.__upgrade_list = []
 
         # movimento
-        self.__obstacle_sprites = obstacle_sprites
+        self.__obstacle_sprites = self.__group_manager.player_obstacle_sprites
         self.__speed = 5
 
         # ataques
-        self.__attacks = [FireballAttack(attack_groups, obstacle_sprites),
-                          SliceAttack(attack_groups, obstacle_sprites),
-                          AreaAttack(attack_groups, obstacle_sprites)]
+        self.__attacks = [FireballAttack(), SliceAttack(), AreaAttack()]
 
         # dano
         self.__vulnerable = True
         self.__hurt_time = 0
         self.__invincibility_duration = 60
-
-        # cajado (somente desenha o sprite)
-        self.__staff = Staff(groups)
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -74,7 +75,7 @@ class Player(Entity):
         # ataques
         attack_keys = (mouse[0], mouse[2], keys[pygame.K_q])
         for i, attack in enumerate(self.__attacks):
-            attack.use(self, attack_keys[i])
+            attack.use(attack_keys[i])
 
     def cooldowns(self):
         for attack in self.__attacks:
@@ -122,7 +123,7 @@ class Player(Entity):
     def give_upgrade(self, upgrade):
         if self.__upgrade_points > 0:
             self.__upgrade_points -= 1
-            upgrade.apply(self)
+            upgrade.apply()
             self.__upgrade_list.append(upgrade)
 
     def give_health(self, health):
@@ -138,10 +139,11 @@ class Player(Entity):
             sys.exit()
 
     def update(self):
+        self.__obstacle_sprites = self.__group_manager.player_obstacle_sprites
         self.check_death()
         self.input()
         self.animate()
-        self.staff.animate(self)
+        self.__staff.animate(self)
         self.move(self.__move_speed)
         self.cooldowns()
 
@@ -202,14 +204,6 @@ class Player(Entity):
         return self.__upgrade_points
 
     @property
-    def obstacle_sprites(self):
-        return self.__obstacle_sprites
-
-    @obstacle_sprites.setter
-    def obstacle_sprites(self, obstacle_sprites):
-        self.__obstacle_sprites = obstacle_sprites
-
-    @property
     def speed(self):
         return self.__speed
 
@@ -222,13 +216,17 @@ class Player(Entity):
         return self.__upgrade_list
 
     @property
-    def level_ip_ex_increment(self):
+    def level_up_exp_increment(self):
         return self.__level_up_exp_increment
+
+    @property
+    def obstacle_sprites(self):
+        return self.__obstacle_sprites
 
 
 class Staff(pygame.sprite.Sprite):
-    def __init__(self, groups):
-        super().__init__(groups)
+    def __init__(self):
+        super().__init__()
         self.__sprite_type = 'staff'
         self.__animation = Resources().get_animation('/staff')
         self.__frame_index = 0
@@ -244,7 +242,7 @@ class Staff(pygame.sprite.Sprite):
 
     def toggle_animation(self):
         self.__animate = True
-        self.__light = LightSource(self.rect.center, self.groups())
+        self.__light = LightSource(self.rect.center)
 
     def animate(self, player):
         if self.__animate:

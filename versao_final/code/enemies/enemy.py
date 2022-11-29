@@ -1,20 +1,25 @@
 import pygame
 
 from code.entity import Entity
+from code.group_manager import GroupManager
 from code.resources import Resources
 
 
 class Enemy(Entity):
-    def __init__(self, name, pos, groups, obstacle_sprites, health=1, speed=3, collision_damage=1, exp=1,
+    def __init__(self, name, pos, health=1, speed=3, collision_damage=1, exp=1,
                  attack_cooldown=40):
-        super().__init__(groups, 'enemy')
+        super().__init__('enemy')
+
+        self.__group_manager = GroupManager()
+        self.__group_manager.add_to_enemies(self)
+
         self.__animation = Resources().get_animation(f'/enemies/{name}')
         self.__frame_index = 0
         self.__animation_speed = 0.2
         self.image = self.__animation[0]
         self.rect = self.image.get_rect(topleft=pos)
         self.__hitbox = self.rect.inflate(0, - self.image.get_width() // 5)
-        self.__obstacle_sprites = obstacle_sprites
+        self.__obstacle_sprites = self.__group_manager.enemy_obstacle_sprites
 
         self.__status = ''
         self.__health = health
@@ -33,8 +38,9 @@ class Enemy(Entity):
         self.__hit_time = 0
         self.__invincibility_duration = 20
 
-    def get_player_distance_direction(self, player):
+    def get_player_distance_direction(self):
         enemy_vec = pygame.math.Vector2(self.rect.center)
+        player = self.__group_manager.player
         player_vec = pygame.math.Vector2(player.rect.center)
         sub_vec = player_vec - enemy_vec
         distance = sub_vec.magnitude()
@@ -46,8 +52,9 @@ class Enemy(Entity):
 
         return distance, direction
 
-    def get_status(self, player):
+    def get_status(self):
         # decide o status atual
+        player = self.__group_manager.player
         if player.hitbox.colliderect(self.__damage_hitbox) and self.__can_attack:
             if self.__status != 'attack':
                 pass  # TODO: self.frame_index = 0
@@ -55,18 +62,20 @@ class Enemy(Entity):
         else:
             self.__status = 'move'
 
-    def actions(self, player):
+    def actions(self):
         # faz uma ação baseado no status atual
+        player = self.__group_manager.player
         if self.__status == 'attack':
             self.__attack_time = self.__attack_cooldown
             self.__can_attack = False  # TODO: passar para a lógica do animate() ao adicionar sprites
             player.damage(self.__collision_damage)
         elif self.__status == 'move':
-            self.direction = self.get_player_distance_direction(player)[1]
+            self.direction = self.get_player_distance_direction()[1]
         else:
             self.direction = pygame.math.Vector2()
 
-    def animate(self, player):
+    def animate(self):
+        player = self.__group_manager.player
         self.__frame_index += self.__animation_speed
         if self.__frame_index >= len(self.__animation):
             self.__frame_index = 0
@@ -93,17 +102,19 @@ class Enemy(Entity):
             if self.__hit_time <= 0:
                 self.__vulnerable = True
 
-    def damage(self, damage, player):
+    def damage(self, damage):
         if self.__vulnerable:
-            self.direction = self.get_player_distance_direction(player)[1]
+            player = self.__group_manager.player
+            self.direction = self.get_player_distance_direction()[1]
             self.__health -= damage
             self.__hit_time = self.__invincibility_duration
             self.__vulnerable = False
 
-    def check_death(self, player):
+    def check_death(self):
         if self.__health <= 0:
-            self.kill()
+            player = self.__group_manager.player
             player.give_exp(self.__exp)
+            self.kill()
 
     def hit_reaction(self):
         if not self.__vulnerable:
@@ -115,18 +126,14 @@ class Enemy(Entity):
         self.__damage_hitbox.center = self.__hitbox.center
 
     def update(self):
+        self.__obstacle_sprites = GroupManager().enemy_obstacle_sprites
         self.hit_reaction()
         self.move(self.__speed)
         self.cooldowns()
-
-    def enemy_update(self, player):
-        # esse enemy_update() é diferente do update() por receber o parâmetro player
-        # ele também é chamado dentro do Level, mas, por ter uma assinatura diferente do update()
-        # dos outros sprites, não pode ser chamado da mesma forma que eles
-        self.check_death(player)
-        self.get_status(player)
-        self.actions(player)
-        self.animate(player)
+        self.check_death()
+        self.get_status()
+        self.actions()
+        self.animate()
 
     @property
     def obstacle_sprites(self):
