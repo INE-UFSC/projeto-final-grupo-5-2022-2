@@ -1,4 +1,5 @@
 from code.room import Room
+from code.ui import UI
 
 
 class Level:
@@ -19,7 +20,7 @@ class Level:
         print("Level end")
 
     def toggle_menu(self):
-        self.__room.toggle_menu()
+        UI().toggle_menu()
 
     def run(self):
         self.__room.run()

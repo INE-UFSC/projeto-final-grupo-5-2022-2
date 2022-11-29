@@ -3,26 +3,30 @@ import random
 import pygame
 
 from code.settings import *
+from code.singleton import Singleton
 from code.upgrade import *
 
 
-class UI:
+class UI(Singleton):
     def __init__(self):
-        self.__display_surface = pygame.display.get_surface()
-        self.__font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
-        self.__timer_font = pygame.font.Font(UI_FONT, UI_FONT_SIZE + 6)
+        if not self._initialized:
+            self.__display_surface = pygame.display.get_surface()
+            self.__font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
+            self.__timer_font = pygame.font.Font(UI_FONT, UI_FONT_SIZE + 6)
 
-        self.__health_sprite = Resources().get_sprite('/icons/heart.png')
-        self.__exp_bar_rect = pygame.Rect(0, 0, EXP_BAR_WIDTH, BAR_HEIGHT)
-        self.__exp_bar_rect.topright = (self.display_surface.get_size()[0] - 20, 10)
+            self.__health_sprite = Resources().get_sprite('/icons/heart.png')
+            self.__exp_bar_rect = pygame.Rect(0, 0, EXP_BAR_WIDTH, BAR_HEIGHT)
+            self.__exp_bar_rect.topright = (self.display_surface.get_size()[0] - 20, 10)
 
-        self.__is_menu_open = False
-        self.__upgrade_button_list = []
-        self.__available_upgrades = {'health': HealthUpgrade(), 'damage': DamageUpgrade(),
-                                     'firerate': FireRateUpgrade(), 'speed': SpeedUpgrade()}
+            self.__is_menu_open = False
+            self.__upgrade_button_list = []
+            self.__available_upgrades = {'health': HealthUpgrade(), 'damage': DamageUpgrade(),
+                                         'firerate': FireRateUpgrade(), 'speed': SpeedUpgrade()}
 
-        pygame.mouse.set_visible(False)
-        self.__cursor = Resources().get_sprite('/cursor.png')
+            pygame.mouse.set_visible(False)
+            self.__cursor = Resources().get_sprite('/cursor.png')
+
+            self._initialized = True
 
     @property
     def display_surface(self):
