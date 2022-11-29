@@ -1,5 +1,3 @@
-import pygame
-
 from code.camera import Camera
 from code.group_manager import GroupManager
 from code.player import Player
@@ -23,15 +21,11 @@ class Room:
         self.__wave_manager.change_to_wave(room_name)
         self.create_map(room_name)
 
-    @property
-    def player(self):
-        return self.__player
-
     def create_map(self, room_name):
         self.__camera.set_background(room_name)
 
         if not hasattr(self, 'player'):
-            self.__player = Player()
+            Player()
         else:
             # TODO: posicionar o player
             pass
@@ -45,19 +39,16 @@ class Room:
                 if col != '-1':
                     Tile((x, y), col)
 
-    def spawn_enemy(self, enemy_class, pos):
-        enemy_class(pos)
-
     def toggle_menu(self):
         self.__ui.toggle_menu()
 
+    def room_ended(self):
+        return self.__wave_manager.wave_ended() and len(self.__group_manager.enemy_sprites) == 0
+
     def run(self):
         self.__camera.draw(self.__group_manager.visible_sprites)
-        self.__ui.display(self.__player, self.__wave_manager.timer)
+        self.__ui.display(self.__group_manager.player, self.__wave_manager.timer)
 
         if not self.__ui.is_menu_open:
-            self.__wave_manager.update(self.spawn_enemy)
+            self.__wave_manager.update()
             self.__group_manager.visible_sprites.update()
-            # conferir colisão dos ataques com os inimigos
-            for attack_sprite in self.__group_manager.attack_sprites:
-                attack_sprite.enemy_collision()

@@ -19,8 +19,11 @@ class WaveManager:
         self.__timer = 0
         self.__tick_index = 0
 
-    def update(self, spawn_enemy):
-        if self.__wave_data is None or self.__timer >= self.__max_time:
+    def wave_ended(self):
+        return self.__timer >= self.__max_time
+
+    def update(self):
+        if self.__wave_data is None or self.wave_ended():
             return
 
         self.__timer += 1
@@ -44,7 +47,7 @@ class WaveManager:
                 # previous - spawna na mesma posição do anterior
                 if location == 'random':
                     spawn_position = random.choice(self.__spawn_positions)
-                spawn_enemy(self.__enemy_classes[enemy_name], spawn_position)
+                self.__enemy_classes[enemy_name](spawn_position)
 
     @property
     def timer(self):

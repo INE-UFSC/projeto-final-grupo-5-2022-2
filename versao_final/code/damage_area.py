@@ -70,6 +70,7 @@ class EnemyDamageArea(Entity):
                     break
 
     def update(self):
+        self.enemy_collision()
         # movimento
         self.image.set_alpha(self.image.get_alpha() - self.__fade_out_step)
         if self.__speed != 0:

@@ -1,5 +1,4 @@
 from code.room import Room
-from code.settings import WIDTH
 
 
 class Level:
@@ -24,6 +23,6 @@ class Level:
 
     def run(self):
         self.__room.run()
-        # TODO: conferir se a wave já terminou
-        if self.__room.player.rect.topleft[0] > WIDTH - 192:  # mudar
+        # TODO: mudar para quando ele for para algum lado
+        if self.__room.room_ended():  # mudar
             self.next_room()
