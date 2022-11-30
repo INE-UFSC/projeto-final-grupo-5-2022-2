@@ -1,6 +1,6 @@
 import pygame
 
-from code.camera import YSortCameraGroup
+from code.y_sort_camera_group import YSortCameraGroup
 from code.singleton import Singleton
 
 

@@ -14,9 +14,10 @@ class Level:
             self.__current_room_index += 1
             self.__room.change_to(self.__rooms[self.__current_room_index])
         else:
-            self.end_level()
+            self.end_level() 
 
     def end_level(self):
+        # TODO: implementar o endlevel
         print("Level end")
 
     def toggle_menu(self):
