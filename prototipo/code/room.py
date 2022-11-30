@@ -29,7 +29,6 @@ class Room:
     def create_map(self, room_name):
         self.__group_manager.visible_sprites.set_background(room_name)
 
-        # TODO: posicionar o player
         if not hasattr(self, 'player'):
             self.__player = Player([self.__group_manager.visible_sprites],
                                    [self.__group_manager.visible_sprites, self.__group_manager.attack_sprites],
@@ -37,6 +36,9 @@ class Room:
         else:
             self.__group_manager.visible_sprites.add(self.__player)
             self.__group_manager.visible_sprites.add(self.__player.staff)
+
+        # reposiciona o player
+        self.__player.position = (TILESIZE, self.__player.position[1])
 
         # parede invisível ao redor da sala
         for i in range(0, WIDTH, TILESIZE):  # horizontal
