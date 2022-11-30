@@ -1,5 +1,7 @@
 import os
 
+# TODO: transformar em singleton 
+
 WIDTH = 1280
 HEIGHT = 720
 FPS = 60
@@ -24,6 +26,8 @@ BAR_HEIGHT = 32
 EXP_BAR_WIDTH = 176
 EXP_BAR_COLOR = '#0099db'
 STAT_BAR_WIDTH = 384
+
+LEVEL_CHANGE_DISTANCE = 192 # distância do player até a borda direita para mudar de sala
 
 X_OFFSET = {
     '': 0,
