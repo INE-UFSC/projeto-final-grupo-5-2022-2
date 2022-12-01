@@ -3,9 +3,10 @@ from abc import ABC, abstractmethod
 import pygame
 
 from code.settings import *
+from code.ui.ui_component import UIComponent
 
 
-class Button(pygame.sprite.Sprite, ABC):
+class Button(UIComponent, pygame.sprite.Sprite, ABC):
     def __init__(self, x, y, width, height, enabled=True, color=UI_BG_COLOR, hover_color=UI_HOVER_COLOR,
                  on_click_args=None, on_click=None):
         super().__init__()
@@ -34,7 +35,7 @@ class Button(pygame.sprite.Sprite, ABC):
                     self.__can_click = False
 
     @abstractmethod
-    def display(self):
+    def draw(self):
         pass
 
     def cooldown(self):
@@ -45,7 +46,7 @@ class Button(pygame.sprite.Sprite, ABC):
     def button_update(self):
         self.cooldown()
         self.input()
-        self.display()
+        self.draw()
 
     @property
     def index(self):

@@ -8,7 +8,7 @@ class UpgradeButton(Button):
     def __init__(self, x, y, on_click_args, on_click):
         super().__init__(x, y, 576, 128, on_click_args=on_click_args, on_click=on_click)
 
-    def display(self):
+    def draw(self):
         if self.enabled:
             mouse_pos = pygame.mouse.get_pos()
             if self.rect.collidepoint(mouse_pos):
