@@ -17,18 +17,18 @@ class UI:
         self.__health_sprite = Resources().get_sprite('/icons/heart.png')
 
         self.__exp_bar = ProgressBar((0, 0), 0, 0)
-        self.__exp_bar.rect.topright = (self.display_surface.get_size()[0] - 20, 10)
-        exp_label_x = self.display_surface.get_size()[0] - 30
+        self.__exp_bar.rect.topright = (self.__display_surface.get_size()[0] - 20, 10)
+        exp_label_x = self.__display_surface.get_size()[0] - 30
         exp_label_y = BAR_HEIGHT + 17
         exp_label_pos = {'topright': (exp_label_x, exp_label_y)}
         self.__exp_label = Label(exp_label_pos, '', self.__font)
 
-        up_x = self.display_surface.get_size()[0] - 20
-        up_y = self.display_surface.get_size()[1] - 20
+        up_x = self.__display_surface.get_size()[0] - 20
+        up_y = self.__display_surface.get_size()[1] - 20
         upgrade_points_pos = {'bottomright': (up_x, up_y)}
         self.__upgrade_points_label = Label(upgrade_points_pos, '', self.__font)
 
-        tl_x = self.display_surface.get_width() // 2
+        tl_x = self.__display_surface.get_width() // 2
         tl_y = 20
         timer_label_pos = {'centerx': tl_x, 'top': tl_y}
         self.__timer_label = Label(timer_label_pos, '', self.__font)
@@ -39,24 +39,12 @@ class UI:
 
         self.__cursor = Cursor('/cursor.png')
 
-    @property
-    def display_surface(self):
-        return self.__display_surface
-
-    @property
-    def font(self):
-        return self.__font
-
-    @property
-    def health_sprite(self):
-        return self.__health_sprite
-
     def show_health(self, health):
         for i in range(health):
             x = 10 + i * (ITEM_BOX_SIZE + UI_COMPONENT_MARGIN)
             y = 10
-            self.display_surface.blit(self.__health_sprite,
-                                      self.__health_sprite.get_rect(topleft=(x, y)))
+            self.__display_surface.blit(self.__health_sprite,
+                                        self.__health_sprite.get_rect(topleft=(x, y)))
 
     def show_exp(self, exp, level_up_exp, current_level):
         # barra
