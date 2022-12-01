@@ -39,6 +39,9 @@ class Room:
                 if col != '-1':
                     Tile((x, y), col)
 
+    def toggle_menu(self):
+        self.__ui.toggle_menu()
+
     def room_ended(self):
         return self.__wave_manager.wave_ended() and len(self.__group_manager.enemy_sprites) == 0
 
