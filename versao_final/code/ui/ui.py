@@ -62,13 +62,15 @@ class UI:
         return self.__upgrade_button_list
 
     @property
-    def avalaible_upgrade(self):
+    def available_upgrades(self):
         return self.__available_upgrades
 
     def show_health(self, health):
         for i in range(health):
-            self.display_surface.blit(self.health_sprite,
-                                      self.health_sprite.get_rect(topleft=(10 + i * (ITEM_BOX_SIZE + 10), 10)))
+            x = 10 + i * (ITEM_BOX_SIZE + HEART_SPRITE_MARGIN)
+            y = 10
+            self.display_surface.blit(self.__health_sprite,
+                                      self.__health_sprite.get_rect(topleft=(x, y)))
 
     def show_exp(self, exp, level_up_exp, current_level):
         # barra
