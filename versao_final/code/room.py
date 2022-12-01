@@ -4,7 +4,7 @@ from code.player import Player
 from code.resources import Resources
 from code.settings import *
 from code.tile import Tile
-from code.ui import UI
+from code.ui.ui import UI
 from code.wave_manager import WaveManager
 
 
