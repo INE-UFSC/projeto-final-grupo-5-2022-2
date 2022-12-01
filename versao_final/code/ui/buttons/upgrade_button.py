@@ -6,7 +6,7 @@ from code.ui.buttons.button import Button
 
 class UpgradeButton(Button):
     def __init__(self, x, y, on_click_args, on_click):
-        super().__init__(x, y, 576, 128, on_click_args=on_click_args, on_click=on_click)
+        super().__init__(x, y, UPGRADE_BUTTON_WIDTH, UPGRADE_BUTTON_HEIGHT, on_click_args=on_click_args, on_click=on_click)
 
     def draw(self):
         if self.enabled:
