@@ -8,13 +8,12 @@ class ProgressBar(UIComponent):
     def __init__(self, pos, current_progress, maximum_progress, width=EXP_BAR_WIDTH, height=BAR_HEIGHT,
                  background_color=UI_BG_COLOR, progress_color=EXP_BAR_COLOR, outline_width=3):
         super().__init__()
-        self.__pos = pos
         self.__current_progress = current_progress
         self.__maximum_progress = maximum_progress
         self.__background_color = background_color
         self.__progress_color = progress_color
         self.__outline_width = outline_width
-        self.__rect = pygame.Rect(0, 0, width, height)
+        self.__rect = pygame.Rect(pos[0], pos[1], width, height)
 
     def draw(self):
         pygame.draw.rect(self.display_surface, self.__background_color, self.__rect)

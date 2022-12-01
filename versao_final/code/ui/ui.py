@@ -5,6 +5,7 @@ import pygame
 from code.settings import *
 from code.ui.buttons.upgrade_button import UpgradeButton
 from code.ui.cursor import Cursor
+from code.ui.label import Label
 from code.ui.progress_bar import ProgressBar
 from code.upgrade import *
 
@@ -15,8 +16,13 @@ class UI:
         self.__font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
 
         self.__health_sprite = Resources().get_sprite('/icons/heart.png')
+
         self.__exp_bar = ProgressBar((0, 0), 0, 0)
         self.__exp_bar.rect.topright = (self.display_surface.get_size()[0] - 20, 10)
+        exp_label_x = self.display_surface.get_size()[0] - 30
+        exp_label_y = BAR_HEIGHT + 17
+        exp_label_pos = {'topright': (exp_label_x, exp_label_y)}
+        self.__exp_label = Label(exp_label_pos, '', self.__font)
 
         self.__is_menu_open = False
         self.__upgrade_button_list = []
@@ -36,10 +42,6 @@ class UI:
     @property
     def health_sprite(self):
         return self.__health_sprite
-
-    @property
-    def exp_bar_react(self):
-        return self.__exp_bar_rect
 
     @property
     def is_menu_open(self):
@@ -65,14 +67,8 @@ class UI:
         self.__exp_bar.draw()
 
         # nível atual
-        text_surf = self.font.render(str(f'LV: {current_level}'), False, TEXT_COLOR)
-        x = self.display_surface.get_size()[0] - 30
-        y = 10 + BAR_HEIGHT + 7
-        text_rect = text_surf.get_rect(topright=(x, y))
-
-        pygame.draw.rect(self.display_surface, UI_BG_COLOR, text_rect.inflate(20, 20))
-        self.display_surface.blit(text_surf, text_rect)
-        pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, text_rect.inflate(20, 20), 3)
+        self.__exp_label.text = f'LV: {current_level}'
+        self.__exp_label.draw()
 
     def show_attacks(self, attacks):
         for i, attack in enumerate(attacks):
