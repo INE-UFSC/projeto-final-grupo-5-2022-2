@@ -29,6 +29,11 @@ class UI:
         upgrade_points_pos = {'bottomright': (up_x, up_y)}
         self.__upgrade_points_label = Label(upgrade_points_pos, '', self.__font)
 
+        tl_x = self.display_surface.get_width() // 2
+        tl_y = 20
+        timer_label_pos = {'centerx': tl_x, 'top': tl_y}
+        self.__timer_label = Label(timer_label_pos, '', self.__font)
+
         self.__is_menu_open = False
         self.__upgrade_button_list = []
         self.__available_upgrades = {'health': HealthUpgrade(), 'damage': DamageUpgrade(),
@@ -165,12 +170,8 @@ class UI:
         total_seconds = remaining_time // 60
         minutes = total_seconds // 60
         seconds = total_seconds % 60
-
-        time_surf = self.font.render(f'{minutes}:{seconds:02d}', False, TEXT_COLOR)
-        time_rect = time_surf.get_rect(topleft=(self.display_surface.get_width() // 2 - time_surf.get_width() // 2, 20))
-        pygame.draw.rect(self.display_surface, UI_BG_COLOR, time_rect.inflate(20, 20))
-        pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, time_rect.inflate(20, 20), 3)
-        self.display_surface.blit(time_surf, time_rect)
+        self.__timer_label.text = f'{minutes}:{seconds:02d}'
+        self.__timer_label.draw()
 
     def display(self, player, time):
         if len(self.__upgrade_button_list) == 0:
