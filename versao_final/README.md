@@ -18,13 +18,13 @@ disponível [aqui](https://docs.google.com/document/d/189AMDekPZeVRerxjPzfzko3lh
 - [ ] Singleton para as settings
     - [ ] Tirar variáveis soltas no meio do código que deveriam estar nos settings (tipo algumas soltas no UI.py da
       posição dos botões)
-- [ ] Alterar lógica de instanciação de sprites para algo mais intuitivo (refatorar a parte dos grupos)
-- [ ] Passar o enemy_obstacle_sprites e o player_obstacle_sprites para o singleton dos grupos (assim, não é necessário
+- [x] Alterar lógica de instanciação de sprites para algo mais intuitivo (refatorar a parte dos grupos)
+- [x] Passar o enemy_obstacle_sprites e o player_obstacle_sprites para o singleton dos grupos (assim, não é necessário
   atualizar os grupos de cada inimigo individualmente)
-- [ ] Ajustar a classe da câmera
+- [x] Ajustar a classe da câmera
 - [x] Renomear waves.py para wave_manager.py
 - [x] Singleton para carregar todos os sprites de uma só vez.
-- [ ] Dividir melhor a ui.py
+- [x] Dividir melhor a ui.py
     - Criar uma pasta para os elementos da UI
 - [ ] Arrumar a visibilidade dos atributos (transformar em privado) nas classes restantes
 - [x] Tirar o Game do main.py e colocar ele em um arquivo próprio
