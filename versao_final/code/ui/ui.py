@@ -1,13 +1,11 @@
-import random
-
 import pygame
 
 from code.settings import *
-from code.ui.buttons.upgrade_button import UpgradeButton
 from code.ui.cooldown_icon import CooldownIcon
 from code.ui.cursor import Cursor
 from code.ui.label import Label
 from code.ui.progress_bar import ProgressBar
+from code.ui.upgrade_menu import UpgradeMenu
 from code.upgrade import *
 
 
@@ -37,10 +35,7 @@ class UI:
 
         self.__cooldown_icons = []  # a lista de ícones é gerada no show_cooldowns()
 
-        self.__is_menu_open = False
-        self.__upgrade_button_list = []
-        self.__available_upgrades = {'health': HealthUpgrade(), 'damage': DamageUpgrade(),
-                                     'firerate': FireRateUpgrade(), 'speed': SpeedUpgrade()}
+        self.__upgrade_menu = UpgradeMenu()
 
         self.__cursor = Cursor('/cursor.png')
 
@@ -55,18 +50,6 @@ class UI:
     @property
     def health_sprite(self):
         return self.__health_sprite
-
-    @property
-    def is_menu_open(self):
-        return self.__is_menu_open
-
-    @property
-    def upgrade_botton_list(self):
-        return self.__upgrade_button_list
-
-    @property
-    def available_upgrades(self):
-        return self.__available_upgrades
 
     def show_health(self, health):
         for i in range(health):
@@ -102,54 +85,7 @@ class UI:
         self.__upgrade_points_label.draw()
 
     def toggle_menu(self):
-        self.__is_menu_open = not self.__is_menu_open
-
-    def show_menu(self, player):
-        # fundo
-        shadow = pygame.Surface(self.display_surface.get_size())
-        shadow.set_alpha(150)
-        shadow.fill(COLOR_BLACK)
-        self.display_surface.blit(shadow, (0, 0))
-
-        # seção de stats
-        stats = {'HP': f'{player.health}/{player.max_health}',
-                 'DAMAGE': f'+{int((player.attacks[0].damage - player.attacks[0].base_damage) / player.attacks[0].base_damage * 100)}%',
-                 'FIRERATE': f'+{int((player.attacks[0].base_cooldown - player.attacks[0].cooldown) / player.attacks[0].base_cooldown * 100)}%',
-                 'SPEED': f'+{int((player.move_speed - player.base_speed) / player.base_speed * 100)}%'}
-
-        for i, key in enumerate(stats):
-            x, y = 128, 256 + 64 * i
-            stat_name_surf = self.font.render(f'{key}', False, TEXT_COLOR)
-            stat_name_rect = stat_name_surf.get_rect(topleft=(x, y))
-            stat_surf = self.font.render(f'{stats[key]}', False, TEXT_COLOR)
-            stat_rect = stat_surf.get_rect(topright=(x + STAT_BAR_WIDTH, y))
-            self.display_surface.blit(stat_name_surf, stat_name_rect)
-            self.display_surface.blit(stat_surf, stat_rect)
-            separator = pygame.Rect(stat_name_rect.left, stat_name_rect.bottom + 5, STAT_BAR_WIDTH, 4)
-            pygame.draw.rect(self.display_surface, UI_BORDER_COLOR_ACTIVE, separator)
-
-        # seção de upgrades
-        for button in self.__upgrade_button_list:
-            button.enabled = player.upgrade_points > 0
-            button.button_update()
-
-        upgrade_title_surf = self.font.render('UPGRADES DISPONÍVEIS', False, TEXT_COLOR)
-        upgrade_title_rect = upgrade_title_surf.get_rect(topleft=(self.display_surface.get_size()[0] - 704, 64))
-        self.display_surface.blit(upgrade_title_surf, upgrade_title_rect)
-
-    def reroll_upgrades(self):
-        remaining_upgrades = list(self.__available_upgrades.values())
-        for i in range(0, 3):
-            upgrade = random.choice(remaining_upgrades)
-            self.__upgrade_button_list[i].index[1] = upgrade
-            remaining_upgrades.remove(upgrade)
-            if len(remaining_upgrades) == 0:
-                break
-
-    def buy_upgrade(self, args):
-        # essa função vai receber como args o give_upgrade() do player e o upgrade
-        args[0](args[1])
-        self.reroll_upgrades()
+        self.__upgrade_menu.toggle()
 
     def show_cursor(self):
         self.__cursor.draw()
@@ -166,28 +102,17 @@ class UI:
         self.__timer_label.text = f'{minutes}:{seconds:02d}'
         self.__timer_label.draw()
 
-    def display(self, player, time):
-        if len(self.__upgrade_button_list) == 0:
-            # iniciar os botões de upgrade
-            for i in range(0, 3):
-                x = self.display_surface.get_size()[0] - 704
-                y = 128 + 192 * i
-                button = UpgradeButton(x, y, [player.give_upgrade, self.__available_upgrades['health']],
-                                       on_click=self.buy_upgrade)
-                self.__upgrade_button_list.append(button)
-            self.reroll_upgrades()
+    def is_menu_open(self):
+        return self.__upgrade_menu.is_open
 
+    def display(self, player, time):
         self.show_timer(time)
         self.show_health(player.health)
         self.show_exp(player.exp, player.level_up_exp, player.current_level)
         self.show_cooldowns(player.attacks)
         self.show_upgrade_points(player.upgrade_points)
 
-        if self.__is_menu_open:
-            self.show_menu(player)
+        if self.is_menu_open():
+            self.__upgrade_menu.draw()
 
         self.show_cursor()
-
-    @property
-    def is_menu_open(self):
-        return self.__is_menu_open

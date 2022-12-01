@@ -18,7 +18,7 @@ class Button(UIComponent, pygame.sprite.Sprite, ABC):
         self.__hover_color = hover_color
         self.__enabled = enabled
 
-        self.__index = on_click_args
+        self.__on_click_args = on_click_args
         self.__on_click = on_click
         self.__can_click = True
         self.__click_time = None
@@ -31,7 +31,7 @@ class Button(UIComponent, pygame.sprite.Sprite, ABC):
             if mouse[0] and self.rect.collidepoint(mouse_pos):
                 self.__click_time = pygame.time.get_ticks()
                 if self.__can_click:
-                    self.__on_click(self.__index)
+                    self.__on_click(self.__on_click_args)
                     self.__can_click = False
 
     @abstractmethod
@@ -49,12 +49,12 @@ class Button(UIComponent, pygame.sprite.Sprite, ABC):
         self.draw()
 
     @property
-    def index(self):
-        return self.__index
+    def on_click_args(self):
+        return self.__on_click_args
 
-    @index.setter
-    def index(self, index):
-        self.__index = index
+    @on_click_args.setter
+    def on_click_args(self, index):
+        self.__on_click_args = index
 
     @property
     def enabled(self):
@@ -79,3 +79,19 @@ class Button(UIComponent, pygame.sprite.Sprite, ABC):
     @property
     def font(self):
         return self.__font
+
+    @property
+    def click_time(self):
+        return self.__click_time
+
+    @click_time.setter
+    def click_time(self, click_time):
+        self.__click_time = click_time
+
+    @property
+    def can_click(self):
+        return self.__can_click
+
+    @can_click.setter
+    def can_click(self, can_click):
+        self.__can_click = can_click

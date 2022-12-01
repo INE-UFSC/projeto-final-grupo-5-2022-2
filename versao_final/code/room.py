@@ -25,6 +25,7 @@ class Room:
         self.__camera.set_background(room_name)
 
         if not hasattr(self, 'player'):
+            # TODO: o player está sendo resetado toda vez que uma sala nova é criada
             Player()
         else:
             # TODO: posicionar o player
@@ -49,6 +50,6 @@ class Room:
         self.__camera.draw(self.__group_manager.visible_sprites)
         self.__ui.display(self.__group_manager.player, self.__wave_manager.timer)
 
-        if not self.__ui.is_menu_open:
+        if not self.__ui.is_menu_open():
             self.__wave_manager.update()
             self.__group_manager.visible_sprites.update()

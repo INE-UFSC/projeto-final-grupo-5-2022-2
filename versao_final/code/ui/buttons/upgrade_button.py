@@ -22,14 +22,14 @@ class UpgradeButton(Button):
 
             # conteúdo
             # nome
-            name_surf = self.font.render(self.index[1].name, False, TEXT_COLOR)
+            name_surf = self.font.render(self.on_click_args.name, False, TEXT_COLOR)
             name_rect = name_surf.get_rect(topleft=(self.rect.left + 10, self.rect.top + 10))
             self.display_surface.blit(name_surf, name_rect)
             # linha pra separar
             separator = pygame.Rect(name_rect.left, name_rect.bottom + 5, self.rect.width - 20, 4)
             pygame.draw.rect(self.display_surface, UI_BORDER_COLOR_ACTIVE, separator)
             # ícone
-            icon = self.index[1].icon
+            icon = self.on_click_args.icon
             icon_rect = icon.get_rect(topleft=(name_rect.left, separator.bottom + 10))
             pygame.draw.rect(self.display_surface, UI_BORDER_COLOR_ACTIVE, icon_rect, 4)
             self.display_surface.blit(icon, icon_rect)
@@ -38,7 +38,7 @@ class UpgradeButton(Button):
             description_surf.fill([0, 0, 0, 0])
             description_rect = name_surf.get_rect(topleft=(icon_rect.right + 10, icon_rect.top))
             # separar as linhas da descrição
-            words = self.index[1].description.split(' ')
+            words = self.on_click_args.description.split(' ')
             current_line = 0
             while len(words) > 0:
                 current_word_index = len(words)
