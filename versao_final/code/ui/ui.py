@@ -12,7 +12,6 @@ class UI:
     def __init__(self):
         self.__display_surface = pygame.display.get_surface()
         self.__font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
-        self.__timer_font = pygame.font.Font(UI_FONT, UI_FONT_SIZE + 6)
 
         self.__health_sprite = Resources().get_sprite('/icons/heart.png')
         self.__exp_bar = ProgressBar((0, 0), 0, 0)
@@ -33,10 +32,6 @@ class UI:
     @property
     def font(self):
         return self.__font
-
-    @property
-    def timer_font(self):
-        return self.__timer_font
 
     @property
     def health_sprite(self):
