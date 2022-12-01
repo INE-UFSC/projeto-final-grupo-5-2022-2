@@ -4,6 +4,7 @@ import pygame
 
 from code.settings import *
 from code.ui.buttons.upgrade_button import UpgradeButton
+from code.ui.cooldown_icon import CooldownIcon
 from code.ui.cursor import Cursor
 from code.ui.label import Label
 from code.ui.progress_bar import ProgressBar
@@ -33,6 +34,8 @@ class UI:
         tl_y = 20
         timer_label_pos = {'centerx': tl_x, 'top': tl_y}
         self.__timer_label = Label(timer_label_pos, '', self.__font)
+
+        self.__cooldown_icons = []  # a lista de ícones é gerada no show_cooldowns()
 
         self.__is_menu_open = False
         self.__upgrade_button_list = []
@@ -67,7 +70,7 @@ class UI:
 
     def show_health(self, health):
         for i in range(health):
-            x = 10 + i * (ITEM_BOX_SIZE + HEART_SPRITE_MARGIN)
+            x = 10 + i * (ITEM_BOX_SIZE + UI_COMPONENT_MARGIN)
             y = 10
             self.display_surface.blit(self.__health_sprite,
                                       self.__health_sprite.get_rect(topleft=(x, y)))
@@ -77,34 +80,22 @@ class UI:
         self.__exp_bar.current_progress = exp
         self.__exp_bar.maximum_progress = level_up_exp
         self.__exp_bar.draw()
-
         # nível atual
         self.__exp_label.text = f'LV: {current_level}'
         self.__exp_label.draw()
 
-    def show_attacks(self, attacks):
-        for i, attack in enumerate(attacks):
-            bg_rect = pygame.Rect(10 + i * (ITEM_BOX_SIZE + 10), HEIGHT - 10 - ITEM_BOX_SIZE, ITEM_BOX_SIZE,
-                                  ITEM_BOX_SIZE)
-            pygame.draw.rect(self.display_surface, UI_BG_COLOR, bg_rect)
+    def show_cooldowns(self, attacks):
+        if len(self.__cooldown_icons) != len(attacks):
+            self.__cooldown_icons = []
+            for i, attack in enumerate(attacks):
+                x = UI_COMPONENT_MARGIN + i * (ITEM_BOX_SIZE + UI_COMPONENT_MARGIN)
+                y = HEIGHT - UI_COMPONENT_MARGIN - ITEM_BOX_SIZE
+                self.__cooldown_icons.append(CooldownIcon((x, y), attack.icon, attack.attack_time, attack.cooldown))
 
-            # ícone
-            attack_surf = attack.icon
-            attack_rect = attack_surf.get_rect(center=bg_rect.center)
-            self.display_surface.blit(attack_surf, attack_rect)
-
-            # cooldown
-            if not attack.can_attack:
-                # aqui tem que usar o max() para não resultar em altura 0
-                rect_height = max(1,
-                                  ITEM_BOX_SIZE - ITEM_BOX_SIZE * (
-                                          attack.cooldown - attack.attack_time) / attack.cooldown)
-                cooldown_surf = pygame.Surface((ITEM_BOX_SIZE, rect_height))
-                cooldown_surf.set_alpha(128)
-                cooldown_surf.fill(COLOR_BLACK)
-                self.display_surface.blit(cooldown_surf, bg_rect)
-
-            pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, bg_rect, 3)
+        for i, cooldown_icon in enumerate(self.__cooldown_icons):
+            cooldown_icon.current_cooldown = attacks[i].attack_time
+            cooldown_icon.maximum_cooldown = attacks[i].cooldown
+            cooldown_icon.draw()
 
     def show_upgrade_points(self, upgrade_points):
         self.__upgrade_points_label.text = str(upgrade_points)
@@ -189,7 +180,7 @@ class UI:
         self.show_timer(time)
         self.show_health(player.health)
         self.show_exp(player.exp, player.level_up_exp, player.current_level)
-        self.show_attacks(player.attacks)
+        self.show_cooldowns(player.attacks)
         self.show_upgrade_points(player.upgrade_points)
 
         if self.__is_menu_open:
