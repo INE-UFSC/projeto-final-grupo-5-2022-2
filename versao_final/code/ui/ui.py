@@ -4,6 +4,7 @@ import pygame
 
 from code.settings import *
 from code.ui.buttons.upgrade_button import UpgradeButton
+from code.ui.cursor import Cursor
 from code.ui.progress_bar import ProgressBar
 from code.upgrade import *
 
@@ -22,8 +23,7 @@ class UI:
         self.__available_upgrades = {'health': HealthUpgrade(), 'damage': DamageUpgrade(),
                                      'firerate': FireRateUpgrade(), 'speed': SpeedUpgrade()}
 
-        pygame.mouse.set_visible(False)
-        self.__cursor = Resources().get_sprite('/cursor.png')
+        self.__cursor = Cursor('/cursor.png')
 
     @property
     def display_surface(self):
@@ -159,10 +159,7 @@ class UI:
         self.reroll_upgrades()
 
     def show_cursor(self):
-        x, y = pygame.mouse.get_pos()
-        x -= self.__cursor.get_width() // 2
-        y -= self.__cursor.get_height() // 2
-        self.display_surface.blit(self.__cursor, (x, y))
+        self.__cursor.draw()
 
     def show_timer(self, time):
         if time == WAVE_TIME:
