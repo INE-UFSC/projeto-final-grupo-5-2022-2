@@ -3,6 +3,8 @@ from code.ui import UI
 from code.settings import *
 from code.fade import Fade
 from code.group_manager import GroupManager
+
+
 class Level:
     def __init__(self):
         # salas
@@ -26,7 +28,7 @@ class Level:
         print("Level end")
 
     def toggle_menu(self):
-        UI().toggle_menu()
+        self.__room.toggle_menu()
 
     def run(self):
         self.__room.run()

@@ -4,7 +4,7 @@ from code.player import Player
 from code.resources import Resources
 from code.settings import *
 from code.tile import Tile
-from code.ui import UI
+from code.ui.ui import UI
 from code.wave_manager import WaveManager
 
 
@@ -25,6 +25,7 @@ class Room:
         self.__camera.set_background(room_name)
 
         if not hasattr(self, 'player'):
+            # TODO: o player está sendo resetado toda vez que uma sala nova é criada
             Player()
         else:
             self.__player.position = (TILESIZE, self.__player.position[1])
@@ -38,6 +39,9 @@ class Room:
                 if col != '-1':
                     Tile((x, y), col)
 
+    def toggle_menu(self):
+        self.__ui.toggle_menu()
+
     def room_ended(self):
         return self.__wave_manager.wave_ended() and len(self.__group_manager.enemy_sprites) == 0
 
@@ -45,6 +49,6 @@ class Room:
         self.__camera.draw(self.__group_manager.visible_sprites)
         self.__ui.display(self.__group_manager.player, self.__wave_manager.timer)
 
-        if not self.__ui.is_menu_open:
+        if not self.__ui.is_menu_open():
             self.__wave_manager.update()
             self.__group_manager.visible_sprites.update()
