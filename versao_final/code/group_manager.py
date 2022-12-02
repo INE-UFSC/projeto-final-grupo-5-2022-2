@@ -8,11 +8,10 @@ class GroupManager(Singleton):
         if not self._initialized:
             # sprites que são desenhados
             self.__visible_sprites = pygame.sprite.Group()
-            # efeitos que são sobrepostos a todos os outros sprites
-            self.__effects_sprites = pygame.sprite.Group()
+            # inclui o player e fade, isto é, sprites que não são apagados
+            self.__persistent_sprites = pygame.sprite.Group()
             # player
             self.__player = None
-            self.__player_sprites = pygame.sprite.Group()
             # sprites relacionados ao ataque
             self.__attack_sprites = pygame.sprite.Group()
             self.__enemy_sprites = pygame.sprite.Group()
@@ -45,28 +44,31 @@ class GroupManager(Singleton):
         self.__particle_sprites.add(sprite)
         self.__update_groups()
 
+    def add_to_persistent(self, sprite):
+        self.__persistent_sprites.add(sprite)
+        self.__update_groups()
+
     def __update_groups(self):
         self.__enemy_obstacle_sprites = pygame.sprite.Group(self.__tile_sprites, self.__enemy_sprites)
         self.__player_obstacle_sprites = self.__enemy_obstacle_sprites
 
         if self.__player:
             self.__enemy_obstacle_sprites.add(self.__player)
-            self.__player_sprites = pygame.sprite.Group(self.__player)
+            self.__persistent_sprites = pygame.sprite.Group(self.__player)
             if self.__player.staff:
-                self.__player_sprites.add(self.__player.staff)
+                self.__persistent_sprites.add(self.__player.staff)
 
         # sprites que serão desenhados
-        self.__visible_sprites = pygame.sprite.Group(self.effects_sprites,
-                                                     self.__player_sprites,
+        self.__visible_sprites = pygame.sprite.Group(self.__persistent_sprites,
                                                      self.__tile_sprites,
                                                      self.__enemy_sprites,
                                                      self.__attack_sprites,
                                                      self.__particle_sprites)
 
     def clear_all(self):
-        # limpa todos os grupos menos o player
+        # limpa todos os grupos, menos os sprites persistentes
         for attribute, value in self.__dict__.items():
-            if isinstance(value, pygame.sprite.Group):
+            if isinstance(value, pygame.sprite.Group) and id(value) != id(self.__persistent_sprites):
                 value.empty()
 
     @property
@@ -83,8 +85,8 @@ class GroupManager(Singleton):
         return self.__visible_sprites
 
     @property
-    def effects_sprites(self):
-        return self.__effects_sprites
+    def persistent_sprites(self):
+        return self.__persistent_sprites
 
     @property
     def attack_sprites(self):

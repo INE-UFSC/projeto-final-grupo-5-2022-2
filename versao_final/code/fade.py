@@ -1,12 +1,15 @@
 import pygame
 
+from code.group_manager import GroupManager
 from code.settings import *
 
+
 class Fade(pygame.sprite.Sprite):
-    def __init__(self, *groups, fade_step = 5, fade_in=True):
-        super().__init__(groups)
+    def __init__(self, fade_step=5, fade_in=True):
+        super().__init__()
+        GroupManager().add_to_persistent(self)
         self.__sprite_type = 'effect'
-        
+
         self.image = pygame.Surface((WIDTH, HEIGHT))
         self.image.fill(COLOR_BLACK)
         self.rect = self.image.get_rect()
@@ -17,7 +20,7 @@ class Fade(pygame.sprite.Sprite):
         else:
             self.__fade_step = abs(fade_step)
             self.image.set_alpha(0 + self.__fade_step)
-    
+
     @property
     def sprite_type(self):
         return self.__sprite_type
