@@ -1,5 +1,4 @@
 from code.room import Room
-from code.ui import UI
 from code.settings import *
 from code.fade import Fade
 from code.group_manager import GroupManager
