@@ -27,8 +27,7 @@ class Room:
         if not hasattr(self, 'player'):
             Player()
         else:
-            # TODO: posicionar o player
-            pass
+            self.__player.position = (TILESIZE, self.__player.position[1])
 
         # tiles
         tiles = Resources().get_tilemap(room_name)

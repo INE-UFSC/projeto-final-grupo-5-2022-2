@@ -12,7 +12,7 @@ class Camera(Singleton):
         if not self._initialized:
             self.__display_surface = pygame.display.get_surface()
             self.__back_sprite_types = ['on_ground']
-            self.__front_sprite_types = ['light']
+            self.__front_sprite_types = ['light', 'effect']
             self.__background = pygame.Surface((TILESIZE, TILESIZE))
             self.__background_shadow = Resources().get_sprite('/backgrounds/shadow_overlay.png')
             self.__screen_shake_offset = pygame.math.Vector2()

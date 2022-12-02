@@ -8,6 +8,8 @@ class GroupManager(Singleton):
         if not self._initialized:
             # sprites que são desenhados
             self.__visible_sprites = pygame.sprite.Group()
+            # efeitos que são sobrepostos a todos os outros sprites
+            self.__effects_sprites = pygame.sprite.Group()
             # player
             self.__player = None
             self.__player_sprites = pygame.sprite.Group()
@@ -22,6 +24,10 @@ class GroupManager(Singleton):
             self.__particle_sprites = pygame.sprite.Group()
 
             self._initialized = True
+
+    @property
+    def player(self):
+        return self.__player
 
     def add_to_attacks(self, sprite):
         self.__attack_sprites.add(sprite)
@@ -50,7 +56,8 @@ class GroupManager(Singleton):
                 self.__player_sprites.add(self.__player.staff)
 
         # sprites que serão desenhados
-        self.__visible_sprites = pygame.sprite.Group(self.__player_sprites,
+        self.__visible_sprites = pygame.sprite.Group(self.effects_sprites,
+                                                     self.__player_sprites,
                                                      self.__tile_sprites,
                                                      self.__enemy_sprites,
                                                      self.__attack_sprites,
@@ -74,6 +81,10 @@ class GroupManager(Singleton):
     @property
     def visible_sprites(self):
         return self.__visible_sprites
+
+    @property
+    def effects_sprites(self):
+        return self.__effects_sprites
 
     @property
     def attack_sprites(self):

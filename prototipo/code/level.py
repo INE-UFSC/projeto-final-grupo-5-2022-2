@@ -1,7 +1,6 @@
 from code.room import Room
 from code.settings import *
 from code.fade import Fade
-from code.group_manager import GroupManager
 
 class Level:
     def __init__(self):

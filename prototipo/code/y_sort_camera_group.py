@@ -9,7 +9,7 @@ class YSortCameraGroup(pygame.sprite.Group):
         super().__init__()
         self.__display_surface = pygame.display.get_surface()
         self.__back_sprite_types = ['on_ground']
-        self.__front_sprite_types = ['light', 'staff']
+        self.__front_sprite_types = ['light', 'staff', 'fade']
         self.__background = pygame.Surface((TILESIZE, TILESIZE))
 
     def custom_draw(self):

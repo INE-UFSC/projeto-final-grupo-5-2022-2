@@ -26,6 +26,10 @@ class Room:
     def player(self):
         return self.__player
 
+    @property
+    def group_manager(self):
+        return self.__group_manager
+
     def create_map(self, room_name):
         self.__group_manager.visible_sprites.set_background(room_name)
 
