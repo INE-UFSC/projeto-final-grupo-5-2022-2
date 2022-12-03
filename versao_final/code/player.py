@@ -107,10 +107,10 @@ class Player(Entity):
             self.image.set_alpha(255)
 
     def damage(self, damage):
-        if self.__vulnerable:
+        if self.vulnerable:
             self.__health -= damage
             self.__vulnerable = False
-            self.i = self.__invincibility_duration
+            self.__hurt_time = self.__invincibility_duration
             print(damage)
 
     def give_exp(self, exp):
