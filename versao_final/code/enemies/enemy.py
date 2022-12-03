@@ -200,6 +200,10 @@ class Enemy(Entity):
     def attack_time(self):
         return self.__attack_time
 
+    @attack_time.setter
+    def attack_time(self, attack_time):
+        self.__attack_time = attack_time
+
     @property
     def attack_cooldown(self):
         return self.__attack_cooldown

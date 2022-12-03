@@ -10,7 +10,6 @@ class PlayerDamageArea(Entity):
                  particle_spawners=[], hit_sound=None, fade_out_step=0) -> None:
         super().__init__('player_damage_area')
         self.__group_manager = GroupManager()
-        self.__group_manager.add_to_enemy_attacks(self)
         self.image = surface
         self.rect = self.image.get_rect(center=pos)
         self.__hitbox = self.rect
@@ -28,21 +27,56 @@ class PlayerDamageArea(Entity):
         self.__hit_sound = hit_sound
 
     def player_collision(self):
-        collision_sprites = pygame.sprite.spritecollide(self, self.__group_manager.player, False)
-        if collision_sprites:
-            player = collision_sprites[0]
-            if player.vulnerable:
-                # dar o dano no player
-                player.damage(self.__damage) 
+        player = self.group_manager.player
+        collision = player.hitbox.colliderect(self.__hitbox)
+        if collision and player.vulnerable:
+            # dar o dano no player
+            player.damage(self.__damage) 
 
-                try: # tocar o som de hit
-                    # evitar exceção caso o arquivo de som não exista
-                    self.__hit_sound.play() 
-                except Exception:
-                    pass
-                
-                # destruir o ataque
-                self.kill
+            try: # tocar o som de hit
+                # evitar exceção caso o arquivo de som não exista
+                self.hit_sound.play() 
+            except Exception:
+                pass
+            
+            # destruir o ataque
+            self.kill()
 
     def update(self):
-        pass
+        self.player_collision()
+
+        moved = self.move(self.speed, 'smaller_hitbox')
+        if not moved:
+            # projétil colidiu com algum obstáculo
+            self.kill()
+
+        for particle_spawner in self.__particle_spawners:
+            particle_spawner.rect.center = self.rect.center + self.direction * self.speed
+
+        self.__destroy_timer += 1
+        if self.__destroy_timer >= self.__destroy_time:
+            self.kill()
+        
+    @property
+    def speed(self):
+        return self.__speed
+
+    @property
+    def group_manager(self):
+        return self.__group_manager
+
+    @property
+    def hit_sound(self):
+        return self.__hit_sound
+
+    @property
+    def hitbox(self):
+        return self.__hitbox
+
+    @property
+    def obstacle_sprites(self):
+        return self.__obstacle_sprites
+
+    @property
+    def damage(self):
+        return self.__damage

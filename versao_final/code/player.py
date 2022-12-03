@@ -111,6 +111,7 @@ class Player(Entity):
             self.__health -= damage
             self.__vulnerable = False
             self.i = self.__invincibility_duration
+            print(damage)
 
     def give_exp(self, exp):
         self.__exp += exp
@@ -135,6 +136,7 @@ class Player(Entity):
         if self.__health <= 0:
             # TEMPORÁRIO
             # futuramente, é necessário implementar a tela de GAME OVER
+            print("PLAYER morreu")
             pygame.quit()
             sys.exit()
 
