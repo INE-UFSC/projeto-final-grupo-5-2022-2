@@ -1,13 +1,14 @@
 import random
 
 from code.enemies.bat import Bat
+from code.enemies.Spider import Spider
 from code.resources import Resources
 from code.settings import *
 
 
 class WaveManager:
     def __init__(self):
-        self.__enemy_classes = {'bat': Bat}  # TODO: passar para o singleton dos settings
+        self.__enemy_classes = {'bat': Bat, 'spider' : Spider}  # TODO: passar para o singleton dos settings
         self.__wave_data = None
         self.__timer = 0
         self.__tick_index = 0

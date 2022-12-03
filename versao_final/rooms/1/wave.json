@@ -12,13 +12,7 @@
     ],
     "spawns": [
       {
-        "enemies": "bat/bat/bat",
-        "locations": "random/previous/previous",
-        "after": 0,
-        "before": 9999
-      },
-      {
-        "enemies": "bat/bat",
+        "enemies": "spider/spider",
         "locations": "random/random",
         "after": 0,
         "before": 9999

@@ -16,6 +16,7 @@ class GroupManager(Singleton):
             # sprites relacionados ao ataque
             self.__attack_sprites = pygame.sprite.Group()
             self.__enemy_sprites = pygame.sprite.Group()
+            self.__enemy_attack_sprites = pygame.sprite.Group()
             # sprites que funcionam como obstáculos
             self.__tile_sprites = pygame.sprite.Group()
             self.__enemy_obstacle_sprites = pygame.sprite.Group()
@@ -31,6 +32,10 @@ class GroupManager(Singleton):
 
     def add_to_attacks(self, sprite):
         self.__attack_sprites.add(sprite)
+        self.__update_groups()
+
+    def add_to_enemy_attacks(self, sprite):
+        self.__enemy_attack_sprites.add(sprite)
         self.__update_groups()
 
     def add_to_enemies(self, sprite):
@@ -61,6 +66,7 @@ class GroupManager(Singleton):
                                                      self.__tile_sprites,
                                                      self.__enemy_sprites,
                                                      self.__attack_sprites,
+                                                     self.__enemy_attack_sprites,
                                                      self.__particle_sprites)
 
     def clear_all(self):

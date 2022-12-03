@@ -34,6 +34,12 @@ class Entity(pygame.sprite.Sprite):
     def direction(self, direction):
         self.__direction = direction
 
+    def get_distance(A, B) -> float:
+        # retorna a distância entre duas entities
+        pos_a = A.position
+        pos_b = B.position
+        return math.sqrt((pos_b[0] - pos_a[0])**2 + (pos_b[1] - pos_a[1])**2)
+
     def move(self, speed, collision_hitbox_name='hitbox'):
         # o collision_hitbox_name é utilizado pelo DamageArea para escolher colidir somente com a
         # hitbox menor (smaller_hitbox) dos Tiles

@@ -10,8 +10,8 @@ class Enemy(Entity):
                  attack_cooldown=40):
         super().__init__('enemy')
 
-        self.__group_manager = GroupManager()
-        self.__group_manager.add_to_enemies(self)
+        self._group_manager = GroupManager()
+        self._group_manager.add_to_enemies(self)
 
         self.__animation = Resources().get_animation(f'/enemies/{name}')
         self.__frame_index = 0
@@ -19,7 +19,7 @@ class Enemy(Entity):
         self.image = self.__animation[0]
         self.rect = self.image.get_rect(topleft=pos)
         self.__hitbox = self.rect.inflate(0, - self.image.get_width() // 5)
-        self.__obstacle_sprites = self.__group_manager.enemy_obstacle_sprites
+        self.__obstacle_sprites = self._group_manager.enemy_obstacle_sprites
 
         self.__status = ''
         self.__health = health
@@ -39,8 +39,9 @@ class Enemy(Entity):
         self.__invincibility_duration = 20
 
     def get_player_distance_direction(self):
+        # TODO: dividir esse método
         enemy_vec = pygame.math.Vector2(self.rect.center)
-        player = self.__group_manager.player
+        player = self._group_manager.player
         player_vec = pygame.math.Vector2(player.rect.center)
         sub_vec = player_vec - enemy_vec
         distance = sub_vec.magnitude()
@@ -54,7 +55,7 @@ class Enemy(Entity):
 
     def get_status(self):
         # decide o status atual
-        player = self.__group_manager.player
+        player = self._group_manager.player
         if player.hitbox.colliderect(self.__damage_hitbox) and self.__can_attack:
             if self.__status != 'attack':
                 pass  # TODO: self.frame_index = 0
@@ -64,7 +65,7 @@ class Enemy(Entity):
 
     def actions(self):
         # faz uma ação baseado no status atual
-        player = self.__group_manager.player
+        player = self._group_manager.player
         if self.__status == 'attack':
             self.__attack_time = self.__attack_cooldown
             self.__can_attack = False  # TODO: passar para a lógica do animate() ao adicionar sprites
@@ -75,7 +76,7 @@ class Enemy(Entity):
             self.direction = pygame.math.Vector2()
 
     def animate(self):
-        player = self.__group_manager.player
+        player = self._group_manager.player
         self.__frame_index += self.__animation_speed
         if self.__frame_index >= len(self.__animation):
             self.__frame_index = 0
@@ -104,7 +105,7 @@ class Enemy(Entity):
 
     def damage(self, damage):
         if self.__vulnerable:
-            player = self.__group_manager.player
+            player = self._group_manager.player
             self.direction = self.get_player_distance_direction()[1]
             self.__health -= damage
             self.__hit_time = self.__invincibility_duration
@@ -112,7 +113,7 @@ class Enemy(Entity):
 
     def check_death(self):
         if self.__health <= 0:
-            player = self.__group_manager.player
+            player = self._group_manager.player
             player.give_exp(self.__exp)
             self.kill()
 
@@ -191,6 +192,10 @@ class Enemy(Entity):
     def can_attack(self):
         return self.__can_attack
 
+    @can_attack.setter
+    def can_attack(self, can_attack):
+        self.__can_attack = can_attack
+
     @property
     def attack_time(self):
         return self.__attack_time
@@ -198,6 +203,10 @@ class Enemy(Entity):
     @property
     def attack_cooldown(self):
         return self.__attack_cooldown
+
+    @attack_cooldown.setter
+    def attack_cooldown(self, attack_cooldown):
+        self.__attack_cooldown = attack_cooldown
 
     @property
     def hit_time(self):

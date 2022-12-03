@@ -53,8 +53,11 @@ class EnemyDamageArea(Entity):
                 if not target_sprite.vulnerable:  # pular os inimigos que não estão vulneráveis
                     continue
 
-                if self.hit_sound is not None:
-                    self.hit_sound.play()
+                try:
+                    # evitar exceção caso o arquivo de som não exista
+                    self.hit_sound.play() 
+                except Exception:
+                    pass
 
                 target_sprite.damage(self.__damage)
                 if target_sprite.health <= 0:

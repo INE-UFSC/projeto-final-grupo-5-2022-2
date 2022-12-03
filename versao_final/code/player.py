@@ -110,7 +110,7 @@ class Player(Entity):
         if self.__vulnerable:
             self.__health -= damage
             self.__vulnerable = False
-            self.__hurt_time = self.__invincibility_duration
+            self.i = self.__invincibility_duration
 
     def give_exp(self, exp):
         self.__exp += exp
