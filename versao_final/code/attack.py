@@ -3,11 +3,11 @@ import pygame
 import random
 from abc import ABC, abstractmethod
 
-from code.damage_area import EnemyDamageArea
-from code.group_manager import GroupManager
-from code.particles import FireSource, LightSource, AnimationParticle
-from code.resources import Resources
-from code.settings import WHITE
+from code.EnemyDamageArea import EnemyDamageArea
+from code.GroupManager import GroupManager
+from code.Particles import FireSource, LightSource, AnimationParticle
+from code.Resources import Resources
+from code.Settings import WHITE
 
 
 class Attack(ABC):

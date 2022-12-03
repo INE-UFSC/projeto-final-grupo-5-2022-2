@@ -4,8 +4,8 @@ import pygame.sprite
 import random
 from abc import ABC, abstractmethod
 
-from code.group_manager import GroupManager
-from code.resources import Resources
+from code.GroupManager import GroupManager
+from code.Resources import Resources
 
 
 class ParticleSource(pygame.sprite.Sprite, ABC):

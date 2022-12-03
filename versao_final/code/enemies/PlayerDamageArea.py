@@ -1,8 +1,8 @@
 import pygame
 
-from code.entity import Entity
-from code.group_manager import GroupManager
-from code.settings import *
+from code.Entity import Entity
+from code.GroupManager import GroupManager
+from code.Settings import *
 
 class PlayerDamageArea(Entity):
     def __init__(self, pos, damage=0, speed=0, direction=pygame.math.Vector2, 

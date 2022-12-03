@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 
 import pygame
 
-from code.settings import *
-from code.ui.ui_component import UIComponent
+from code.Settings import *
+from code.ui.UIComponent import UIComponent
 
 
 class Button(UIComponent, pygame.sprite.Sprite, ABC):

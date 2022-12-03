@@ -2,9 +2,9 @@ import random
 
 import pygame
 
-from code.resources import Resources
-from code.settings import TILESIZE
-from code.singleton import Singleton
+from code.Resources import Resources
+from code.Settings import TILESIZE
+from code.Singleton import Singleton
 
 
 class Camera(Singleton):

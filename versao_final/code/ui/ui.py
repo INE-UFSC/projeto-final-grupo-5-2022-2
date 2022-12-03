@@ -1,12 +1,12 @@
 import pygame
 
-from code.settings import *
-from code.ui.cooldown_icon import CooldownIcon
-from code.ui.cursor import Cursor
-from code.ui.label import Label
-from code.ui.progress_bar import ProgressBar
-from code.ui.upgrade_menu import UpgradeMenu
-from code.upgrade import *
+from code.Settings import *
+from code.ui.CooldownIcon import CooldownIcon
+from code.ui.Cursor import Cursor
+from code.ui.Label import Label
+from code.ui.ProgressBar import ProgressBar
+from code.ui.UpgradeMenu import UpgradeMenu
+from code.Upgrade import *
 
 
 class UI:

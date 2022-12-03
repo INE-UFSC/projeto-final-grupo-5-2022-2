@@ -2,11 +2,11 @@ import random
 
 import pygame
 
-from code.camera import Camera
-from code.entity import Entity
-from code.group_manager import GroupManager
-from code.particles import FireSource, BloodSource
-from code.settings import TILESIZE
+from code.Camera import Camera
+from code.Entity import Entity
+from code.GroupManager import GroupManager
+from code.Particles import FireSource, BloodSource
+from code.Settings import TILESIZE
 
 
 class EnemyDamageArea(Entity):

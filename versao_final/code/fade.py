@@ -1,7 +1,7 @@
 import pygame
 
-from code.group_manager import GroupManager
-from code.settings import *
+from code.GroupManager import GroupManager
+from code.Settings import *
 
 
 class Fade(pygame.sprite.Sprite):

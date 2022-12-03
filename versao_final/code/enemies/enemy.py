@@ -1,8 +1,8 @@
 import pygame
 
-from code.entity import Entity
-from code.group_manager import GroupManager
-from code.resources import Resources
+from code.Entity import Entity
+from code.GroupManager import GroupManager
+from code.Resources import Resources
 
 
 class Enemy(Entity):

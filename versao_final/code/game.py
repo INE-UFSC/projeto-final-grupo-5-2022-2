@@ -2,9 +2,9 @@ import sys
 
 import pygame
 
-from code.level import Level
-from code.settings import *
-from code.resources import Resources
+from code.Level import Level
+from code.Settings import *
+from code.Resources import Resources
 
 
 class Game:

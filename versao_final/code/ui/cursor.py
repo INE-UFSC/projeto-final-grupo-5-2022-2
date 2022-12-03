@@ -1,7 +1,7 @@
 import pygame
 
-from code.resources import Resources
-from code.ui.ui_component import UIComponent
+from code.Resources import Resources
+from code.ui.UIComponent import UIComponent
 
 
 class Cursor(UIComponent):

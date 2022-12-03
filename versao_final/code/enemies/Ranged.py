@@ -1,9 +1,9 @@
 import pygame
 
-from code.enemies.enemy import Enemy
+from code.enemies.Enemy import Enemy
 from code.enemies.PlayerDamageArea import PlayerDamageArea
-from code.entity import Entity
-from code.resources import Resources
+from code.Entity import Entity
+from code.Resources import Resources
 
 
 class Ranged(Enemy):

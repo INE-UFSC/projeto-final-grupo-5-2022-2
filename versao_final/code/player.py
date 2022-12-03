@@ -1,8 +1,8 @@
 import sys
 
-from code.attack import *
-from code.entity import Entity
-from code.group_manager import GroupManager
+from code.Attack import *
+from code.Entity import Entity
+from code.GroupManager import GroupManager
 
 
 class Player(Entity):

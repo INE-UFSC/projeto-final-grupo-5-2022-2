@@ -1,11 +1,11 @@
-from code.camera import Camera
-from code.group_manager import GroupManager
-from code.player import Player
-from code.resources import Resources
-from code.settings import *
-from code.tile import Tile
-from code.ui.ui import UI
-from code.wave_manager import WaveManager
+from code.Camera import Camera
+from code.GroupManager import GroupManager
+from code.Player import Player
+from code.Resources import Resources
+from code.Settings import *
+from code.Tile import Tile
+from code.ui.UI import UI
+from code.WaveManager import WaveManager
 
 
 class Room:

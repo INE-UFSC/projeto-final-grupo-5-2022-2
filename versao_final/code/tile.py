@@ -1,8 +1,8 @@
 import pygame
-from code.group_manager import GroupManager
 
-from code.resources import Resources
-from code.settings import *
+from code.GroupManager import GroupManager
+from code.Resources import Resources
+from code.Settings import *
 
 
 class Tile(pygame.sprite.Sprite):

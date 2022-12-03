@@ -4,8 +4,8 @@ from csv import reader
 
 import pygame
 
-from code.settings import GAME_PATH
-from code.singleton import Singleton
+from code.Settings import GAME_PATH
+from code.Singleton import Singleton
 
 
 class Resources(Singleton):

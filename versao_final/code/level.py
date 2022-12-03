@@ -1,7 +1,7 @@
-from code.fade import Fade
-from code.group_manager import GroupManager
-from code.room import Room
-from code.settings import *
+from code.Fade import Fade
+from code.GroupManager import GroupManager
+from code.Room import Room
+from code.Settings import *
 
 
 class Level:

@@ -1,9 +1,9 @@
 import random
 
-from code.enemies.bat import Bat
+from code.enemies.Bat import Bat
 from code.enemies.Spider import Spider
-from code.resources import Resources
-from code.settings import *
+from code.Resources import Resources
+from code.Settings import *
 
 
 class WaveManager:

@@ -1,6 +1,6 @@
 import pygame
 
-from code.singleton import Singleton
+from code.Singleton import Singleton
 
 
 class GroupManager(Singleton):

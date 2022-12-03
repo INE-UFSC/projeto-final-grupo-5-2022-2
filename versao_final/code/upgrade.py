@@ -1,7 +1,7 @@
 from abc import abstractmethod, ABC
 
-from code.group_manager import GroupManager
-from code.resources import Resources
+from code.GroupManager import GroupManager
+from code.Resources import Resources
 
 
 class Upgrade(ABC):
