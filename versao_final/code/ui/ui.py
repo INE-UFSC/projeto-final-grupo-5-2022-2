@@ -6,7 +6,7 @@ from code.ui.Cursor import Cursor
 from code.ui.Label import Label
 from code.ui.ProgressBar import ProgressBar
 from code.ui.UpgradeMenu import UpgradeMenu
-from code.Upgrade import *
+from code.Resources import Resources
 
 
 class UI:

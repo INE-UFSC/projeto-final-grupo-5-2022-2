@@ -6,7 +6,7 @@ from code.GroupManager import GroupManager
 from code.Settings import *
 from code.ui.buttons.UpgradeButton import UpgradeButton
 from code.ui.UIComponent import UIComponent
-from code.Upgrade import HealthUpgrade, DamageUpgrade, SpeedUpgrade, FireRateUpgrade
+from code.upgrades import HealthUpgrade, DamageUpgrade, SpeedUpgrade, FireRateUpgrade
 
 
 class UpgradeMenu(UIComponent):
@@ -14,8 +14,8 @@ class UpgradeMenu(UIComponent):
         super().__init__()
         self.__font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
         self.__is_open = False
-        self.__available_upgrades = {'health': HealthUpgrade(), 'damage': DamageUpgrade(),
-                                     'firerate': FireRateUpgrade(), 'speed': SpeedUpgrade()}
+        self.__available_upgrades = {'health': HealthUpgrade.HealthUpgrade(), 'damage': DamageUpgrade.DamageUpgrade(),
+                                     'firerate': FireRateUpgrade.FireRateUpgrade(), 'speed': SpeedUpgrade.SpeedUpgrade()}
         self.__upgrade_buttons = []
         self.reroll_upgrades()
 
