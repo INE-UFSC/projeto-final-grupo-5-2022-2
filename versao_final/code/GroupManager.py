@@ -59,8 +59,9 @@ class GroupManager(Singleton):
 
         if self.__player:
             self.__enemy_obstacle_sprites.add(self.__player)
-            self.__persistent_sprites = pygame.sprite.Group(self.__player)
-            if self.__player.staff:
+            if self.__player not in self.__persistent_sprites:
+                self.__persistent_sprites.add(self.__player)
+            if self.__player.staff and self.__player.staff not in self.__persistent_sprites:
                 self.__persistent_sprites.add(self.__player.staff)
 
         # sprites que serão desenhados
