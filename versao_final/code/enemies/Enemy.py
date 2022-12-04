@@ -18,7 +18,8 @@ class Enemy(Entity):
         self.__animation_speed = 0.2
         self.image = self.__animation[0]
         self.rect = self.image.get_rect(topleft=pos)
-        self.__hitbox = self.rect.inflate(0, - self.image.get_width() // 5)
+        self.__hitbox = self.rect.inflate(0, - self.image.get_height() // 1.5)
+        self.__hitbox.bottom = self.rect.bottom
         self.__obstacle_sprites = self._group_manager.enemy_obstacle_sprites
 
         self.__status = ''
