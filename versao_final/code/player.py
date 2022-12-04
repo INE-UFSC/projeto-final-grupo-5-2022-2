@@ -26,7 +26,7 @@ class Player(Entity):
         self.rect = self.image.get_rect(topleft=(300, 300))
         self.__hitbox = self.rect.inflate(-16, -26)
 
-        self.__health = 3
+        self.__health = 7
         self.__max_health = 7
         self.__base_speed = 5
         self.__move_speed = self.__base_speed
