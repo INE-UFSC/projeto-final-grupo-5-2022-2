@@ -25,11 +25,8 @@ class Room:
     def create_map(self, room_name):
         self.__camera.set_background(room_name)
 
-        if not hasattr(self, 'player'):
-            # TODO: o player está sendo resetado toda vez que uma sala nova é criada
-            # acho que dava pra adicionar um 'p' no tileset do mapa pra indicar a posição
-            # do jogador e, se ele não existir, criar, mas, se existir, só posicionar na nova posição
-            Player()
+        if self.__group_manager.player is None:
+            self.__player = Player()
         else:
             self.__player.position = (TILESIZE, self.__player.position[1])
 
