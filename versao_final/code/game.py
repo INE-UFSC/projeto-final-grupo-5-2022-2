@@ -15,7 +15,7 @@ class Game:
         self.clock = pygame.time.Clock()
         Resources()  # carregar os sprites
         # level
-        self.level = Level()
+        self.level = Level(('1', '2'))
 
     def run(self):
         while True:

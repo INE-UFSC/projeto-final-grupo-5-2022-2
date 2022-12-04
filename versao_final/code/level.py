@@ -5,9 +5,9 @@ from code.Settings import *
 
 
 class Level:
-    def __init__(self):
+    def __init__(self, rooms : tuple):
         # salas
-        self.__rooms = ('1', '2')
+        self.__rooms = rooms
         self.__current_room_index = 0
         self.__room = Room(self.__rooms[self.__current_room_index])
         self.__changing_room = False

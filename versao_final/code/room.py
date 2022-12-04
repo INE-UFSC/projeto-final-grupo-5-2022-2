@@ -14,6 +14,7 @@ class Room:
         self.__camera = Camera()
         self.__group_manager = GroupManager()
         self.__wave_manager = WaveManager()
+        self.tiles = []
         self.change_to(room_name)
 
     def change_to(self, room_name):
@@ -33,8 +34,8 @@ class Room:
             self.__player.position = (TILESIZE, self.__player.position[1])
 
         # tiles
-        tiles = Resources().get_tilemap(room_name)
-        for row_index, row in enumerate(tiles):
+        self.tiles = Resources().get_tilemap(room_name)
+        for row_index, row in enumerate(self.tiles):
             for col_index, col in enumerate(row):
                 x = col_index * TILESIZE
                 y = row_index * TILESIZE
@@ -54,3 +55,11 @@ class Room:
         if not self.__ui.is_menu_open():
             self.__wave_manager.update()
             self.__group_manager.visible_sprites.update()
+
+    @property
+    def tiles(self):
+        return self.__tiles
+
+    @tiles.setter
+    def tiles(self, tiles):
+        self.__tiles = tiles
