@@ -7,7 +7,7 @@ from code.Resources import Resources
 
 
 class Ranged(Enemy):
-    def __init__(self, name, pos, range, target_distance, projectile_sprite, projectile_damage,
+    def __init__(self, name, pos, range, target_distance, projectile_damage,
                  projectile_speed, flee_distance, health, speed, collision_damage, exp,
                  attack_cooldown):
         super().__init__(name, pos, health, speed, collision_damage, exp,
@@ -15,7 +15,7 @@ class Ranged(Enemy):
         self.__range = range
         self.__target_distance = target_distance
         self.__flee_distance = flee_distance
-        self.__projectile_sprite = Resources().get_sprite(projectile_sprite)
+        self.__projectile_sprite = Resources().get_sprite(f'/enemies/{name}/projectile.png')
         self.__projectile_damage = projectile_damage
         self.__projectile_speed = projectile_speed
         self.__projectile_cooldown = attack_cooldown
@@ -61,10 +61,13 @@ class Ranged(Enemy):
 
         # sempre ataca a distância se estiver no alcance
         if self.projectile_cooldown < 0 and self.in_range:
-            self.projectile_cooldown = self.attack_cooldown
-            projectile = PlayerDamageArea(self.position, self.projectile_damage, self.projectile_speed,
-                                          self.get_player_distance_direction()[1], self.projectile_sprite)
-            self._group_manager.add_to_enemy_attacks(projectile)
+            self.launch_projectile()
+
+    def launch_projectile(self):
+        self.projectile_cooldown = self.attack_cooldown
+        projectile = PlayerDamageArea(self.position, self.projectile_damage, self.projectile_speed,
+                                    self.get_player_distance_direction()[1], self.projectile_sprite)
+        self._group_manager.add_to_enemy_attacks(projectile)
 
     def cooldowns(self):
         super().cooldowns()

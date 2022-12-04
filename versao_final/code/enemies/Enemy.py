@@ -13,7 +13,7 @@ class Enemy(Entity):
         self._group_manager = GroupManager()
         self._group_manager.add_to_enemies(self)
 
-        self.__animation = Resources().get_animation(f'/enemies/{name}')
+        self.__animation = Resources().get_animation(f'/enemies/{name}/move')
         self.__frame_index = 0
         self.__animation_speed = 0.2
         self.image = self.__animation[0]
