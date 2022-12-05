@@ -1,14 +1,10 @@
+from code.enemies.EnemyStatus import Melee_Status
 from code.Entity import Entity
 from code.GroupManager import GroupManager
 from code.Resources import Resources
-from enum import Enum
 
 import pygame
 
-
-class Melee_Status(Enum):
-    MOVE = 0
-    ATTACK = 1
 
 class Enemy(Entity):
     def __init__(self, name, pos, health=1, speed=3, collision_damage=1, exp=1,
