@@ -1,9 +1,14 @@
-import pygame
-
 from code.Entity import Entity
 from code.GroupManager import GroupManager
 from code.Resources import Resources
+from enum import Enum
 
+import pygame
+
+
+class Melee_Status(Enum):
+    MOVE = 0
+    ATTACK = 1
 
 class Enemy(Entity):
     def __init__(self, name, pos, health=1, speed=3, collision_damage=1, exp=1,
@@ -12,6 +17,7 @@ class Enemy(Entity):
 
         self._group_manager = GroupManager()
         self._group_manager.add_to_enemies(self)
+        self.__name = name
 
         self.__animation = Resources().get_animation(f'/enemies/{name}/move')
         self.__frame_index = 0
@@ -22,7 +28,7 @@ class Enemy(Entity):
         self.__hitbox.bottom = self.rect.bottom
         self.__obstacle_sprites = self._group_manager.enemy_obstacle_sprites
 
-        self.__status = ''
+        self.__status = Melee_Status.MOVE
         self.__health = health
         self.__speed = speed
         self.__collision_damage = collision_damage
@@ -58,20 +64,20 @@ class Enemy(Entity):
         # decide o status atual
         player = self._group_manager.player
         if player.hitbox.colliderect(self.__damage_hitbox) and self.__can_attack:
-            if self.__status != 'attack':
+            if self.__status != Melee_Status.ATTACK:
                 pass  # TODO: self.frame_index = 0
-            self.__status = 'attack'
+            self.__status = Melee_Status.ATTACK
         else:
-            self.__status = 'move'
+            self.__status = Melee_Status.MOVE
 
     def actions(self):
         # faz uma ação baseado no status atual
         player = self._group_manager.player
-        if self.__status == 'attack':
+        if self.__status == Melee_Status.ATTACK:
             self.__attack_time = self.__attack_cooldown
             self.__can_attack = False  # TODO: passar para a lógica do animate() ao adicionar sprites
             player.damage(self.__collision_damage)
-        elif self.__status == 'move':
+        elif self.__status == Melee_Status.MOVE:
             self.direction = self.get_player_distance_direction()[1]
         else:
             self.direction = pygame.math.Vector2()
@@ -136,6 +142,10 @@ class Enemy(Entity):
         self.get_status()
         self.actions()
         self.animate()
+    
+    @property
+    def name(self):
+        return self.__name
 
     @property
     def obstacle_sprites(self):
@@ -220,3 +230,23 @@ class Enemy(Entity):
     @property
     def invincibility_duration(self):
         return self.__invincibility_duration
+
+    @property
+    def frame_index(self):
+        return self.__frame_index
+
+    @frame_index.setter
+    def frame_index(self, frame_index):
+        self.__frame_index = frame_index
+
+    @property
+    def animation(self):
+        return self.__animation
+
+    @animation.setter
+    def animation(self, animation):
+        self.__animation = animation
+
+    @property
+    def animation_speed(self):
+        return self.__animation_speed

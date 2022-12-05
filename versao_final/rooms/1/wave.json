@@ -12,19 +12,7 @@
     ],
     "spawns": [
       {
-        "enemies": "spider/zombie",
-        "locations": "random/random",
-        "after": 0,
-        "before": 9999
-      },
-      {
-        "enemies": "tar/slime",
-        "locations": "random/random",
-        "after": 0,
-        "before": 9999
-      },
-      {
-        "enemies": "bat/bat",
+        "enemies": "spider/bat",
         "locations": "random/random",
         "after": 0,
         "before": 9999

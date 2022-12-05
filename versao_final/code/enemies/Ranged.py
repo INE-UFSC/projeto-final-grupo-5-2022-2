@@ -1,10 +1,10 @@
-import pygame
-
 from code.enemies.Enemy import Enemy
 from code.enemies.PlayerDamageArea import PlayerDamageArea
 from code.Entity import Entity
 from code.Resources import Resources
+from code.enemies.EnemyStatus import RangedStatus
 
+import pygame
 
 class Ranged(Enemy):
     def __init__(self, name, pos, range, target_distance, projectile_damage,
@@ -20,7 +20,9 @@ class Ranged(Enemy):
         self.__projectile_speed = projectile_speed
         self.__projectile_cooldown = attack_cooldown
 
-        self.__in_range = False
+        self.__status = RangedStatus.MOVE
+
+        self.__is_attacking = False
 
     def update(self):
         self.distance = Entity.get_distance(self, self._group_manager.player)
@@ -29,39 +31,43 @@ class Ranged(Enemy):
     def get_status(self):
         # decide o status atual
         if self._group_manager.player.hitbox.colliderect(self.damage_hitbox) and self.can_attack:
-            self.status = 'melee'
-        elif self.status == 'attack':
-            self.in_range = True
+            self.status = RangedStatus.MELEE
+        elif self.status == RangedStatus.ATTACK:
             if self.distance > self.range:
-                self.status = 'move'
-                self.in_range = False
+                self.status = RangedStatus.MOVE
             elif self.distance < self.flee_distance:
-                self.status = 'flee'
+                self.status = RangedStatus.FLEE
         elif self.distance < self.target_distance:
-            self.status = 'attack'
-            self.in_range = True
+            self.status = RangedStatus.ATTACK
         else:
-            self.status = 'move'
-            self.in_range = False
+            self.status = RangedStatus.MOVE
 
     def actions(self):
         # sobrescreve o método actions da classe Enemy
         # muda os status possíveis do inimigo
         player = self._group_manager.player
-        if self.status == 'melee':
+        if self.status == RangedStatus.MELEE:
             self.attack_time = self.attack_cooldown
             self.can_attack = False  # TODO: passar para a lógica do animate() ao adicionar sprites
             player.damage(self.collision_damage)
-        elif self.status == 'move':
+        elif self.status == RangedStatus.MOVE:
             self.direction = self.get_player_distance_direction()[1]
-        elif self.status == 'flee':
+        elif self.status == RangedStatus.FLEE:
             self.direction = -self.get_player_distance_direction()[1]
         else:
+            if self.status == RangedStatus.ATTACK and self.projectile_cooldown <= 0 and not self.is_attacking:
+                self.is_attacking = True
+                self.animation = Resources().get_animation(f'/enemies/{self.name}/attack')
+                self.frame_index = 0
             self.direction = pygame.math.Vector2()
 
-        # sempre ataca a distância se estiver no alcance
-        if self.projectile_cooldown < 0 and self.in_range:
-            self.launch_projectile()
+    def animate(self):
+        if self.is_attacking:
+            if self.frame_index >= len(self.animation) - 1:
+                self.is_attacking = False
+                self.launch_projectile()
+                self.animation = Resources().get_animation(f'/enemies/{self.name}/move')
+        super().animate()
 
     def launch_projectile(self):
         self.projectile_cooldown = self.attack_cooldown
@@ -106,12 +112,12 @@ class Ranged(Enemy):
         self.__projectile_cooldown = value
 
     @property
-    def in_range(self):
-        return self.__in_range
+    def is_attacking(self):
+        return self.__is_attacking
     
-    @in_range.setter
-    def in_range(self, value):
-        self.__in_range = value
+    @is_attacking.setter
+    def is_attacking(self, value):
+        self.__is_attacking = value
 
     @property
     def distance(self):
