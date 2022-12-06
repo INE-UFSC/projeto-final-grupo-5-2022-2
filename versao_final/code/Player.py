@@ -8,12 +8,9 @@ from code.Staff import Staff
 
 class Player(Entity):
     def __init__(self):
-        # cajado (somente desenha o sprite)
-        self.__staff = Staff()
-        # grupos
+        self.__staff = Staff()  # cajado (somente desenha o sprite)
         super().__init__('player')
         self.__group_manager = GroupManager()
-        self.__group_manager.player = self
         # importar animações
         self.__animations = {'up': [], 'down': [], 'left': [], 'right': []}
         for animation in self.__animations.keys():

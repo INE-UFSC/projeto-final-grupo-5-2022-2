@@ -1,8 +1,9 @@
 import math
-import pygame
-import pygame.sprite
 import random
 from abc import ABC, abstractmethod
+
+import pygame
+import pygame.sprite
 
 from code.GroupManager import GroupManager
 from code.Resources import Resources
@@ -11,10 +12,14 @@ from code.Resources import Resources
 class ParticleSource(pygame.sprite.Sprite, ABC):
     def __init__(self, pos):
         super().__init__()
-        GroupManager().add_to_particles(self)
+        self.__group_manager = GroupManager()
         self.__sprite_type = 'particle_source'
         self.image = pygame.Surface((1, 1))
         self.rect = self.image.get_rect(center=pos)
+
+    @property
+    def group_manager(self):
+        return self.__group_manager
 
     @property
     def sprite_type(self):
@@ -28,7 +33,6 @@ class ParticleSource(pygame.sprite.Sprite, ABC):
 class Particle(pygame.sprite.Sprite, ABC):
     def __init__(self):
         super().__init__()
-        GroupManager().add_to_particles(self)
         self.display_surface = pygame.display.get_surface()
         self.inner_timer = 0  # um timer interno é mais suave que utilizar os ticks do pygame
 
@@ -59,7 +63,8 @@ class FireSource(ParticleSource):
         for i in range(random.randint(1, 3)):
             x_offset = random.randint(-self.offset, self.offset)
             y_offset = random.randint(-self.offset, self.offset)
-            FireParticle((self.rect.centerx + x_offset, self.rect.centery + y_offset))
+            particle = FireParticle((self.rect.centerx + x_offset, self.rect.centery + y_offset))
+            self.group_manager.add_to_particles(particle)
 
 
 class FireParticle(Particle):
@@ -126,8 +131,11 @@ class LightSource(ParticleSource):
     def __init__(self, pos, outer_diameter=128, outer_color='#f77622', inner_diameter=96,
                  inner_color='#feae34'):
         super().__init__(pos)
-        self.particles = [LightParticle(pos, outer_diameter, outer_color, 16, 16),
-                          LightParticle(pos, inner_diameter, inner_color, 64, 8)]
+        outer_particle = LightParticle(pos, outer_diameter, outer_color, 16, 16)
+        inner_particle = LightParticle(pos, inner_diameter, inner_color, 64, 8)
+        self.group_manager.add_to_particles(outer_particle)
+        self.group_manager.add_to_particles(inner_particle)
+        self.particles = [outer_particle, inner_particle]
 
     def kill(self):
         for particle in self.particles:
@@ -248,7 +256,8 @@ class BloodSource(ParticleSource):
             direction.x += random.randint(-self.offset, self.offset) / 100
             direction.y += random.randint(-self.offset, self.offset) / 100
             direction.normalize()
-            BloodParticle(self.pos, direction, speed=self.blood_speed)
+            particle = BloodParticle(self.pos, direction, speed=self.blood_speed)
+            self.group_manager.add_to_particles(particle)
         self.kill()
 
 

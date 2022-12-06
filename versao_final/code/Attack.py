@@ -12,6 +12,7 @@ from code.Settings import WHITE
 
 class Attack(ABC):
     def __init__(self, icon, damage=1, cooldown=0, cast_sound='', hit_sound=''):
+        self.__group_manager = GroupManager()
         self.__icon = Resources().get_sprite(icon)
 
         self.__base_damage = damage
@@ -26,10 +27,6 @@ class Attack(ABC):
             self.__cast_sound = Resources().get_sound(cast_sound)
         if hit_sound != '':
             self.__hit_sound = Resources().get_sound(hit_sound)
-
-    @property
-    def icon(self):
-        return self.__icon
 
     def use(self, key):
         if self.__can_attack and key:
@@ -50,6 +47,14 @@ class Attack(ABC):
     @abstractmethod
     def create(self):
         pass
+
+    @property
+    def group_manager(self):
+        return self.__group_manager
+
+    @property
+    def icon(self):
+        return self.__icon
 
     @property
     def damage(self):
@@ -108,13 +113,17 @@ class FireballAttack(Attack):
         angle = math.atan2(pos[1] - mouse_pos[1], pos[0] - mouse_pos[0])
         direction = pygame.math.Vector2(-math.cos(angle), -math.sin(angle))
         # criar o projétil
-        EnemyDamageArea(pos, damage=self.damage, speed=40,
+        light = LightSource(pos)
+        fire = FireSource(pos)
+        self.group_manager.add_to_particles(light)
+        self.group_manager.add_to_particles(fire)
+        damage_area = EnemyDamageArea(pos, damage=self.damage, speed=40,
                         direction=direction,
                         destroy_on_impact=True,
                         surface=sprite,
-                        particle_spawners=[LightSource(pos),
-                                           FireSource(pos)],
+                        particle_spawners=[light, fire],
                         hit_sound=self.hit_sound)
+        self.group_manager.add_to_attacks(damage_area)
         self.cast_sound.play()
 
 
@@ -155,6 +164,7 @@ class SliceAttack(Attack):
                                           screen_shake_on_kill=True,
                                           direction=direction)
             damage_area.rect.center = current_pos
+            self.group_manager.add_to_attacks(damage_area)
 
             # condições para parar de criar
             for obstacle in GroupManager().tile_sprites:
@@ -204,15 +214,18 @@ class AreaAttack(Attack):
         damage_area = EnemyDamageArea(pos, damage=self.damage,
                                       surface=sprite, destroy_time=60, damage_time=1, fade_out_step=4.25)
         damage_area.sprite_type = 'on_ground'
+        self.group_manager.add_to_attacks(damage_area)
         # criar partículas
         explosion_animation = Resources().get_animation('/attacks/explosion')
         explosion_pos = (damage_area.rect.centerx, damage_area.rect.centery - damage_area.image.get_height() // 2)
-        AnimationParticle(explosion_pos, explosion_animation, 0.2, destroy_on_end=True)
-        fire_source = FireSource((player.staff.rect.centerx, player.staff.rect.y + 15))
+        explosion = AnimationParticle(explosion_pos, explosion_animation, 0.2, destroy_on_end=True)
+        self.group_manager.add_to_particles(explosion)
+        fire = FireSource((player.staff.rect.centerx, player.staff.rect.y + 15))
+        self.group_manager.add_to_particles(fire)
         for i in range(5, 15):
-            fire_source.offset = random.randint(16, 32)
-            fire_source.update()
-        fire_source.kill()
+            fire.offset = random.randint(16, 32)
+            fire.update()
+        fire.kill()
 
     def use(self, key):
         # reescrever o use para mostrar a área de dano enquanto o jogador está segurando Q

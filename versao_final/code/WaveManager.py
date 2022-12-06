@@ -1,19 +1,21 @@
 import random
 
-from code.enemies.Bat import Bat
-from code.enemies.Spider import Spider
-from code.enemies.Slime import Slime
-from code.enemies.Tar import Tar
-from code.enemies.Zombie import Zombie
+from code.GroupManager import GroupManager
 from code.Resources import Resources
 from code.Settings import *
+from code.enemies.Bat import Bat
+from code.enemies.Slime import Slime
+from code.enemies.Spider import Spider
+from code.enemies.Tar import Tar
+from code.enemies.Zombie import Zombie
 
 
 class WaveManager:
     def __init__(self):
+        self.__group_manager = GroupManager()
         # TODO: passar a enemy classes para o singleton dos settings
-        self.__enemy_classes = {'bat': Bat, 'spider' : Spider, 'slime' : Slime,
-                                'zombie' : Zombie, 'tar' : Tar}
+        self.__enemy_classes = {'bat': Bat, 'spider': Spider, 'slime': Slime,
+                                'zombie': Zombie, 'tar': Tar}
         self.__wave_data = None
         self.__timer = 0
         self.__tick_index = 0
@@ -53,7 +55,8 @@ class WaveManager:
                 # previous - spawna na mesma posição do anterior
                 if location == 'random':
                     spawn_position = random.choice(self.__spawn_positions)
-                self.__enemy_classes[enemy_name](spawn_position)
+                enemy = self.__enemy_classes[enemy_name](spawn_position)
+                self.__group_manager.add_to_enemies(enemy)
 
     @property
     def timer(self):

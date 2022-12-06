@@ -1,14 +1,17 @@
 import math
-from code.Particles import LightSource
-from code.Resources import Resources
 
 import pygame
+
+from code.GroupManager import GroupManager
+from code.Particles import LightSource
+from code.Resources import Resources
 
 
 class Staff(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.__sprite_type = 'staff'
+        self.__group_manager = GroupManager()
         self.__animation = Resources().get_animation('/staff')
         self.__frame_index = 0
         self.__animation_speed = 0.2
@@ -16,6 +19,7 @@ class Staff(pygame.sprite.Sprite):
         self.image = self.__animation[0]
         self.rect = self.image.get_rect()
         self.__original_rect = self.rect
+        self.__light = None
 
     @property
     def sprite_type(self):
@@ -23,7 +27,11 @@ class Staff(pygame.sprite.Sprite):
 
     def toggle_animation(self):
         self.__animate = True
+        # partícula de luz
+        if self.__light:
+            self.__light.kill()
         self.__light = LightSource(self.rect.center)
+        self.__group_manager.add_to_particles(self.__light)
 
     def animate(self, player):
         if self.__animate:

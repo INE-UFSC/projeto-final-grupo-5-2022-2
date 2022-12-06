@@ -8,7 +8,6 @@ from code.Settings import *
 class Tile(pygame.sprite.Sprite):
     def __init__(self, pos, tile_number=''):
         super().__init__()
-        GroupManager().add_to_tiles(self)
         self.__sprite_type = 'tile'
         self.__tile_number = tile_number
         # TODO: Ajustar a parte do offset

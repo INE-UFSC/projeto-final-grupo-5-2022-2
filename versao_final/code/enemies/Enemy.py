@@ -12,7 +12,6 @@ class Enemy(Entity):
         super().__init__('enemy')
 
         self._group_manager = GroupManager()
-        self._group_manager.add_to_enemies(self)
         self.__name = name
 
         self.__animation = Resources().get_animation(f'/enemies/{name}/move')
@@ -108,7 +107,6 @@ class Enemy(Entity):
 
     def damage(self, damage):
         if self.__vulnerable:
-            player = self._group_manager.player
             self.direction = self.get_player_distance_direction()[1]
             self.__health -= damage
             self.__hit_time = self.__invincibility_duration

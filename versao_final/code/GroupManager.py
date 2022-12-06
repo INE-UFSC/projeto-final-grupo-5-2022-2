@@ -25,10 +25,6 @@ class GroupManager(Singleton):
 
             self._initialized = True
 
-    @property
-    def player(self):
-        return self.__player
-
     def add_to_attacks(self, sprite):
         self.__attack_sprites.add(sprite)
         self.__update_groups()

@@ -20,7 +20,6 @@ class EnemyDamageArea(Entity):
                  screen_shake_on_kill=False):
         super().__init__('enemy_damage_area')
         self.__group_manager = GroupManager()
-        self.__group_manager.add_to_attacks(self)
         self.image = surface
         self.rect = self.image.get_rect(center=pos)
         self.__hitbox = self.rect
@@ -64,7 +63,8 @@ class EnemyDamageArea(Entity):
                     target_sprite.check_death()
 
                     if self.__blood_on_kill:
-                        BloodSource(collision_sprites[0].rect.center, self.direction)
+                        blood = BloodSource(collision_sprites[0].rect.center, self.direction)
+                        self.__group_manager.add_to_particles(blood)
                     if self.__screen_shake_on_kill:
                         Camera().shake()
 

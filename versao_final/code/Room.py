@@ -26,9 +26,12 @@ class Room:
         self.__camera.set_background(room_name)
 
         if self.__group_manager.player is None:
-            self.__player = Player()
+            player = Player()
+            self.__group_manager.player = player
         else:
-            self.__player.position = (TILESIZE, self.__player.position[1])
+            # TODO: arrumar isso
+            player = self.__group_manager.player
+            player.position = (TILESIZE, player.position[1])
 
         # tiles
         self.tiles = Resources().get_tilemap(room_name)
@@ -37,7 +40,8 @@ class Room:
                 x = col_index * TILESIZE
                 y = row_index * TILESIZE
                 if col != '-1':
-                    Tile((x, y), col)
+                    tile = Tile((x, y), col)
+                    self.__group_manager.add_to_tiles(tile)
 
     def toggle_menu(self):
         self.__ui.toggle_menu()
