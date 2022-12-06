@@ -12,11 +12,13 @@ class Animator:
             self.__animations[animation] = Resources.get_animation(f'{animations_path}/{animation}')
         self.__group_manager = GroupManager()
 
+        self.blink = False
+
     def tick(self, animation) -> bool:
         self.__frame_index += self.animation_speed
         
         # animação de vulnerabilidade
-        if not self.__vulnerable:
+        if not self.blink:
             alpha = self.wave_value()
             self.image.set_alpha(alpha)
         else:
@@ -39,3 +41,11 @@ class Animator:
     @property
     def animations(self) -> dict:
         return self.__animations
+
+    @property
+    def blink(self) -> bool:
+        return self.blink
+
+    @blink.setter
+    def blink(self, value : bool) -> None:
+        self.blink = value
