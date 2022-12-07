@@ -1,13 +1,15 @@
+from abc import ABC
+
 import pygame
 
 from code.Entity import Entity
 from code.Resources import Resources
 from code.damage.PlayerDamageArea import PlayerDamageArea
-from code.enemies.Enemy import Enemy
+from code.enemies.BasicEnemy import Enemy
 from code.enemies.EnemyStatus import RangedStatus
 
 
-class Ranged(Enemy):
+class RangedEnemy(Enemy, ABC):
     def __init__(self, name, pos, range, target_distance, projectile_damage,
                  projectile_speed, flee_distance, health, speed, collision_damage, exp,
                  attack_cooldown):

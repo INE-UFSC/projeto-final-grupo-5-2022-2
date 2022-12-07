@@ -1,4 +1,4 @@
-from code.enemies.Enemy import Enemy
+from code.enemies.BasicEnemy import Enemy
 
 
 class Bat(Enemy):

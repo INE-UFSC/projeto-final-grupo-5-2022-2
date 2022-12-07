@@ -1,9 +1,9 @@
-from code.enemies.EnemyStatus import Melee_Status
+import pygame
+
 from code.Entity import Entity
 from code.GroupManager import GroupManager
 from code.Resources import Resources
-
-import pygame
+from code.enemies.EnemyStatus import Melee_Status
 
 
 class Enemy(Entity):
