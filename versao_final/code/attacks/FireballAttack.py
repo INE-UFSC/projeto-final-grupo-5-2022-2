@@ -4,9 +4,10 @@ import pygame
 
 from code.EnemyDamageArea import EnemyDamageArea
 from code.GroupManager import GroupManager
-from code.Particles import LightSource, FireSource
 from code.Resources import Resources
 from code.attacks.Attack import Attack
+from code.particles.FireSource import FireSource
+from code.particles.LightSource import LightSource
 
 
 class FireballAttack(Attack):

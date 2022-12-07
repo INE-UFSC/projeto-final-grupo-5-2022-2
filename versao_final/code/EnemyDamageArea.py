@@ -5,8 +5,9 @@ import pygame
 from code.Camera import Camera
 from code.Entity import Entity
 from code.GroupManager import GroupManager
-from code.Particles import FireSource, BloodSource
 from code.Settings import TILESIZE
+from code.particles.BloodSource import BloodSource
+from code.particles.FireSource import FireSource
 
 
 class EnemyDamageArea(Entity):
@@ -54,7 +55,7 @@ class EnemyDamageArea(Entity):
 
                 try:
                     # evitar exceção caso o arquivo de som não exista
-                    self.hit_sound.play() 
+                    self.hit_sound.play()
                 except Exception:
                     pass
 

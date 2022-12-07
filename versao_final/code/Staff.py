@@ -3,8 +3,8 @@ import math
 import pygame
 
 from code.GroupManager import GroupManager
-from code.Particles import LightSource
 from code.Resources import Resources
+from code.particles.LightSource import LightSource
 
 
 class Staff(pygame.sprite.Sprite):

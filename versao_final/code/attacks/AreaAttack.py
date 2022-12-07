@@ -1,12 +1,14 @@
-import pygame
 import random
+
+import pygame
 
 from code.EnemyDamageArea import EnemyDamageArea
 from code.GroupManager import GroupManager
-from code.Particles import AnimationParticle, FireSource
 from code.Resources import Resources
 from code.Settings import WHITE
 from code.attacks.Attack import Attack
+from code.particles.AnimationParticle import AnimationParticle
+from code.particles.FireSource import FireSource
 
 
 class AreaAttack(Attack):
