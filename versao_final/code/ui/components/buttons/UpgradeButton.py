@@ -1,7 +1,7 @@
 import pygame
 
 from code.Settings import *
-from code.ui.buttons.Button import Button
+from code.ui.components.buttons.Button import Button
 
 
 class UpgradeButton(Button):

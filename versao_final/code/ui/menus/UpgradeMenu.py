@@ -4,8 +4,8 @@ import pygame
 
 from code.GroupManager import GroupManager
 from code.Settings import *
-from code.ui.buttons.UpgradeButton import UpgradeButton
-from code.ui.UIComponent import UIComponent
+from code.ui.components.buttons import UpgradeButton
+from code.ui.components.UIComponent import UIComponent
 from code.upgrades import HealthUpgrade, DamageUpgrade, SpeedUpgrade, FireRateUpgrade
 
 
