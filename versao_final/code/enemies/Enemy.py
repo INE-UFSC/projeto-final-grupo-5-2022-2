@@ -11,7 +11,7 @@ class Enemy(Entity):
                  attack_cooldown=40):
         super().__init__('enemy')
 
-        self._group_manager = GroupManager()
+        self.__group_manager = GroupManager()
         self.__name = name
 
         self.__animation = Resources().get_animation(f'/enemies/{name}/move')
@@ -21,7 +21,7 @@ class Enemy(Entity):
         self.rect = self.image.get_rect(topleft=pos)
         self.__hitbox = self.rect.inflate(0, - self.image.get_height() // 1.5)
         self.__hitbox.bottom = self.rect.bottom
-        self.__obstacle_sprites = self._group_manager.enemy_obstacle_sprites
+        self.__obstacle_sprites = self.__group_manager.enemy_obstacle_sprites
 
         self.__status = Melee_Status.MOVE
         self.__health = health
@@ -43,7 +43,7 @@ class Enemy(Entity):
     def get_player_distance_direction(self):
         # TODO: dividir esse método
         enemy_vec = pygame.math.Vector2(self.rect.center)
-        player = self._group_manager.player
+        player = self.__group_manager.player
         player_vec = pygame.math.Vector2(player.rect.center)
         sub_vec = player_vec - enemy_vec
         distance = sub_vec.magnitude()
@@ -57,7 +57,7 @@ class Enemy(Entity):
 
     def get_status(self):
         # decide o status atual
-        player = self._group_manager.player
+        player = self.__group_manager.player
         if player.hitbox.colliderect(self.__damage_hitbox) and self.__can_attack:
             if self.__status != Melee_Status.ATTACK:
                 pass  # TODO: self.frame_index = 0
@@ -67,7 +67,7 @@ class Enemy(Entity):
 
     def actions(self):
         # faz uma ação baseado no status atual
-        player = self._group_manager.player
+        player = self.__group_manager.player
         if self.__status == Melee_Status.ATTACK:
             self.__attack_time = self.__attack_cooldown
             self.__can_attack = False  # TODO: passar para a lógica do animate() ao adicionar sprites
@@ -78,7 +78,7 @@ class Enemy(Entity):
             self.direction = pygame.math.Vector2()
 
     def animate(self):
-        player = self._group_manager.player
+        player = self.__group_manager.player
         self.__frame_index += self.__animation_speed
         if self.__frame_index >= len(self.__animation):
             self.__frame_index = 0
@@ -114,7 +114,7 @@ class Enemy(Entity):
 
     def check_death(self):
         if self.__health <= 0:
-            player = self._group_manager.player
+            player = self.__group_manager.player
             player.give_exp(self.__exp)
             self.kill()
 
@@ -136,7 +136,11 @@ class Enemy(Entity):
         self.get_status()
         self.actions()
         self.animate()
-    
+
+    @property
+    def group_manager(self):
+        return self.__group_manager
+
     @property
     def name(self):
         return self.__name

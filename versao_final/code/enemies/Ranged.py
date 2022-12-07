@@ -25,12 +25,12 @@ class Ranged(Enemy):
         self.__is_attacking = False
 
     def update(self):
-        self.distance = Entity.get_distance(self, self._group_manager.player)
+        self.distance = Entity.get_distance(self, self.group_manager.player)
         super().update()
 
     def get_status(self):
         # decide o status atual
-        if self._group_manager.player.hitbox.colliderect(self.damage_hitbox) and self.can_attack:
+        if self.group_manager.player.hitbox.colliderect(self.damage_hitbox) and self.can_attack:
             self.status = RangedStatus.MELEE
         elif self.status == RangedStatus.ATTACK:
             if self.distance > self.range:
@@ -45,7 +45,7 @@ class Ranged(Enemy):
     def actions(self):
         # sobrescreve o método actions da classe Enemy
         # muda os status possíveis do inimigo
-        player = self._group_manager.player
+        player = self.group_manager.player
         if self.status == RangedStatus.MELEE:
             self.attack_time = self.attack_cooldown
             self.can_attack = False  # TODO: passar para a lógica do animate() ao adicionar sprites
@@ -73,7 +73,7 @@ class Ranged(Enemy):
         self.projectile_cooldown = self.attack_cooldown
         projectile = PlayerDamageArea(self.position, self.projectile_damage, self.projectile_speed,
                                     self.get_player_distance_direction()[1], self.projectile_sprite)
-        self._group_manager.add_to_enemy_attacks(projectile)
+        self.group_manager.add_to_enemy_attacks(projectile)
 
     def cooldowns(self):
         super().cooldowns()
