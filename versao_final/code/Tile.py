@@ -1,6 +1,5 @@
 import pygame
 
-from code.GroupManager import GroupManager
 from code.Resources import Resources
 from code.Settings import *
 
