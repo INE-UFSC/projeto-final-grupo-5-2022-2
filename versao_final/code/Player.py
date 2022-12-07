@@ -1,9 +1,13 @@
 import sys
 
-from code.Attack import *
+import pygame
+
 from code.Entity import Entity
-from code.GroupManager import GroupManager
 from code.Staff import Staff
+from code.attacks.AreaAttack import AreaAttack
+from code.attacks.Attack import *
+from code.attacks.FireballAttack import FireballAttack
+from code.attacks.SliceAttack import SliceAttack
 
 
 class Player(Entity):
