@@ -1,16 +1,15 @@
 import random
+from abc import ABC, abstractmethod
 
 import pygame
 
-from code.Camera import Camera
 from code.Entity import Entity
 from code.GroupManager import GroupManager
 from code.Settings import TILESIZE
-from code.particles.BloodSource import BloodSource
 from code.particles.FireSource import FireSource
 
 
-class EnemyDamageArea(Entity):
+class DamageArea(Entity, ABC):
     def __init__(self, pos, damage=0, speed=0, direction=pygame.math.Vector2(),
                  destroy_on_impact=False,
                  surface=pygame.Surface((TILESIZE, TILESIZE)), destroy_time=60, damage_time=0,
@@ -19,7 +18,7 @@ class EnemyDamageArea(Entity):
                  blood_on_kill=False,
                  fade_out_step=0,
                  screen_shake_on_kill=False):
-        super().__init__('enemy_damage_area')
+        super().__init__('damage_area')
         self.__group_manager = GroupManager()
         self.image = surface
         self.rect = self.image.get_rect(center=pos)
@@ -42,39 +41,12 @@ class EnemyDamageArea(Entity):
 
         self.__hit_sound = hit_sound
 
-    def enemy_collision(self):
-        if not self.__damage_time > 0:
-            # dar dano somente enquanto o damage time for maior que 0
-            return
-
-        collision_sprites = pygame.sprite.spritecollide(self, self.__group_manager.enemy_sprites, False)
-        if collision_sprites:
-            for target_sprite in collision_sprites:
-                if not target_sprite.vulnerable:  # pular os inimigos que não estão vulneráveis
-                    continue
-
-                try:
-                    # evitar exceção caso o arquivo de som não exista
-                    self.hit_sound.play()
-                except Exception:
-                    pass
-
-                target_sprite.damage(self.__damage)
-                if target_sprite.health <= 0:
-                    target_sprite.check_death()
-
-                    if self.__blood_on_kill:
-                        blood = BloodSource(collision_sprites[0].rect.center, self.direction)
-                        self.__group_manager.add_to_particles(blood)
-                    if self.__screen_shake_on_kill:
-                        Camera().shake()
-
-                if self.__destroy_on_impact:  # ataque dá dano em só um inimigo
-                    self.kill()
-                    break
+    @abstractmethod
+    def target_collision(self):
+        pass
 
     def update(self):
-        self.enemy_collision()
+        self.target_collision()
         # movimento
         self.image.set_alpha(self.image.get_alpha() - self.__fade_out_step)
         if self.__speed != 0:
@@ -105,6 +77,10 @@ class EnemyDamageArea(Entity):
                     particle_spawner.update()
             particle_spawner.kill()
         super().kill()
+
+    @property
+    def group_manager(self):
+        return self.__group_manager
 
     @property
     def hitbox(self):
@@ -157,3 +133,7 @@ class EnemyDamageArea(Entity):
     @property
     def hit_sound(self):
         return self.__hit_sound
+
+    @property
+    def screen_shake_on_kill(self):
+        return self.__screen_shake_on_kill

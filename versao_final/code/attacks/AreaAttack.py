@@ -2,7 +2,7 @@ import random
 
 import pygame
 
-from code.EnemyDamageArea import EnemyDamageArea
+from code.damage.EnemyDamageArea import EnemyDamageArea
 from code.GroupManager import GroupManager
 from code.Resources import Resources
 from code.Settings import WHITE

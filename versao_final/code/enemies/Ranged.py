@@ -1,10 +1,11 @@
-from code.enemies.Enemy import Enemy
-from code.enemies.PlayerDamageArea import PlayerDamageArea
+import pygame
+
 from code.Entity import Entity
 from code.Resources import Resources
+from code.damage.PlayerDamageArea import PlayerDamageArea
+from code.enemies.Enemy import Enemy
 from code.enemies.EnemyStatus import RangedStatus
 
-import pygame
 
 class Ranged(Enemy):
     def __init__(self, name, pos, range, target_distance, projectile_damage,
@@ -72,7 +73,8 @@ class Ranged(Enemy):
     def launch_projectile(self):
         self.projectile_cooldown = self.attack_cooldown
         projectile = PlayerDamageArea(self.position, self.projectile_damage, self.projectile_speed,
-                                    self.get_player_distance_direction()[1], self.projectile_sprite)
+                                      self.get_player_distance_direction()[1],
+                                      surface=self.projectile_sprite)
         self.group_manager.add_to_enemy_attacks(projectile)
 
     def cooldowns(self):
@@ -114,7 +116,7 @@ class Ranged(Enemy):
     @property
     def is_attacking(self):
         return self.__is_attacking
-    
+
     @is_attacking.setter
     def is_attacking(self, value):
         self.__is_attacking = value
