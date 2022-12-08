@@ -32,7 +32,8 @@ class Game(Singleton):
                     sys.exit()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_TAB:
-                        if isinstance(current_scene, LevelScene):  # TODO: acho que dava só pra ter um método pra reagir a keys na cena
+                        if isinstance(current_scene,
+                                      LevelScene):  # TODO: acho que dava só pra ter um método pra reagir a keys na cena
                             current_scene.toggle_menu()
 
             self.screen.fill(COLOR_BLACK)

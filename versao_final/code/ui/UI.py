@@ -37,7 +37,7 @@ class UI:
 
         self.__upgrade_menu = UpgradeMenu()
 
-        self.__cursor = Cursor('/cursor.png')
+        self.__cursor = Cursor()
 
     def show_health(self, health):
         for i in range(health):

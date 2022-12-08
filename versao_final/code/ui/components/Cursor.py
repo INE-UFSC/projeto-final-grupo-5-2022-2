@@ -5,7 +5,7 @@ from code.ui.components.UIComponent import UIComponent
 
 
 class Cursor(UIComponent):
-    def __init__(self, image_path):
+    def __init__(self, image_path='/cursor.png'):
         super().__init__()
         self.__cursor = Resources().get_sprite(image_path)
         pygame.mouse.set_visible(False)
