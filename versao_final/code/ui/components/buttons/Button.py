@@ -31,7 +31,10 @@ class Button(UIComponent, pygame.sprite.Sprite, ABC):
             if mouse[0] and self.rect.collidepoint(mouse_pos):
                 self.__click_time = pygame.time.get_ticks()
                 if self.__can_click:
-                    self.__on_click(self.__on_click_args)
+                    if self.__on_click_args:
+                        self.__on_click(self.__on_click_args)
+                    else:
+                        self.__on_click()
                     self.__can_click = False
 
     @abstractmethod

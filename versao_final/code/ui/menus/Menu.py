@@ -8,6 +8,7 @@ from code.ui.components.buttons.Button import Button
 
 class Menu(ABC):
     def __init__(self):
+        self.__display_surface = pygame.display.get_surface()
         self.__font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
         self.__components = None
 
@@ -17,6 +18,10 @@ class Menu(ABC):
                 component.button_update()
             else:
                 component.draw()
+
+    @property
+    def display_surface(self):
+        return self.__display_surface
 
     @property
     def font(self):
