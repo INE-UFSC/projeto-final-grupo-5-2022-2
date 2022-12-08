@@ -2,11 +2,12 @@ import random
 
 import pygame
 
-from code.GroupManager import GroupManager
-from code.Settings import *
+from code.level.GroupManager import GroupManager
+from code.library.Settings import *
 from code.ui.components.UIComponent import UIComponent
 from code.ui.components.buttons.UpgradeButton import UpgradeButton
-from code.upgrades import HealthUpgrade, DamageUpgrade, SpeedUpgrade, FireRateUpgrade
+from code.level.upgrades import HealthUpgrade, DamageUpgrade, SpeedUpgrade
+from code.level.upgrades import FireRateUpgrade
 
 
 class UpgradeMenu(UIComponent):

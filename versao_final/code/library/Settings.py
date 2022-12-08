@@ -1,0 +1,46 @@
+
+import os
+
+WIDTH = 1280
+HEIGHT = 720
+FPS = 60
+TILESIZE = 64
+
+# Para o executável funcionar corretamente precisa adicionar mais um os.pardir
+# no os.path.join abaixo.
+GAME_PATH = os.path.abspath(os.path.join(__file__, os.pardir, os.pardir, os.pardir))
+
+COLOR_BLACK = (0, 0, 0)
+WHITE = '#ffffff'
+
+UI_FONT = f'{GAME_PATH}/graphics/font/joystix.ttf'
+UI_FONT_SIZE = 18
+UI_BG_COLOR = '#222222'
+UI_BORDER_COLOR = '#111111'
+UI_BORDER_COLOR_ACTIVE = '#FFFFFF'
+UI_HOVER_COLOR = '#424242'
+TEXT_COLOR = '#EEEEEE'
+ITEM_BOX_SIZE = 64
+BAR_HEIGHT = 32
+EXP_BAR_WIDTH = 176
+EXP_BAR_COLOR = '#0099db'
+STAT_BAR_WIDTH = 384
+UI_COMPONENT_MARGIN = 10
+
+UPGRADE_BUTTON_RIGHT_MARGIN = 704
+UPGRADE_BUTTON_TOP = 128
+UPGRADE_BUTTON_SPACING = 192
+UPGRADE_TITLE_TOP = 64
+UPGRADE_BUTTON_WIDTH = 576
+UPGRADE_BUTTON_HEIGHT = 128
+STAT_LEFT_MARGIN = 128
+STAT_TOP_MARGIN = 256
+STAT_SPACING = 64
+
+X_OFFSET = {'': 0, '0': -16}
+Y_OFFSET = {'': 0, '0': -40}
+SMALL_HITBOX_OFFSET = {'': -50}
+
+WAVE_TIME = 5400  # 1 minuto e 30 segundos
+
+LEVEL_CHANGE_DISTANCE = 192

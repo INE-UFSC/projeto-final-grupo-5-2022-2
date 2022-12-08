@@ -1,7 +1,7 @@
-from code.Fade import Fade
-from code.GroupManager import GroupManager
-from code.Room import Room
-from code.Settings import WIDTH
+from code.level.Fade import Fade
+from code.level.GroupManager import GroupManager
+from code.level.Room import Room
+from code.library.Settings import WIDTH
 from code.scenes.ILevelScene import ILevelScene
 
 

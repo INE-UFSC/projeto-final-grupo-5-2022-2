@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 import pygame
 
-from code.Settings import *
+from code.library.Settings import *
 from code.ui.components.UIComponent import UIComponent
 
 

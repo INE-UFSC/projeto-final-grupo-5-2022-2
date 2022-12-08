@@ -2,7 +2,7 @@ from abc import ABC
 
 import pygame
 
-from code.Settings import UI_FONT, UI_FONT_SIZE
+from code.library.Settings import UI_FONT, UI_FONT_SIZE
 from code.ui.components.buttons.Button import Button
 
 

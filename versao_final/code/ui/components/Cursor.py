@@ -1,6 +1,6 @@
 import pygame
 
-from code.Resources import Resources
+from code.library.Resources import Resources
 from code.ui.components.UIComponent import UIComponent
 
 

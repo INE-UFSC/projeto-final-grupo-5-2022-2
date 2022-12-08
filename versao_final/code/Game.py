@@ -2,9 +2,9 @@ import sys
 
 import pygame
 
-from code.Resources import Resources
-from code.Settings import *
-from code.Singleton import Singleton
+from code.library.Resources import Resources
+from code.library.Settings import *
+from code.library.Singleton import Singleton
 from code.scenes.LevelScene import LevelScene
 from code.scenes.StartMenuScene import StartMenuScene
 
