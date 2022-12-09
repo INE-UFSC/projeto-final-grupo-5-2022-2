@@ -39,10 +39,12 @@ class Player(Entity):
         self.__current_level = 1
         self.__upgrade_points = 0
         self.__upgrade_list = []
+        
 
         # movimento
         self.__obstacle_sprites = self.__group_manager.player_obstacle_sprites
         self.__speed = 5
+        self.__ignore_input = False
 
         # ataques
         self.__attacks = [FireballAttack(), SliceAttack(), AreaAttack()]
@@ -53,6 +55,10 @@ class Player(Entity):
         self.__invincibility_duration = 60
 
     def input(self):
+        # ignorar input caso o player esteja morto ou em transição
+        if self.ignore_input:
+            return
+
         keys = pygame.key.get_pressed()
         mouse = pygame.mouse.get_pressed()
 
@@ -226,3 +232,11 @@ class Player(Entity):
     @property
     def obstacle_sprites(self):
         return self.__obstacle_sprites
+
+    @property
+    def ignore_input(self):
+        return self.__ignore_input
+
+    @ignore_input.setter
+    def ignore_input(self, ignore):
+        self.__ignore_input = ignore
