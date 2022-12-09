@@ -1,11 +1,11 @@
 from code.level.Camera import Camera
 from code.level.GroupManager import GroupManager
 from code.level.Player import Player
+from code.level.Tile import Tile
+from code.level.WaveManager import WaveManager
 from code.library.Resources import Resources
 from code.library.Settings import Settings
-from code.level.Tile import Tile
 from code.ui.UI import UI
-from code.level.WaveManager import WaveManager
 
 
 class Room:
@@ -17,6 +17,15 @@ class Room:
         self.__wave_manager = WaveManager()
         self.tiles = []
         self.change_to(room_name)
+
+        # para a lógica de out of bounds
+        player = self.__group_manager.player
+        self.__min_x = -player.image.get_width()
+        self.__min_y = -player.image.get_height()
+        self.__width = self.__settings.WIDTH
+        self.__height = self.__settings.HEIGHT
+        self.__coordinates = {'top': (self.__width // 2, self.__min_y), 'bottom': (self.__width // 2, self.__height),
+                              'left': (self.__min_x, self.__height // 2), 'right': (self.__width, self.__height // 2)}
 
     def change_to(self, room_name):
         self.__group_manager.clear_all()
@@ -50,11 +59,23 @@ class Room:
     def room_ended(self):
         return self.__wave_manager.wave_ended() and len(self.__group_manager.enemy_sprites) == 0
 
+    def __check_player_out_of_bounds(self):
+        player = self.__group_manager.player
+        if player.hitbox.x < self.__min_x:
+            player.hitbox.topleft = self.__coordinates['right']
+        elif player.hitbox.x > self.__width:
+            player.hitbox.topleft = self.__coordinates['left']
+        if player.hitbox.y < self.__min_y:
+            player.hitbox.topleft = self.__coordinates['bottom']
+        elif player.hitbox.y > self.__height:
+            player.hitbox.topleft = self.__coordinates['top']
+
     def run(self):
         self.__camera.draw(self.__group_manager.visible_sprites)
         self.__ui.display(self.__group_manager.player, self.__wave_manager.timer)
 
         if not self.__ui.is_menu_open():
+            self.__check_player_out_of_bounds()
             self.__wave_manager.update()
             self.__group_manager.visible_sprites.update()
 
