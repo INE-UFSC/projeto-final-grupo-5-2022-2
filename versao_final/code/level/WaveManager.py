@@ -1,13 +1,13 @@
 import random
 
 from code.level.GroupManager import GroupManager
-from code.library.Resources import Resources
-from code.library.Settings import Settings
 from code.level.enemies.Bat import Bat
 from code.level.enemies.Slime import Slime
 from code.level.enemies.Spider import Spider
 from code.level.enemies.Tar import Tar
 from code.level.enemies.Zombie import Zombie
+from code.library.Resources import Resources
+from code.library.Settings import Settings
 
 
 class WaveManager:
@@ -21,7 +21,11 @@ class WaveManager:
         self.__timer = 0
         self.__tick_index = 0
         self.__max_time = self.__settings.WAVE_TIME
-        self.__spawn_positions = ((200, 200), (500, 500))
+
+        width = self.__settings.WIDTH
+        height = self.__settings.HEIGHT
+        self.__spawn_positions = (
+        (width // 2, -64), (width // 2, height + 64), (-64, height // 2), (width + 64, height // 2))
 
     def change_to_wave(self, room_name):
         self.__wave_data = Resources().get_wave(room_name)
