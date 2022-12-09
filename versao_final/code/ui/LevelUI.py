@@ -1,12 +1,12 @@
 import pygame
 
+from code.library.Resources import Resources
 from code.library.Settings import Settings
 from code.ui.components.CooldownIcon import CooldownIcon
 from code.ui.components.Cursor import Cursor
 from code.ui.components.Label import Label
 from code.ui.components.ProgressBar import ProgressBar
-from code.ui.menus.UpgradeMenu import UpgradeMenu
-from code.library.Resources import Resources
+from code.ui.menus.LevelMenu import UpgradeMenu
 
 
 class UI:
@@ -37,7 +37,7 @@ class UI:
 
         self.__cooldown_icons = []  # a lista de ícones é gerada no show_cooldowns()
 
-        self.__upgrade_menu = UpgradeMenu()
+        self.__level_menu = UpgradeMenu()
 
         self.__cursor = Cursor()
 
@@ -61,10 +61,11 @@ class UI:
         if len(self.__cooldown_icons) != len(attacks):
             self.__cooldown_icons = []
             for i, attack in enumerate(attacks):
-                x = self.__settings.UI_COMPONENT_MARGIN + i * (self.__settings.ITEM_BOX_SIZE + self.__settings.UI_COMPONENT_MARGIN)
+                x = self.__settings.UI_COMPONENT_MARGIN + i * (
+                            self.__settings.ITEM_BOX_SIZE + self.__settings.UI_COMPONENT_MARGIN)
                 y = self.__settings.HEIGHT - self.__settings.UI_COMPONENT_MARGIN - self.__settings.ITEM_BOX_SIZE
-                self.__cooldown_icons.append(CooldownIcon((x, y), attack.icon, attack.attack_time, attack.cooldown, 
-                                             self.__settings.UI_BG_COLOR))
+                self.__cooldown_icons.append(CooldownIcon((x, y), attack.icon, attack.attack_time, attack.cooldown,
+                                                          self.__settings.UI_BG_COLOR))
 
         for i, cooldown_icon in enumerate(self.__cooldown_icons):
             cooldown_icon.current_cooldown = attacks[i].attack_time
@@ -76,7 +77,7 @@ class UI:
         self.__upgrade_points_label.draw()
 
     def toggle_menu(self):
-        self.__upgrade_menu.toggle()
+        self.__level_menu.toggle()
 
     def show_cursor(self):
         self.__cursor.draw()
@@ -95,7 +96,11 @@ class UI:
 
     @property
     def is_menu_open(self):
-        return self.__upgrade_menu.is_open
+        return self.__level_menu.is_open
+
+    @property
+    def exit_clicked(self):
+        return self.__level_menu.exit_clicked
 
     def display(self, player, time):
         self.show_timer(time)
@@ -105,6 +110,6 @@ class UI:
         self.show_upgrade_points(player.upgrade_points)
 
         if self.is_menu_open:
-            self.__upgrade_menu.draw()
+            self.__level_menu.draw()
 
         self.show_cursor()

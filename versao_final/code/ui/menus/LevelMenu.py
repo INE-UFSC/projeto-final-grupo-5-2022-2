@@ -3,11 +3,12 @@ import random
 import pygame
 
 from code.level.GroupManager import GroupManager
+from code.level.upgrades import FireRateUpgrade
+from code.level.upgrades import HealthUpgrade, DamageUpgrade, SpeedUpgrade
 from code.library.Settings import Settings
 from code.ui.components.UIComponent import UIComponent
+from code.ui.components.buttons.TextButton import TextButton
 from code.ui.components.buttons.UpgradeButton import UpgradeButton
-from code.level.upgrades import HealthUpgrade, DamageUpgrade, SpeedUpgrade
-from code.level.upgrades import FireRateUpgrade
 
 
 class UpgradeMenu(UIComponent):
@@ -21,6 +22,21 @@ class UpgradeMenu(UIComponent):
                                      'speed': SpeedUpgrade.SpeedUpgrade()}
         self.__upgrade_buttons = []
         self.reroll_upgrades()
+
+        self.__exit_button = TextButton(self.__settings.UI_COMPONENT_MARGIN,
+                                        self.__settings.HEIGHT - self.__settings.UI_COMPONENT_MARGIN - self.__settings.TEXT_BUTTON_HEIGHT,
+                                        'SAIR PARA A TELA INICIAL',
+                                        on_click=self.exit,
+                                        on_click_args=None,
+                                        width=self.__settings.EXIT_BUTTON_WIDTH)
+        self.__exit_clicked = False
+
+    def exit(self):
+        self.__exit_clicked = True
+
+    @property
+    def exit_clicked(self):
+        return self.__exit_clicked
 
     def toggle(self):
         self.__is_open = not self.__is_open
@@ -85,3 +101,6 @@ class UpgradeMenu(UIComponent):
         upgrade_title_rect = upgrade_title_surf.get_rect(
             topleft=(ut_x, ut_y))
         self.display_surface.blit(upgrade_title_surf, upgrade_title_rect)
+
+        # botão de sair para o menu
+        self.__exit_button.button_update()

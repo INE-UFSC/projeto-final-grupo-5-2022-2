@@ -31,6 +31,11 @@ class LevelScene(ILevelScene):
         group_manager.add_to_persistent(self.__arrow)
 
     def run(self):
+        # sair
+        if self.__room.exit_clicked:
+            self.change_to_scene('start')
+
+        # rodar a sala
         self.__room.run()
 
         # efeitos (fade e seta)
@@ -53,7 +58,7 @@ class LevelScene(ILevelScene):
 
         # morte do player
         if self.__room.is_player_dead:
-            self.change_to_scene('end')
+            self.change_to_scene('death')
 
     def go_to_next_room(self):
         if self.__current_room_index < len(self.__rooms) - 1:
@@ -64,7 +69,7 @@ class LevelScene(ILevelScene):
             self.end()
 
     def end(self):
-        print("Level end")  # TODO: Menu de morte
+        self.change_to_scene('win')
 
     def toggle_menu(self):
         self.__room.toggle_menu()

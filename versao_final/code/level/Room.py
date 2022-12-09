@@ -5,7 +5,7 @@ from code.level.Tile import Tile
 from code.level.WaveManager import WaveManager
 from code.library.Resources import Resources
 from code.library.Settings import Settings
-from code.ui.UI import UI
+from code.ui.LevelUI import UI
 
 
 class Room:
@@ -59,6 +59,10 @@ class Room:
     @property
     def room_ended(self):
         return self.__wave_manager.wave_ended and len(self.__group_manager.enemy_sprites) == 0
+
+    @property
+    def exit_clicked(self):
+        return self.__ui.exit_clicked
 
     def __check_player_out_of_bounds(self):
         player = self.__group_manager.player

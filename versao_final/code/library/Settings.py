@@ -46,6 +46,7 @@ class Settings(Singleton):
             self.__MENU_LOGO_TOP = 96
             self.__TEXT_BUTTON_WIDTH = 576
             self.__TEXT_BUTTON_HEIGHT = 64
+            self.__EXIT_BUTTON_WIDTH = 400
 
             self.__X_OFFSET = {'': 0, '0': -16}
             self.__Y_OFFSET = {'': 0, '0': -40}
@@ -187,6 +188,10 @@ class Settings(Singleton):
     @property
     def TEXT_BUTTON_HEIGHT(self) -> int:
         return self.__TEXT_BUTTON_HEIGHT
+
+    @property
+    def EXIT_BUTTON_WIDTH(self) -> int:
+        return self.__EXIT_BUTTON_WIDTH
 
     @property
     def X_OFFSET(self) -> dict:

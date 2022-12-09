@@ -4,9 +4,10 @@ import pygame
 
 from code.library.Resources import Resources
 from code.library.Settings import Settings
-from code.scenes.EndMenuScene import EndMenuScene
+from code.scenes.DeathMenuScene import DeathMenuScene
 from code.scenes.LevelScene import LevelScene
 from code.scenes.StartMenuScene import StartMenuScene
+from code.scenes.WinMenuScene import WinMenuScene
 
 
 class Game:
@@ -21,7 +22,8 @@ class Game:
 
         self.__scenes = {'start': StartMenuScene(self.change_to_scene),
                          'level': LevelScene(self.change_to_scene),
-                         'end': EndMenuScene(self.change_to_scene)}
+                         'death': DeathMenuScene(self.change_to_scene),
+                         'win': WinMenuScene(self.change_to_scene)}
         self.__current_scene_key = 'start'
         self._initialized = True
 
@@ -33,7 +35,7 @@ class Game:
                     pygame.quit()
                     sys.exit()
                 elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_TAB:
+                    if event.key == pygame.K_ESCAPE:
                         if isinstance(current_scene,
                                       LevelScene):  # TODO: acho que dava só pra ter um método pra reagir a keys na cena
                             current_scene.toggle_menu()
