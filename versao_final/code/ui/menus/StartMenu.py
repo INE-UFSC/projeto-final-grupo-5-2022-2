@@ -16,8 +16,8 @@ class StartMenu(Menu):
         center_x = self.display_surface.get_width() // 2
 
         buttons = [TextButton(0, 320, 'NOVO JOGO', on_click=change_to_scene, on_click_args='level'),
-                   TextButton(0, 416, 'CONTINUAR', None, None), TextButton(0, 512, 'CONTROLES', None, None),
-                   TextButton(0, 608, 'SAIR', on_click=self.quit_game, on_click_args=None)]
+                   TextButton(0, 416, 'CONTINUAR', None, None),
+                   TextButton(0, 512, 'SAIR', on_click=self.quit_game, on_click_args=None)]
         for button in buttons:
             button.rect.centerx = center_x
 
