@@ -5,7 +5,7 @@ from code.ui.components.CooldownIcon import CooldownIcon
 from code.ui.components.Cursor import Cursor
 from code.ui.components.Label import Label
 from code.ui.components.ProgressBar import ProgressBar
-from code.ui.menus.UpgradeMenu import UpgradeMenu
+from code.ui.menus.LevelMenu import UpgradeMenu
 from code.library.Resources import Resources
 
 
