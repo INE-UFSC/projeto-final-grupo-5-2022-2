@@ -45,3 +45,5 @@ class Game:
 
     def change_to_scene(self, scene):
         self.__current_scene_key = scene
+        self.__scenes[self.__current_scene_key] = self.__scenes[self.__current_scene_key].__class__(
+            self.change_to_scene)  # resetar as cenas ao trocar

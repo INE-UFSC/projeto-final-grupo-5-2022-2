@@ -10,6 +10,8 @@ from code.scenes.ILevelScene import ILevelScene
 class LevelScene(ILevelScene):
     def __init__(self, change_to_scene):
         super().__init__(change_to_scene)
+        group_manager = GroupManager()
+        group_manager.nuke()  # limpar os sprites persistentes também
         self.__settings = Settings()
         self.__rooms = ('1', '2')
         self.__current_room_index = 0
@@ -17,7 +19,7 @@ class LevelScene(ILevelScene):
         self.__changing_room = False
 
         self.__fade = Fade(in_step=16, out_step=-8, alpha=0)
-        GroupManager().add_to_persistent(self.__fade)
+        group_manager.add_to_persistent(self.__fade)
         # a seta está sendo definida no LevelScene em vez de no Room para ter acesso
         # ao atributo changing_room
         arrow_animation = Resources().get_animation('/icons/arrow')
@@ -26,7 +28,7 @@ class LevelScene(ILevelScene):
         self.__arrow = AnimationParticle((arrow_x, arrow_y), arrow_animation, 0.1)
         self.__arrow.sprite_type = 'effect'
         self.__arrow.image.set_alpha(0)
-        GroupManager().add_to_persistent(self.__arrow)
+        group_manager.add_to_persistent(self.__arrow)
 
     def run(self):
         self.__room.run()

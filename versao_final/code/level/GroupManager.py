@@ -74,6 +74,11 @@ class GroupManager(Singleton):
             if isinstance(value, pygame.sprite.Group) and id(value) != id(self.__persistent_sprites):
                 value.empty()
 
+    def nuke(self):
+        self.clear_all()
+        self.player = None
+        self.__persistent_sprites = pygame.sprite.Group()
+
     @property
     def player(self):
         return self.__player
