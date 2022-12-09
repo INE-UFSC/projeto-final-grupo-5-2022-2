@@ -51,7 +51,7 @@ class Settings(Singleton):
 
         self.__WAVE_TIME = 5400  # 1 minuto e 30 segundos
 
-        self.__LEVEL_CHANGE_DISTANCE = 192
+        self.__LEVEL_CHANGE_DISTANCE = 64
 
     # Getters de todas as variáveis
     @property

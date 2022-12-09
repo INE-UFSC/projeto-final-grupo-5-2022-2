@@ -24,3 +24,11 @@ class AnimationParticle(Particle):
             self.__frame_index = 0
         self.image = self.__animation[int(self.__frame_index)]
         self.rect = self.image.get_rect(center=self.rect.center)
+
+    @property
+    def sprite_type(self):
+        return self.__sprite_type
+    
+    @sprite_type.setter
+    def sprite_type(self, value):
+        self.__sprite_type = value
