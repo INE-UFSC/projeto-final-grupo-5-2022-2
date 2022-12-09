@@ -6,52 +6,54 @@ from code.library.Singleton import Singleton
 class Settings(Singleton):
     def __init__(self) -> None:
         super().__init__()
-        self.__WIDTH = 1280
-        self.__HEIGHT = 720
-        self.__FPS = 60
-        self.__TILESIZE = 64
+        if not self._initialized:
+            self.__WIDTH = 1280
+            self.__HEIGHT = 720
+            self.__FPS = 60
+            self.__TILESIZE = 64
 
-        # Para o executável funcionar corretamente precisa adicionar mais um os.pardir
-        # no os.path.join abaixo.
-        self.__GAME_PATH = os.path.abspath(os.path.join(__file__, os.pardir, os.pardir, os.pardir))
+            # Para o executável funcionar corretamente precisa adicionar mais um os.pardir
+            # no os.path.join abaixo.
+            self.__GAME_PATH = os.path.abspath(os.path.join(__file__, os.pardir, os.pardir, os.pardir))
+            self.__SAVE_PATH = f'{self.__GAME_PATH}/save'
 
-        self.__COLOR_BLACK = (0, 0, 0)
-        self.__WHITE = '#ffffff'
+            self.__COLOR_BLACK = (0, 0, 0)
+            self.__WHITE = '#ffffff'
 
-        self.__UI_FONT = f'{self.__GAME_PATH}/graphics/font/joystix.ttf'
-        self.__UI_FONT_SIZE = 18
-        self.__UI_BG_COLOR = '#262b44'
-        self.__UI_BORDER_COLOR = '#181425'
-        self.__UI_BORDER_COLOR_ACTIVE = '#FFFFFF'
-        self.__UI_HOVER_COLOR = '#3a4466'
-        self.__TEXT_COLOR = '#EEEEEE'
-        self.__ITEM_BOX_SIZE = 64
-        self.__BAR_HEIGHT = 32
-        self.__EXP_BAR_WIDTH = 176
-        self.__EXP_BAR_COLOR = '#0099db'
-        self.__STAT_BAR_WIDTH = 384
-        self.__UI_COMPONENT_MARGIN = 10
+            self.__UI_FONT = f'{self.__GAME_PATH}/graphics/font/joystix.ttf'
+            self.__UI_FONT_SIZE = 18
+            self.__UI_BG_COLOR = '#262b44'
+            self.__UI_BORDER_COLOR = '#181425'
+            self.__UI_BORDER_COLOR_ACTIVE = '#FFFFFF'
+            self.__UI_HOVER_COLOR = '#3a4466'
+            self.__TEXT_COLOR = '#EEEEEE'
+            self.__ITEM_BOX_SIZE = 64
+            self.__BAR_HEIGHT = 32
+            self.__EXP_BAR_WIDTH = 176
+            self.__EXP_BAR_COLOR = '#0099db'
+            self.__STAT_BAR_WIDTH = 384
+            self.__UI_COMPONENT_MARGIN = 10
 
-        self.__UPGRADE_BUTTON_RIGHT_MARGIN = 704
-        self.__UPGRADE_BUTTON_TOP = 128
-        self.__UPGRADE_BUTTON_SPACING = 192
-        self.__UPGRADE_TITLE_TOP = 64
-        self.__UPGRADE_BUTTON_WIDTH = 576
-        self.__UPGRADE_BUTTON_HEIGHT = 128
-        self.__STAT_LEFT_MARGIN = 128
-        self.__STAT_TOP_MARGIN = 256
-        self.__STAT_SPACING = 64
-        self.__MENU_LOGO_TOP = 96
-        self.__TEXT_BUTTON_WIDTH = 576
-        self.__TEXT_BUTTON_HEIGHT = 64
+            self.__UPGRADE_BUTTON_RIGHT_MARGIN = 704
+            self.__UPGRADE_BUTTON_TOP = 128
+            self.__UPGRADE_BUTTON_SPACING = 192
+            self.__UPGRADE_TITLE_TOP = 64
+            self.__UPGRADE_BUTTON_WIDTH = 576
+            self.__UPGRADE_BUTTON_HEIGHT = 128
+            self.__STAT_LEFT_MARGIN = 128
+            self.__STAT_TOP_MARGIN = 256
+            self.__STAT_SPACING = 64
+            self.__MENU_LOGO_TOP = 96
+            self.__TEXT_BUTTON_WIDTH = 576
+            self.__TEXT_BUTTON_HEIGHT = 64
 
-        self.__X_OFFSET = {'': 0, '0': -16}
-        self.__Y_OFFSET = {'': 0, '0': -40}
-        self.__SMALL_HITBOX_OFFSET = {'': -50}
+            self.__X_OFFSET = {'': 0, '0': -16}
+            self.__Y_OFFSET = {'': 0, '0': -40}
+            self.__SMALL_HITBOX_OFFSET = {'': -50}
 
-        self.__WAVE_TIME = 5400  # 1 minuto e 30 segundos
+            self.__WAVE_TIME = 5400  # 1 minuto e 30 segundos
 
-        self.__LEVEL_CHANGE_DISTANCE = 64
+            self.__LEVEL_CHANGE_DISTANCE = 64
 
     # Getters de todas as variáveis
     @property
@@ -73,6 +75,10 @@ class Settings(Singleton):
     @property
     def GAME_PATH(self) -> str:
         return self.__GAME_PATH
+
+    @property
+    def SAVE_PATH(self) -> str:
+        return self.__SAVE_PATH
 
     @property
     def COLOR_BLACK(self) -> tuple:
