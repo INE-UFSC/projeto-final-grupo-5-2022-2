@@ -5,9 +5,10 @@ from code.ui.components.buttons.Button import Button
 
 
 class TextButton(Button):
-    def __init__(self, x, y, text, on_click_args, on_click):
+    def __init__(self, x, y, text, on_click_args, on_click, width=None):
         self.__settings = Settings()
-        super().__init__(x, y, self.__settings.TEXT_BUTTON_WIDTH, self.__settings.TEXT_BUTTON_HEIGHT, 
+        button_width = self.__settings.TEXT_BUTTON_WIDTH if width is None else width
+        super().__init__(x, y, button_width, self.__settings.TEXT_BUTTON_HEIGHT,
                          self.__settings.UI_BG_COLOR, self.__settings.UI_HOVER_COLOR, 
                          on_click_args=on_click_args, on_click=on_click)
         self.__text = text
