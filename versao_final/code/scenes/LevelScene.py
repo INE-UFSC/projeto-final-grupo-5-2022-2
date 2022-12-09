@@ -31,6 +31,11 @@ class LevelScene(ILevelScene):
         group_manager.add_to_persistent(self.__arrow)
 
     def run(self):
+        # sair
+        if self.__room.exit_clicked:
+            self.change_to_scene('start')
+
+        # rodar a sala
         self.__room.run()
 
         # efeitos (fade e seta)

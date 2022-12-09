@@ -60,6 +60,10 @@ class Room:
     def room_ended(self):
         return self.__wave_manager.wave_ended and len(self.__group_manager.enemy_sprites) == 0
 
+    @property
+    def exit_clicked(self):
+        return self.__ui.exit_clicked
+
     def __check_player_out_of_bounds(self):
         player = self.__group_manager.player
         if player.hitbox.x < self.__min_x:
