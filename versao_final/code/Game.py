@@ -4,6 +4,7 @@ import pygame
 
 from code.library.Resources import Resources
 from code.library.Settings import Settings
+from code.scenes.EndMenuScene import EndMenuScene
 from code.scenes.LevelScene import LevelScene
 from code.scenes.StartMenuScene import StartMenuScene
 
@@ -15,9 +16,12 @@ class Game:
         self.screen = pygame.display.set_mode((self.__settings.WIDTH, self.__settings.HEIGHT))
         pygame.display.set_caption('Jornada à sala ALOCAR')
         self.clock = pygame.time.Clock()
+
         Resources()  # carregar os sprites
+
         self.__scenes = {'start': StartMenuScene(self.change_to_scene),
-                         'level': LevelScene()}
+                         'level': LevelScene(self.change_to_scene),
+                         'end': EndMenuScene(self.change_to_scene)}
         self.__current_scene_key = 'start'
         self._initialized = True
 

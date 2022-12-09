@@ -8,7 +8,8 @@ from code.scenes.ILevelScene import ILevelScene
 
 
 class LevelScene(ILevelScene):
-    def __init__(self):
+    def __init__(self, change_to_scene):
+        super().__init__(change_to_scene)
         self.__settings = Settings()
         self.__rooms = ('1', '2')
         self.__current_room_index = 0
@@ -47,6 +48,10 @@ class LevelScene(ILevelScene):
                 0] > self.__settings.WIDTH - self.__settings.LEVEL_CHANGE_DISTANCE and not self.__changing_room:  # mudar
                 self.__changing_room = True
                 self.__fade.fade_in()
+
+        # morte do player
+        if self.__room.is_player_dead:
+            self.change_to_scene('end')
 
     def go_to_next_room(self):
         if self.__current_room_index < len(self.__rooms) - 1:

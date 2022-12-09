@@ -22,6 +22,8 @@ class Attack(ABC):
         if hit_sound != '':
             self.__hit_sound = Resources().get_sound(hit_sound)
 
+        self.block()  # iniciar com os ataques bloqueados
+
     def use(self, key):
         if self.__can_attack and key:
             GroupManager().player.staff.toggle_animation()

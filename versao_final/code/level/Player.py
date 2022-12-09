@@ -1,5 +1,3 @@
-import sys
-
 import pygame
 
 from code.level.Entity import Entity
@@ -39,7 +37,6 @@ class Player(Entity):
         self.__current_level = 1
         self.__upgrade_points = 0
         self.__upgrade_list = []
-        
 
         # movimento
         self.__obstacle_sprites = self.__group_manager.player_obstacle_sprites
@@ -140,22 +137,20 @@ class Player(Entity):
         if self.__health > self.__max_health:
             self.__health = self.__max_health
 
-    def check_death(self):
-        if self.__health <= 0:
-            # TEMPORÁRIO
-            # futuramente, é necessário implementar a tela de GAME OVER
-            print("PLAYER morreu")
-            pygame.quit()
-            sys.exit()
-
     def update(self):
+        if self.is_dead:
+            return
+
         self.__obstacle_sprites = self.__group_manager.player_obstacle_sprites
-        self.check_death()
         self.input()
         self.animate()
         self.__staff.animate(self)
         self.move(self.__move_speed)
         self.cooldowns()
+
+    @property
+    def is_dead(self):
+        return self.__health <= 0
 
     @property
     def hitbox(self):

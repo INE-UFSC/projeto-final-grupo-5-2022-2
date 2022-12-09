@@ -21,16 +21,17 @@ class Button(UIComponent, pygame.sprite.Sprite, ABC):
 
         self.__on_click_args = on_click_args
         self.__on_click = on_click
-        self.__can_click = True
-        self.__click_time = None
-        self.__click_cooldown = 50  # para evitar que o usuário clique várias vezes sem querer
+
+        self.__click_cooldown = 2  # para evitar que o usuário clique várias vezes sem querer
+        self.__can_click = False
+        self.__click_time = self.__click_cooldown
 
     def input(self):
         if self.__enabled:
             mouse_pos = pygame.mouse.get_pos()
             mouse = pygame.mouse.get_pressed()
             if mouse[0] and self.rect.collidepoint(mouse_pos):
-                self.__click_time = pygame.time.get_ticks()
+                self.__click_time = self.__click_cooldown
                 if self.__can_click:
                     if self.__on_click_args:
                         self.__on_click(self.__on_click_args)
@@ -43,9 +44,10 @@ class Button(UIComponent, pygame.sprite.Sprite, ABC):
         pass
 
     def cooldown(self):
-        current_time = pygame.time.get_ticks()
-        if not self.__can_click and current_time - self.__click_time >= self.__click_cooldown:
-            self.__can_click = True
+        if not self.__can_click:
+            self.__click_time -= 1
+            if self.__click_time <= 0:
+                self.__can_click = True
 
     def button_update(self):
         self.cooldown()

@@ -37,8 +37,6 @@ class UpgradeMenu(UIComponent):
             y = self.__settings.UPGRADE_BUTTON_TOP + self.__settings.UPGRADE_BUTTON_SPACING * i
             upgrade = random.choice(remaining_upgrades)
             button = UpgradeButton(x, y, on_click_args=upgrade, on_click=self.buy_upgrade)
-            button.click_time = pygame.time.get_ticks()  # para evitar que o próximo botão receba um clique instantaneamente
-            button.can_click = False  # ^^
             self.__upgrade_buttons.append(button)
             remaining_upgrades.remove(upgrade)
             if len(remaining_upgrades) == 0:
