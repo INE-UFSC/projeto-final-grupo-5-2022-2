@@ -5,7 +5,7 @@ from code.level.Tile import Tile
 from code.level.WaveManager import WaveManager
 from code.library.Resources import Resources
 from code.library.Settings import Settings
-from code.ui.UI import UI
+from code.ui.LevelUI import UI
 
 
 class Room:
