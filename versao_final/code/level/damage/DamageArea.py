@@ -5,19 +5,13 @@ import pygame
 
 from code.level.Entity import Entity
 from code.level.GroupManager import GroupManager
-from code.library.Settings import TILESIZE
 from code.level.particles.FireSource import FireSource
 
 
 class DamageArea(Entity, ABC):
-    def __init__(self, pos, damage=0, speed=0, direction=pygame.math.Vector2(),
-                 destroy_on_impact=False,
-                 surface=pygame.Surface((TILESIZE, TILESIZE)), destroy_time=60, damage_time=0,
-                 particle_spawners=[],
-                 hit_sound=None,
-                 blood_on_kill=False,
-                 fade_out_step=0,
-                 screen_shake_on_kill=False):
+    def __init__(self, pos, surface, damage=0, speed=0, direction=pygame.math.Vector2(),
+                 destroy_on_impact=False, destroy_time=60, damage_time=0, particle_spawners=[],
+                 hit_sound=None, blood_on_kill=False, fade_out_step=0, screen_shake_on_kill=False):
         super().__init__('damage_area')
         self.__group_manager = GroupManager()
         self.image = surface

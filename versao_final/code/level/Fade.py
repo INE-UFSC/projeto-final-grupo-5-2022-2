@@ -1,14 +1,15 @@
 import pygame
 
-from code.library.Settings import *
+from code.library.Settings import Settings
 
 
 class Fade(pygame.sprite.Sprite):
     def __init__(self, in_step=3, out_step=-2, alpha=0):
         super().__init__()
+        self.__settings = Settings()
         self.__sprite_type = 'effect'
-        self.__image = pygame.Surface((WIDTH, HEIGHT))
-        self.__image.fill(COLOR_BLACK)
+        self.__image = pygame.Surface((self.__settings.WIDTH, self.__settings.HEIGHT))
+        self.__image.fill(self.__settings.COLOR_BLACK)
         self.__image.set_alpha(alpha)
         self.__rect = self.__image.get_rect()
         self.__in_step = in_step

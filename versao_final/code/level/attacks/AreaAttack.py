@@ -5,7 +5,7 @@ import pygame
 from code.level.damage.EnemyDamageArea import EnemyDamageArea
 from code.level.GroupManager import GroupManager
 from code.library.Resources import Resources
-from code.library.Settings import WHITE
+from code.library.Settings import Settings
 from code.level.attacks.Attack import Attack
 from code.level.particles.AnimationParticle import AnimationParticle
 from code.level.particles.FireSource import FireSource
@@ -15,7 +15,8 @@ class AreaAttack(Attack):
     def __init__(self):
         super().__init__('/icons/area_attack.png', damage=100, cooldown=240, cast_sound='area_cast.ogg')
         self.cast_sound.set_volume(0.5)
-
+        
+        self.__settings = Settings()
         self.__display_surface = pygame.display.get_surface()
         self.__attack_started = False
 
@@ -53,7 +54,7 @@ class AreaAttack(Attack):
                 mouse_pos = pygame.mouse.get_pos()
                 area_rect = pygame.Rect(mouse_pos[0], mouse_pos[1], 256, 256)
                 area_rect.center = mouse_pos
-                pygame.draw.rect(self.__display_surface, WHITE, area_rect, 4)
+                pygame.draw.rect(self.__display_surface, self.__settings.WHITE, area_rect, 4)
             else:
                 # criar o ataque
                 if self.__attack_started:

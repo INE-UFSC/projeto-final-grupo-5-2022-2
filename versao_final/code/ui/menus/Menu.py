@@ -2,14 +2,15 @@ from abc import ABC
 
 import pygame
 
-from code.library.Settings import UI_FONT, UI_FONT_SIZE
+from code.library.Settings import Settings
 from code.ui.components.buttons.Button import Button
 
 
 class Menu(ABC):
     def __init__(self):
+        self.__settings = Settings()
         self.__display_surface = pygame.display.get_surface()
-        self.__font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
+        self.__font = pygame.font.Font(self.__settings.UI_FONT, self.__settings.UI_FONT_SIZE)
         self.__components = None
 
     def draw(self):

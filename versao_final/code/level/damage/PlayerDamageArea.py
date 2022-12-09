@@ -1,19 +1,14 @@
 import pygame
 
-from code.library.Settings import *
 from code.level.damage.DamageArea import DamageArea
 
 
 class PlayerDamageArea(DamageArea):
-    def __init__(self, pos, damage=0, speed=0, direction=pygame.math.Vector2(),
-                 destroy_on_impact=False,
-                 surface=pygame.Surface((TILESIZE, TILESIZE)), destroy_time=60, damage_time=0,
-                 particle_spawners=[],
-                 hit_sound=None,
-                 blood_on_kill=False,
-                 fade_out_step=0,
-                 screen_shake_on_kill=False):
-        super().__init__(pos, damage, speed, direction, destroy_on_impact, surface, destroy_time, damage_time,
+    def __init__(self, pos, surface, damage=0, speed=0, direction=pygame.math.Vector2(),
+                 destroy_time=60, damage_time=0, particle_spawners=[], destroy_on_impact=False,
+                 hit_sound=None, blood_on_kill=False, fade_out_step=0, screen_shake_on_kill=False):
+
+        super().__init__(pos, surface, damage, speed, direction, destroy_on_impact, destroy_time, damage_time,
                          particle_spawners, hit_sound,
                          blood_on_kill, fade_out_step, screen_shake_on_kill)
 

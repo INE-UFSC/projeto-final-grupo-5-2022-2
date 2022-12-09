@@ -2,7 +2,7 @@ from code.level.Camera import Camera
 from code.level.GroupManager import GroupManager
 from code.level.Player import Player
 from code.library.Resources import Resources
-from code.library.Settings import *
+from code.library.Settings import Settings
 from code.level.Tile import Tile
 from code.ui.UI import UI
 from code.level.WaveManager import WaveManager
@@ -10,6 +10,7 @@ from code.level.WaveManager import WaveManager
 
 class Room:
     def __init__(self, room_name):
+        self.__settings = Settings()
         self.__ui = UI()
         self.__camera = Camera()
         self.__group_manager = GroupManager()
@@ -31,14 +32,14 @@ class Room:
         else:
             # TODO: arrumar isso
             player = self.__group_manager.player
-            player.position = (TILESIZE, player.position[1])
+            player.position = (self.__settings.TILESIZE, player.position[1])
 
         # tiles
         self.tiles = Resources().get_tilemap(room_name)
         for row_index, row in enumerate(self.tiles):
             for col_index, col in enumerate(row):
-                x = col_index * TILESIZE
-                y = row_index * TILESIZE
+                x = col_index * self.__settings.TILESIZE
+                y = row_index * self.__settings.TILESIZE
                 if col != '-1':
                     tile = Tile((x, y), col)
                     self.__group_manager.add_to_tiles(tile)

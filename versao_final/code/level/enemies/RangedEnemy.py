@@ -74,9 +74,8 @@ class RangedEnemy(Enemy, ABC):
 
     def launch_projectile(self):
         self.projectile_cooldown = self.attack_cooldown
-        projectile = PlayerDamageArea(self.hitbox.center, self.projectile_damage, self.projectile_speed,
-                                      self.get_player_distance_direction()[1],
-                                      surface=self.projectile_sprite)
+        projectile = PlayerDamageArea(self.hitbox.center, self.projectile_sprite, self.projectile_damage,
+                                      self.projectile_speed, self.get_player_distance_direction()[1])
         self.group_manager.add_to_enemy_attacks(projectile)
 
     def cooldowns(self):

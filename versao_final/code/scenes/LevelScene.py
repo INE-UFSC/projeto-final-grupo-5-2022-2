@@ -1,12 +1,13 @@
 from code.level.Fade import Fade
 from code.level.GroupManager import GroupManager
 from code.level.Room import Room
-from code.library.Settings import WIDTH
+from code.library.Settings import Settings
 from code.scenes.ILevelScene import ILevelScene
 
 
 class LevelScene(ILevelScene):
     def __init__(self):
+        self.__settings = Settings()
         self.__rooms = ('1', '2')
         self.__current_room_index = 0
         self.__room = Room(self.__rooms[self.__current_room_index])
@@ -26,7 +27,7 @@ class LevelScene(ILevelScene):
         if self.__room.room_ended():
             # TODO: melhorar a condição de troca de sala
             # a parte de conferir a posição do player acho melhor passar para o room_ended() da sala
-            if GroupManager().player.rect.topleft[0] > WIDTH - 192 and not self.__changing_room:  # mudar
+            if GroupManager().player.rect.topleft[0] > self.__settings.WIDTH - 192 and not self.__changing_room:  # mudar
                 self.__changing_room = True
                 self.__fade.fade_in()
 

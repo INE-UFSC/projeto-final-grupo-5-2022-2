@@ -30,7 +30,7 @@ class FireballAttack(Attack):
         fire = FireSource(pos)
         self.group_manager.add_to_particles(light)
         self.group_manager.add_to_particles(fire)
-        damage_area = EnemyDamageArea(pos, damage=self.damage, speed=40, direction=direction, destroy_on_impact=True,
-                                      surface=sprite, particle_spawners=[light, fire], hit_sound=self.hit_sound)
+        damage_area = EnemyDamageArea(pos=pos, surface=sprite, damage=self.damage, speed=40, direction=direction, destroy_on_impact=True,
+                                      particle_spawners=[light, fire], hit_sound=self.hit_sound)
         self.group_manager.add_to_attacks(damage_area)
         self.cast_sound.play()

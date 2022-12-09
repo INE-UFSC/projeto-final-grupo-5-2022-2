@@ -1,13 +1,14 @@
 import pygame
 
-from code.library.Settings import *
+from code.library.Settings import Settings
 from code.ui.components.UIComponent import UIComponent
 
 
 class ProgressBar(UIComponent):
-    def __init__(self, pos, current_progress, maximum_progress, width=EXP_BAR_WIDTH, height=BAR_HEIGHT,
-                 background_color=UI_BG_COLOR, progress_color=EXP_BAR_COLOR, outline_width=3):
+    def __init__(self, pos, current_progress, maximum_progress, width, height,
+                 background_color, progress_color, outline_width=3):
         super().__init__()
+        self.__settings = Settings()
         self.__current_progress = current_progress
         self.__maximum_progress = maximum_progress
         self.__background_color = background_color
@@ -22,7 +23,7 @@ class ProgressBar(UIComponent):
         current_rect = self.__rect.copy()
         current_rect.width = current_width
         pygame.draw.rect(self.display_surface, self.__progress_color, current_rect)
-        pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, self.__rect, self.__outline_width)
+        pygame.draw.rect(self.display_surface, self.__settings.UI_BORDER_COLOR, self.__rect, self.__outline_width)
 
     @property
     def current_progress(self):

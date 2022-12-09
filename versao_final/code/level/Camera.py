@@ -3,17 +3,18 @@ import random
 import pygame
 
 from code.library.Resources import Resources
-from code.library.Settings import TILESIZE
+from code.library.Settings import Settings
 from code.library.Singleton import Singleton
 
 
 class Camera(Singleton):
     def __init__(self):
         if not self._initialized:
+            self.__settings = Settings()
             self.__display_surface = pygame.display.get_surface()
             self.__back_sprite_types = ['on_ground']
             self.__front_sprite_types = ['light', 'effect']
-            self.__background = pygame.Surface((TILESIZE, TILESIZE))
+            self.__background = pygame.Surface((self.__settings.TILESIZE, self.__settings.TILESIZE))
             self.__background_shadow = Resources().get_sprite('/backgrounds/shadow_overlay.png')
             self.__screen_shake_offset = pygame.math.Vector2()
             self._initialized = True

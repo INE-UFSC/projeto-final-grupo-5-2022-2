@@ -10,8 +10,8 @@ class Settings(Singleton):
         self.__FPS = 60
         self.__TILESIZE = 64
 
-        self.__# Para o executável funcionar corretamente precisa adicionar mais um os.pardir
-        self.__# no os.path.join abaixo.
+        # Para o executável funcionar corretamente precisa adicionar mais um os.pardir
+        # no os.path.join abaixo.
         self.__GAME_PATH = os.path.abspath(os.path.join(__file__, os.pardir, os.pardir, os.pardir))
 
         self.__COLOR_BLACK = (0, 0, 0)

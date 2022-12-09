@@ -4,28 +4,29 @@ from csv import reader
 
 import pygame
 
-from code.library.Settings import GAME_PATH
+from code.library.Settings import Settings
 from code.library.Singleton import Singleton
 
 
 class Resources(Singleton):
     def __init__(self):
         if not self._initialized:
+            self.__settings = Settings()
             self.__cache = {}
             self.__load_resources()
             self._initialized = True
-
+            
     def __load_resources(self):
         extensions = {'.png': self.__load_image,
                       '.ogg': self.__load_sound,
                       '.csv': self.__load_tilemap,
                       '.json': self.__load_wave}
-        for root, dirs, files in os.walk(GAME_PATH):
+        for root, dirs, files in os.walk(self.__settings.GAME_PATH):
             for file in files:
                 name, extension = os.path.splitext(file)
                 if extension in extensions.keys():
                     full_path = os.path.join(root, file)
-                    relative_path = '/' + os.path.relpath(full_path, GAME_PATH).replace('\\', '/')
+                    relative_path = '/' + os.path.relpath(full_path, self.__settings.GAME_PATH).replace('\\', '/')
                     self.__cache[relative_path] = extensions[extension](full_path)
         print(f'[{pygame.time.get_ticks()}] Recursos carregados')
 
@@ -53,7 +54,7 @@ class Resources(Singleton):
 
     def get_animation(self, folder_name):
         surface_list = []
-        for _, __, img_files in os.walk(f'{GAME_PATH}/graphics/{folder_name}'):
+        for _, __, img_files in os.walk(f'{self.__settings.GAME_PATH}/graphics/{folder_name}'):
             for image in img_files:
                 image_surf = self.get_sprite(f'{folder_name}/{image}').copy()
                 surface_list.append(image_surf)

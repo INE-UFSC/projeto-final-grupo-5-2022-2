@@ -2,7 +2,7 @@ import random
 
 from code.level.GroupManager import GroupManager
 from code.library.Resources import Resources
-from code.library.Settings import *
+from code.library.Settings import Settings
 from code.level.enemies.Bat import Bat
 from code.level.enemies.Slime import Slime
 from code.level.enemies.Spider import Spider
@@ -13,13 +13,14 @@ from code.level.enemies.Zombie import Zombie
 class WaveManager:
     def __init__(self):
         self.__group_manager = GroupManager()
+        self.__settings = Settings()
         # TODO: passar a enemy classes para o singleton dos settings
         self.__enemy_classes = {'bat': Bat, 'spider': Spider, 'slime': Slime,
                                 'zombie': Zombie, 'tar': Tar}
         self.__wave_data = None
         self.__timer = 0
         self.__tick_index = 0
-        self.__max_time = WAVE_TIME
+        self.__max_time = self.__settings.WAVE_TIME
         self.__spawn_positions = ((200, 200), (500, 500))
 
     def change_to_wave(self, room_name):
