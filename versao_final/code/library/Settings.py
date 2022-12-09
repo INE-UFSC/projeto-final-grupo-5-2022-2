@@ -20,10 +20,10 @@ class Settings(Singleton):
 
         self.__UI_FONT = f'{self.__GAME_PATH}/graphics/font/joystix.ttf'
         self.__UI_FONT_SIZE = 18
-        self.__UI_BG_COLOR = '#222222'
-        self.__UI_BORDER_COLOR = '#111111'
+        self.__UI_BG_COLOR = '#262b44'
+        self.__UI_BORDER_COLOR = '#181425'
         self.__UI_BORDER_COLOR_ACTIVE = '#FFFFFF'
-        self.__UI_HOVER_COLOR = '#424242'
+        self.__UI_HOVER_COLOR = '#3a4466'
         self.__TEXT_COLOR = '#EEEEEE'
         self.__ITEM_BOX_SIZE = 64
         self.__BAR_HEIGHT = 32
