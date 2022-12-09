@@ -36,13 +36,13 @@ class LevelScene(ILevelScene):
             self.__changing_room = False
             self.go_to_next_room()
 
-        arrow_alpha = 255 if self.__room.room_ended() and not self.__changing_room else 0
+        arrow_alpha = 255 if self.__room.room_ended and not self.__changing_room else 0
         self.__arrow.image.set_alpha(arrow_alpha)
 
         # lógica de próxima sala
-        if self.__room.room_ended():
+        if self.__room.room_ended:
             # TODO: melhorar a condição de troca de sala
-            # a parte de conferir a posição do player acho melhor passar para o room_ended() da sala
+            # a parte de conferir a posição do player acho melhor passar para o room_ended da sala
             if GroupManager().player.rect.topleft[
                 0] > self.__settings.WIDTH - self.__settings.LEVEL_CHANGE_DISTANCE and not self.__changing_room:  # mudar
                 self.__changing_room = True

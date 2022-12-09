@@ -93,6 +93,7 @@ class UI:
         self.__timer_label.text = f'{minutes}:{seconds:02d}'
         self.__timer_label.draw()
 
+    @property
     def is_menu_open(self):
         return self.__upgrade_menu.is_open
 
@@ -103,7 +104,7 @@ class UI:
         self.show_cooldowns(player.attacks)
         self.show_upgrade_points(player.upgrade_points)
 
-        if self.is_menu_open():
+        if self.is_menu_open:
             self.__upgrade_menu.draw()
 
         self.show_cursor()

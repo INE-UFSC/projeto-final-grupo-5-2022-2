@@ -56,8 +56,9 @@ class Room:
     def toggle_menu(self):
         self.__ui.toggle_menu()
 
+    @property
     def room_ended(self):
-        return self.__wave_manager.wave_ended() and len(self.__group_manager.enemy_sprites) == 0
+        return self.__wave_manager.wave_ended and len(self.__group_manager.enemy_sprites) == 0
 
     def __check_player_out_of_bounds(self):
         player = self.__group_manager.player
@@ -74,7 +75,7 @@ class Room:
         self.__camera.draw(self.__group_manager.visible_sprites)
         self.__ui.display(self.__group_manager.player, self.__wave_manager.timer)
 
-        if not self.__ui.is_menu_open():
+        if not self.__ui.is_menu_open:
             self.__check_player_out_of_bounds()
             self.__wave_manager.update()
             self.__group_manager.visible_sprites.update()

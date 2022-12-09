@@ -32,11 +32,12 @@ class WaveManager:
         self.__timer = 0
         self.__tick_index = 0
 
+    @property
     def wave_ended(self):
         return self.__timer >= self.__max_time
 
     def update(self):
-        if self.__wave_data is None or self.wave_ended():
+        if self.__wave_data is None or self.wave_ended:
             return
 
         self.__timer += 1
