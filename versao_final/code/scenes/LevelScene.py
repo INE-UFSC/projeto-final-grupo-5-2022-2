@@ -13,7 +13,7 @@ class LevelScene(ILevelScene):
         group_manager = GroupManager()
         group_manager.nuke()  # limpar os sprites persistentes também
         self.__settings = Settings()
-        self.__rooms = ('1', '2')
+        self.__rooms = ('1', '2', '3', '4')
         self.__current_room_index = 0
         self.__room = Room(self.__rooms[self.__current_room_index])
         self.__changing_room = False
