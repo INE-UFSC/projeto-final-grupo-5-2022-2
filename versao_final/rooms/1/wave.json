@@ -3,18 +3,30 @@
     "ticks": [
       {
         "timer": 0,
-        "every": 240
+        "every": 180
       },
       {
-        "timer": 600,
-        "every": 180
+        "timer": 3600,
+        "every": 120
       }
     ],
     "spawns": [
       {
-        "enemies": "spider/bat",
+        "enemies": "bat/bat",
         "locations": "random/random",
         "after": 0,
+        "before": 9999
+      },
+      {
+        "enemies": "bat/bat/bat/bat/bat",
+        "locations": "random/previous/previous/previous/previous",
+        "after": 4000,
+        "before": 9999
+      },
+      {
+        "enemies": "bat/bat/bat",
+        "locations": "random/random/random",
+        "after": 2000,
         "before": 9999
       }
     ]
