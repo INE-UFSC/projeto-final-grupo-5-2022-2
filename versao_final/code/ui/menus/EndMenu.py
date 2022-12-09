@@ -7,7 +7,7 @@ from code.ui.menus.Menu import Menu
 
 
 class EndMenu(Menu):
-    def __init__(self, change_to_scene):
+    def __init__(self, change_to_scene, message):
         super().__init__()
         self.__settings = Settings()
         center_x = self.display_surface.get_width() // 2
@@ -17,8 +17,6 @@ class EndMenu(Menu):
 
         for button in buttons:
             button.rect.centerx = center_x
-
-        message = "VOCE NAO CHEGOU A SALA ALOCAR"
 
         self.components = [Image({'centerx': center_x, 'top': self.__settings.MENU_LOGO_TOP}, '/logo.png'),
                            Label({'centerx': center_x, 'top': 320}, message, self.font, "#ff5f4f"), *buttons, Cursor()]
