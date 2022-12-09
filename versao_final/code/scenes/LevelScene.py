@@ -37,7 +37,7 @@ class LevelScene(ILevelScene):
             self.__room.change_to(self.__rooms[self.__current_room_index])
             self.__fade.fade_out()
         else:
-            self.end_level()
+            self.end()
 
     def end(self):
         print("Level end")  # TODO: Menu de morte
