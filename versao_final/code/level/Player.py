@@ -33,7 +33,7 @@ class Player(Entity):
 
         self.__exp = 0
         self.__level_up_exp = 10
-        self.__level_up_exp_increment = 10
+        self.__level_up_exp_increment = 0
         self.__current_level = 1
         self.__upgrade_points = 0
         self.__upgrade_list = []
