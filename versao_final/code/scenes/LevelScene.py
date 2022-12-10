@@ -20,7 +20,7 @@ class LevelScene(ILevelScene):
         self.__current_room_index = self.__level_scene_dao.get('current_room_index')
         if self.current_room_index is None:
             self.__current_room_index = 0
-        self.__rooms = ('1', '2')
+        self.__rooms = ('1','2','3','4')
         self.__room = Room(self.__rooms[self.__current_room_index])
         self.__changing_room = False
 

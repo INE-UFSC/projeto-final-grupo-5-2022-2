@@ -12,27 +12,27 @@
     ],
     "spawns": [
       {
-        "enemies": "bat/slime",
+        "enemies": "bat/bat",
         "locations": "random/random",
         "after": 0,
         "before": 9999
       },
       {
-        "enemies": "slime/slime",
+        "enemies": "slime/zombie",
         "locations": "random/random",
         "after": 0,
-        "before": 9999
-      },
-      {
-        "enemies": "slime/zombie/slime",
-        "locations": "random/random/random",
-        "after": 2000,
         "before": 9999
       },
       {
         "enemies": "zombie/zombie",
         "locations": "random/random",
-        "after": 4000,
+        "after": 0,
+        "before": 9999
+      },
+      {
+        "enemies": "spider",
+        "locations": "random",
+        "after": 2000,
         "before": 9999
       }
     ]
