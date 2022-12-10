@@ -14,15 +14,20 @@ class LevelScene(ILevelScene):
         self.__group_manager = GroupManager()
         self.__group_manager.nuke()  # limpar os sprites persistentes também
         self.__settings = Settings()
-        self.__level_scene_dao = LevelSceneDAO()
         self.__new_game = new_game
+        self.__level_scene_dao = LevelSceneDAO()
+
+        # carregar o save, ou criar a sala inicial
 
         self.__current_room_index = self.__level_scene_dao.get('current_room_index')
         if self.current_room_index is None:
             self.__current_room_index = 0
+
         self.__rooms = ('1','2','3','4')
         self.__room = Room(self.__rooms[self.__current_room_index])
         self.__changing_room = False
+
+        self.__group_manager.player.load_save()
 
         self.__fade = Fade(in_step=16, out_step=-8, alpha=0)
         self.__group_manager.add_to_persistent(self.__fade)
@@ -39,10 +44,13 @@ class LevelScene(ILevelScene):
     def run(self):
         # caso seja um novo jogo, limpar o save
         if self.__new_game:
+            print("Novo jogo")
             self.__new_game = False
             self.__level_scene_dao.clear_all()
-            self.__room.__group_manager.player.__player_dao.clear_all()
-            self.__current_room_index = 0
+            self.__group_manager.player.player_dao.clear_all()
+            # vai para a primeira sala
+            self.__current_room_index = -1
+            self.go_to_next_room()
             
         # sair
         if self.__room.exit_clicked:
