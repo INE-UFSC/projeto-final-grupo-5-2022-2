@@ -11,7 +11,7 @@ from code.ui.components.buttons.TextButton import TextButton
 from code.ui.components.buttons.UpgradeButton import UpgradeButton
 
 
-class UpgradeMenu(UIComponent):
+class LevelMenu(UIComponent):
     def __init__(self):
         super().__init__()
         self.__settings = Settings()

@@ -5,13 +5,13 @@ from code.level.Tile import Tile
 from code.level.WaveManager import WaveManager
 from code.library.Resources import Resources
 from code.library.Settings import Settings
-from code.ui.LevelUI import UI
+from code.ui.LevelUI import LevelUI
 
 
 class Room:
     def __init__(self, room_name):
         self.__settings = Settings()
-        self.__ui = UI()
+        self.__ui = LevelUI()
         self.__camera = Camera()
         self.__group_manager = GroupManager()
         self.__wave_manager = WaveManager()

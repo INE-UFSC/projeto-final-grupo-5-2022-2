@@ -6,10 +6,10 @@ from code.ui.components.CooldownIcon import CooldownIcon
 from code.ui.components.Cursor import Cursor
 from code.ui.components.Label import Label
 from code.ui.components.ProgressBar import ProgressBar
-from code.ui.menus.LevelMenu import UpgradeMenu
+from code.ui.menus.LevelMenu import LevelMenu
 
 
-class UI:
+class LevelUI:
     def __init__(self):
         self.__settings = Settings()
         self.__display_surface = pygame.display.get_surface()
@@ -37,7 +37,7 @@ class UI:
 
         self.__cooldown_icons = []  # a lista de ícones é gerada no show_cooldowns()
 
-        self.__level_menu = UpgradeMenu()
+        self.__level_menu = LevelMenu()
 
         self.__cursor = Cursor()
 
