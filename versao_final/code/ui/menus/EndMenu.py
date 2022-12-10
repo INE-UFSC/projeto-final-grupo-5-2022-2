@@ -12,7 +12,7 @@ class EndMenu(Menu):
         self.__settings = Settings()
         center_x = self.display_surface.get_width() // 2
 
-        buttons = [TextButton(0, 416, 'Reiniciar', on_click=change_to_scene, on_click_args='level'),
+        buttons = [TextButton(0, 416, 'Reiniciar', on_click=change_to_scene, on_click_args='new_level'),
                    TextButton(0, 512, 'Voltar ao Menu', on_click=change_to_scene, on_click_args='start')]
 
         for button in buttons:
