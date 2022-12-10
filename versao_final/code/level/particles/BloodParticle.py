@@ -14,9 +14,9 @@ class BloodParticle(Particle):
         self.__obstacle_sprites = GroupManager().tile_sprites
 
         self.__mask_circle_32 = Resources().get_sprite('/masks/circle_32.png')
-        self.image = self.__mask_circle_32.copy()
-        self.image.set_alpha(0)  # para não desenhar a partícula ainda não configurada
-        self.rect = self.image.get_rect(center=pos)
+        self.__image = self.__mask_circle_32.copy()
+        self.__image.set_alpha(0)  # para não desenhar a partícula ainda não configurada
+        self.rect = self.__image.get_rect(center=pos)
 
         self.__direction = direction
         self.__size = 32 * random.randint(25, 150) / 100
@@ -69,9 +69,14 @@ class BloodParticle(Particle):
         if self.__size <= 4:
             self.kill()
 
-        self.image = pygame.transform.scale(self.__mask_circle_32, (self.__size, self.__size))
-        self.image.set_alpha(200)
-        circle = pygame.Surface(self.image.get_size())
+        self.__image = pygame.transform.scale(self.__mask_circle_32, (self.__size, self.__size))
+        self.__image.set_alpha(200)
+        circle = pygame.Surface(self.__image.get_size())
         circle.fill(self.color)
         self.rect = circle.get_rect(center=self.rect.center)
-        self.image.blit(circle, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+        self.__image.blit(circle, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+
+    @property
+    def image(self):
+        return self.__image
+

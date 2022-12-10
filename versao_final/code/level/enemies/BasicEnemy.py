@@ -7,8 +7,7 @@ from code.level.enemies.EnemyStatus import Melee_Status
 
 
 class Enemy(Entity):
-    def __init__(self, name, pos, health=1, speed=3, collision_damage=1, exp=1,
-                 attack_cooldown=40):
+    def __init__(self, name, pos, health=1, speed=3, collision_damage=1, exp=1, attack_cooldown=40):
         super().__init__('enemy')
 
         self.__group_manager = GroupManager()
@@ -17,10 +16,10 @@ class Enemy(Entity):
         self.__animation = Resources().get_animation(f'/enemies/{name}/move')
         self.__frame_index = 0
         self.__animation_speed = 0.2
-        self.image = self.__animation[0]
-        self.rect = self.image.get_rect(topleft=pos)
-        self.__hitbox = self.rect.inflate(0, - self.image.get_height() // 1.5)
-        self.__hitbox.bottom = self.rect.bottom
+        self.__image = self.__animation[0]
+        self.__rect = self.__image.get_rect(topleft=pos)
+        self.__hitbox = self.__rect.inflate(0, - self.__image.get_height() // 1.5)
+        self.__hitbox.bottom = self.__rect.bottom
         self.__obstacle_sprites = self.__group_manager.enemy_obstacle_sprites
 
         self.__status = Melee_Status.MOVE
@@ -42,7 +41,7 @@ class Enemy(Entity):
 
     def get_player_distance_direction(self):
         # TODO: dividir esse método
-        enemy_vec = pygame.math.Vector2(self.rect.center)
+        enemy_vec = pygame.math.Vector2(self.__rect.center)
         player = self.__group_manager.player
         player_vec = pygame.math.Vector2(player.rect.center)
         sub_vec = player_vec - enemy_vec
@@ -82,17 +81,17 @@ class Enemy(Entity):
         self.__frame_index += self.__animation_speed
         if self.__frame_index >= len(self.__animation):
             self.__frame_index = 0
-        self.image = self.__animation[int(self.__frame_index)]
+        self.__image = self.__animation[int(self.__frame_index)]
         if player.hitbox.x < self.__hitbox.x:
             # virar o inimigo em direção do player
-            self.image = pygame.transform.flip(self.image, True, False)
-        self.rect = self.image.get_rect(center=self.hitbox.center)
+            self.__image = pygame.transform.flip(self.__image, True, False)
+        self.__rect = self.__image.get_rect(center=self.hitbox.center)
         # animação de vulnerabilidade
         if not self.__vulnerable:
             alpha = self.wave_value()
-            self.image.set_alpha(alpha)
+            self.__image.set_alpha(alpha)
         else:
-            self.image.set_alpha(255)
+            self.__image.set_alpha(255)
 
     def cooldowns(self):
         if not self.__can_attack:
@@ -248,3 +247,11 @@ class Enemy(Entity):
     @property
     def animation_speed(self):
         return self.__animation_speed
+
+    @property
+    def image(self):
+        return self.__image
+
+    @property
+    def rect(self):
+        return self.__rect

@@ -10,11 +10,9 @@ from code.level.enemies.EnemyStatus import RangedStatus
 
 
 class RangedEnemy(Enemy, ABC):
-    def __init__(self, name, pos, range, target_distance, projectile_damage,
-                 projectile_speed, flee_distance, health, speed, collision_damage, exp,
-                 attack_cooldown):
-        super().__init__(name, pos, health, speed, collision_damage, exp,
-                         attack_cooldown)
+    def __init__(self, name, pos, range, target_distance, projectile_damage, projectile_speed, flee_distance, health,
+                 speed, collision_damage, exp, attack_cooldown):
+        super().__init__(name, pos, health, speed, collision_damage, exp, attack_cooldown)
         self.__range = range
         self.__target_distance = target_distance
         self.__flee_distance = flee_distance

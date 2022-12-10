@@ -14,9 +14,9 @@ class Game:
     def __init__(self):
         pygame.init()
         self.__settings = Settings()
-        self.screen = pygame.display.set_mode((self.__settings.WIDTH, self.__settings.HEIGHT))
+        self.__screen = pygame.display.set_mode((self.__settings.WIDTH, self.__settings.HEIGHT))
         pygame.display.set_caption('Jornada à sala ALOCAR')
-        self.clock = pygame.time.Clock()
+        self.__clock = pygame.time.Clock()
 
         Resources()  # carregar os sprites
 
@@ -41,10 +41,10 @@ class Game:
                                       LevelScene):  # TODO: acho que dava só pra ter um método pra reagir a keys na cena
                             current_scene.toggle_menu()
 
-            self.screen.fill(self.__settings.COLOR_BLACK)
+            self.__screen.fill(self.__settings.COLOR_BLACK)
             current_scene.run()
             pygame.display.update()
-            self.clock.tick(self.__settings.FPS)
+            self.__clock.tick(self.__settings.FPS)
 
     def change_to_scene(self, scene):
         self.__current_scene_key = scene

@@ -9,6 +9,7 @@ from code.level.attacks.SliceAttack import SliceAttack
 from code.library.Resources import Resources
 from code.save.PlayerDAO import PlayerDAO
 
+
 class Player(Entity):
     def __init__(self):
         self.__staff = Staff()  # cajado (somente desenha o sprite)
@@ -24,9 +25,9 @@ class Player(Entity):
         self.__frame_index = 0
         self.__animation_speed = 0.2
 
-        self.image = self.__animations['down'][0]
-        self.rect = self.image.get_rect(topleft=(300, 300))
-        self.__hitbox = self.rect.inflate(-16, -26)
+        self.__image = self.__animations['down'][0]
+        self.__rect = self.__image.get_rect(topleft=(300, 300))
+        self.__hitbox = self.__rect.inflate(-16, -26)
 
         self.__health = 7
         self.__max_health = 7
@@ -97,22 +98,20 @@ class Player(Entity):
     def animate(self):
         animation = self.__animations[self.__state]
         if self.direction.x == 0 and self.direction.y == 0:
-            self.__frame_index = 1 - self.__animation_speed
-            # para reproduzir o próximo frame instantaneamente após
-            # começar a mover
+            self.__frame_index = 1 - self.__animation_speed  # para reproduzir o próximo frame instantaneamente após  # começar a mover
         else:
             self.__frame_index += self.__animation_speed
             if self.__frame_index >= len(animation):
                 self.__frame_index = 0
-        self.image = animation[int(self.__frame_index)]
-        self.rect = self.image.get_rect(center=self.hitbox.center)
+        self.__image = animation[int(self.__frame_index)]
+        self.__rect = self.__image.get_rect(center=self.hitbox.center)
 
         # animação de vulnerabilidade
         if not self.__vulnerable:
             alpha = self.wave_value()
-            self.image.set_alpha(alpha)
+            self.__image.set_alpha(alpha)
         else:
-            self.image.set_alpha(255)
+            self.__image.set_alpha(255)
 
     def damage(self, damage):
         if self.vulnerable and damage > 0:
@@ -151,15 +150,11 @@ class Player(Entity):
         self.cooldowns()
 
     def save(self):
-        save_data = {
-            'exp': self.__exp,
-            'level': self.__current_level,
-            'health': self.__health,
-            'upgrades': self.__upgrade_list
-        }
+        save_data = {'exp': self.__exp, 'level': self.__current_level, 'health': self.__health,
+            'upgrades': self.__upgrade_list}
         for key in save_data:
             self.__player_dao.add(key, save_data[key])
-    
+
     def load_save(self):
         save_data = self.__player_dao.get_all()
         try:
@@ -266,3 +261,11 @@ class Player(Entity):
     @ignore_input.setter
     def ignore_input(self, ignore):
         self.__ignore_input = ignore
+
+    @property
+    def image(self):
+        return self.__image
+
+    @property
+    def rect(self):
+        return self.__rect

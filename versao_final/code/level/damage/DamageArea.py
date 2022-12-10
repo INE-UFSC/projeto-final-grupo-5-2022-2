@@ -9,14 +9,14 @@ from code.level.particles.FireSource import FireSource
 
 
 class DamageArea(Entity, ABC):
-    def __init__(self, pos, surface, damage=0, speed=0, direction=pygame.math.Vector2(),
-                 destroy_on_impact=False, destroy_time=60, damage_time=0, particle_spawners=[],
-                 hit_sound=None, blood_on_kill=False, fade_out_step=0, screen_shake_on_kill=False):
+    def __init__(self, pos, surface, damage=0, speed=0, direction=pygame.math.Vector2(), destroy_on_impact=False,
+                 destroy_time=60, damage_time=0, particle_spawners=[], hit_sound=None, blood_on_kill=False,
+                 fade_out_step=0, screen_shake_on_kill=False):
         super().__init__('damage_area')
         self.__group_manager = GroupManager()
-        self.image = surface
-        self.rect = self.image.get_rect(center=pos)
-        self.__hitbox = self.rect
+        self.__image = surface
+        self.__rect = self.__image.get_rect(center=pos)
+        self.__hitbox = self.__rect
 
         self.__damage = damage
         self.__speed = speed
@@ -42,7 +42,7 @@ class DamageArea(Entity, ABC):
     def update(self):
         self.target_collision()
         # movimento
-        self.image.set_alpha(self.image.get_alpha() - self.__fade_out_step)
+        self.__image.set_alpha(self.__image.get_alpha() - self.__fade_out_step)
         if self.__speed != 0:
             moved = self.move(self.__speed, 'smaller_hitbox')
             if not moved:
@@ -50,7 +50,7 @@ class DamageArea(Entity, ABC):
                 self.kill()
 
             for particle_spawner in self.__particle_spawners:
-                particle_spawner.rect.center = self.rect.center + self.direction * self.speed
+                particle_spawner.rect.center = self.__rect.center + self.direction * self.speed
 
         # tempo enquanto vai dar dano
         if self.__damage_time > 0:
@@ -131,3 +131,11 @@ class DamageArea(Entity, ABC):
     @property
     def screen_shake_on_kill(self):
         return self.__screen_shake_on_kill
+
+    @property
+    def image(self):
+        return self.__image
+
+    @property
+    def rect(self):
+        return self.__rect
