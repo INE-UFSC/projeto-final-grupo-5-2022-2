@@ -49,11 +49,6 @@ class Resources(Singleton):
 
     def has_save(self) -> bool:
         return os.listdir(f'{self.__settings.SAVE_PATH}/{self.__settings.save_name}')
-        try:
-            with open(f'{self.__settings.SAVE_PATH}/{self.__settings.save_name}', 'r'):
-                return True
-        except FileNotFoundError:
-            return False
         
     def get_sprite(self, file):
         file_dir = file.replace('\\', '/')

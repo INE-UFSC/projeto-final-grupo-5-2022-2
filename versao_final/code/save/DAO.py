@@ -13,11 +13,9 @@ class DAO(ABC):
             self.__dump()
 
     def __dump(self):
-        print("dumping")
         pickle.dump(self.__object_cache, open(self.__datasource, "wb"))
 
     def __load(self):
-        print("loading")
         self.__object_cache = pickle.load(open(self.__datasource, "rb"))
     
     def clear_all(self):
@@ -26,13 +24,11 @@ class DAO(ABC):
 
     @abstractmethod
     def add(self, key, obj):
-        print(f'add{key}')
         self.__object_cache[key] = obj
         self.__dump()
 
     @abstractmethod
     def get(self, key):
-        print(f'get{key}')
         try:
             return self.__object_cache[key]
         except KeyError:
@@ -40,7 +36,6 @@ class DAO(ABC):
     
     @abstractmethod
     def remove(self, key):
-        print(f'remove{key}')
         try:
             self.__object_cache.pop(key)
             self.__dump()
@@ -49,4 +44,4 @@ class DAO(ABC):
     
     @abstractmethod
     def get_all(self):
-        return self.__object_cache.values()
+        return self.__object_cache

@@ -161,7 +161,6 @@ class Player(Entity):
     
     def load_save(self):
         save_data = self.__player_dao.get_all()
-        self.__current_level = save_data['level']
         self.__exp = save_data['exp']
         self.__health = save_data['health']
         self.__upgrade_list = save_data['upgrades']
@@ -174,7 +173,7 @@ class Player(Entity):
 
     @property
     def player_dao(self):
-        return self.__player_daos
+        return self.__player_dao
 
     @property
     def hitbox(self):
