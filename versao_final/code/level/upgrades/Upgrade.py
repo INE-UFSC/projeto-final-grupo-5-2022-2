@@ -6,7 +6,7 @@ class Upgrade(ABC):
     def __init__(self, name, description, icon):
         self.__name = name
         self.__description = description
-        self.__icon = Resources().get_sprite(icon)
+        self.__icon = icon
 
     @abstractmethod
     def apply(self):
@@ -22,6 +22,6 @@ class Upgrade(ABC):
 
     @property
     def icon(self):
-        return self.__icon
+        return Resources().get_sprite(self.__icon)
 
 

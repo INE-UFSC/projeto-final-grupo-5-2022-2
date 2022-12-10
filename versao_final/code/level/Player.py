@@ -152,7 +152,6 @@ class Player(Entity):
 
     def save(self):
         save_data = {
-            'level': self.__current_level,
             'exp': self.__exp,
             'health': self.__health,
             'upgrades': self.__upgrade_list
