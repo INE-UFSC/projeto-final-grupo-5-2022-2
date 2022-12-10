@@ -127,3 +127,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+versao_final/saves/save/player.pkl
+versao_final/saves/save/level_scene.pkl
