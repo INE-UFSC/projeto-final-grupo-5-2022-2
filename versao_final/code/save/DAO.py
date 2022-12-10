@@ -5,33 +5,42 @@ from code.library.Settings import Settings
 class DAO(ABC):
     def __init__(self, datasource):
         self.__settings = Settings()
-        self.__datasource = f'{self.__settings.SAVE_PATH}/{datasource}'
-        self.__object_cache = None
+        self.__datasource = f'{self.__settings.SAVE_PATH}/{self.__settings.save_name}/{datasource}'
+        self.__object_cache = {}
         try:
             self.__load()
         except FileNotFoundError:
             self.__dump()
 
     def __dump(self):
-        pickle.dump(self.__cache, open(self.__datasource, "wb"))
+        print("dumping")
+        pickle.dump(self.__object_cache, open(self.__datasource, "wb"))
 
     def __load(self):
+        print("loading")
         self.__object_cache = pickle.load(open(self.__datasource, "rb"))
+    
+    def clear_all(self):
+        self.__object_cache = {}
+        self.__dump()
 
     @abstractmethod
     def add(self, key, obj):
+        print(f'add{key}')
         self.__object_cache[key] = obj
         self.__dump()
 
     @abstractmethod
     def get(self, key):
+        print(f'get{key}')
         try:
             return self.__object_cache[key]
         except KeyError:
-            return None
+            pass
     
     @abstractmethod
     def remove(self, key):
+        print(f'remove{key}')
         try:
             self.__object_cache.pop(key)
             self.__dump()

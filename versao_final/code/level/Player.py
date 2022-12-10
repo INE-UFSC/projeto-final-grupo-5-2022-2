@@ -7,13 +7,15 @@ from code.level.attacks.AreaAttack import AreaAttack
 from code.level.attacks.FireballAttack import FireballAttack
 from code.level.attacks.SliceAttack import SliceAttack
 from code.library.Resources import Resources
-
+from code.save.PlayerDAO import PlayerDAO
 
 class Player(Entity):
     def __init__(self):
         self.__staff = Staff()  # cajado (somente desenha o sprite)
         super().__init__('player')
         self.__group_manager = GroupManager()
+        self.__player_dao = PlayerDAO()
+
         # importar animações
         self.__animations = {'up': [], 'down': [], 'left': [], 'right': []}
         for animation in self.__animations.keys():
@@ -148,9 +150,32 @@ class Player(Entity):
         self.move(self.__move_speed)
         self.cooldowns()
 
+    def save(self):
+        save_data = {
+            'level': self.__current_level,
+            'exp': self.__exp,
+            'health': self.__health,
+            'upgrades': self.__upgrade_list
+        }
+        for key in save_data:
+            self.__player_dao.add(key, save_data[key])
+    
+    def load_save(self):
+        save_data = self.__player_dao.get_all()
+        self.__current_level = save_data['level']
+        self.__exp = save_data['exp']
+        self.__health = save_data['health']
+        self.__upgrade_list = save_data['upgrades']
+        for upgrade in self.__upgrade_list:
+            upgrade.apply()
+
     @property
     def is_dead(self):
         return self.__health <= 0
+
+    @property
+    def player_dao(self):
+        return self.__player_daos
 
     @property
     def hitbox(self):

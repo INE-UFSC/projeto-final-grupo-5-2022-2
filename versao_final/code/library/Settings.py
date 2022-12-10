@@ -15,7 +15,9 @@ class Settings(Singleton):
             # Para o executável funcionar corretamente precisa adicionar mais um os.pardir
             # no os.path.join abaixo.
             self.__GAME_PATH = os.path.abspath(os.path.join(__file__, os.pardir, os.pardir, os.pardir))
-            self.__SAVE_PATH = f'{self.__GAME_PATH}/save'
+            
+            self.__SAVE_PATH = f'{self.__GAME_PATH}/saves'
+            self.__save_name = 'save'
 
             self.__COLOR_BLACK = (0, 0, 0)
             self.__WHITE = '#ffffff'
@@ -52,7 +54,7 @@ class Settings(Singleton):
             self.__Y_OFFSET = {'': 0, '0': -40}
             self.__SMALL_HITBOX_OFFSET = {'': -50}
 
-            self.__WAVE_TIME = 5400  # 1 minuto e 30 segundos
+            self.__WAVE_TIME = 600  # 1 minuto e 30 segundos
 
             self.__LEVEL_CHANGE_DISTANCE = 64
 
@@ -80,6 +82,10 @@ class Settings(Singleton):
     @property
     def SAVE_PATH(self) -> str:
         return self.__SAVE_PATH
+
+    @property
+    def save_name(self) -> str:
+        return self.__save_name
 
     @property
     def COLOR_BLACK(self) -> tuple:

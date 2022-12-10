@@ -1,20 +1,19 @@
 from code.save.DAO import DAO
-from code.scenes.LevelScene import LevelScene
 
 
 class LevelSceneDAO(DAO):
-    def __init__(self, save_name):
-        super().__init__(f'{save_name}.pkl')
+    def __init__(self):
+        super().__init__('level_scene.pkl')
 
-    def add(self, level_scene):
-        if level_scene is not None and isinstance(level_scene, LevelScene):
-            super().add('level_scene', level_scene)
+    def add(self, key, obj):
+        if obj is not None:
+            super().add(f'{key}', obj)
 
-    def get(self) -> LevelScene:
-        return super().get('level_scene')
+    def get(self, key):
+        return super().get(f'{key}')
 
-    def remove(self):
-        super().remove('level_scene')
+    def remove(self, key):
+        super().remove(f'{key}')
 
     def get_all(self):
         return super().get_all()

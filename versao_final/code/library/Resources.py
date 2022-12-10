@@ -1,11 +1,10 @@
 import json
 import os
+from code.library.Settings import Settings
+from code.library.Singleton import Singleton
 from csv import reader
 
 import pygame
-
-from code.library.Settings import Settings
-from code.library.Singleton import Singleton
 
 
 class Resources(Singleton):
@@ -48,6 +47,14 @@ class Resources(Singleton):
         with open(path, 'r', encoding='UTF-8') as file:
             return json.load(file)[0]
 
+    def has_save(self) -> bool:
+        return os.listdir(f'{self.__settings.SAVE_PATH}/{self.__settings.save_name}')
+        try:
+            with open(f'{self.__settings.SAVE_PATH}/{self.__settings.save_name}', 'r'):
+                return True
+        except FileNotFoundError:
+            return False
+        
     def get_sprite(self, file):
         file_dir = file.replace('\\', '/')
         return self.__cache[f'/graphics{file_dir}']

@@ -75,10 +75,6 @@ class Room:
         elif player.hitbox.y > self.__height:
             player.hitbox.topleft = self.__coordinates['top']
 
-    @property
-    def is_player_dead(self):
-        return self.__group_manager.player.is_dead
-
     def run(self):
         self.__camera.draw(self.__group_manager.visible_sprites)
         self.__ui.display(self.__group_manager.player, self.__wave_manager.timer)
@@ -87,6 +83,10 @@ class Room:
             self.__check_player_out_of_bounds()
             self.__wave_manager.update()
             self.__group_manager.visible_sprites.update()
+            
+    @property
+    def is_player_dead(self):
+        return self.__group_manager.player.is_dead
 
     @property
     def tiles(self):

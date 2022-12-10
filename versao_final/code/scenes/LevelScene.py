@@ -5,21 +5,27 @@ from code.level.particles.AnimationParticle import AnimationParticle
 from code.library.Resources import Resources
 from code.library.Settings import Settings
 from code.scenes.ILevelScene import ILevelScene
+from code.save.LevelSceneDAO import LevelSceneDAO
 
 
 class LevelScene(ILevelScene):
-    def __init__(self, change_to_scene):
+    def __init__(self, change_to_scene, new_game=False):
         super().__init__(change_to_scene)
-        group_manager = GroupManager()
-        group_manager.nuke()  # limpar os sprites persistentes também
+        self.__group_manager = GroupManager()
+        self.__group_manager.nuke()  # limpar os sprites persistentes também
         self.__settings = Settings()
+        self.__level_scene_dao = LevelSceneDAO()
+        self.__new_game = new_game
+
+        self.__current_room_index = self.__level_scene_dao.get('current_room_index')
+        if self.current_room_index is None:
+            self.__current_room_index = 0
         self.__rooms = ('1', '2')
-        self.__current_room_index = 0
         self.__room = Room(self.__rooms[self.__current_room_index])
         self.__changing_room = False
 
         self.__fade = Fade(in_step=16, out_step=-8, alpha=0)
-        group_manager.add_to_persistent(self.__fade)
+        self.__group_manager.add_to_persistent(self.__fade)
         # a seta está sendo definida no LevelScene em vez de no Room para ter acesso
         # ao atributo changing_room
         arrow_animation = Resources().get_animation('/icons/arrow')
@@ -28,9 +34,16 @@ class LevelScene(ILevelScene):
         self.__arrow = AnimationParticle((arrow_x, arrow_y), arrow_animation, 0.1)
         self.__arrow.sprite_type = 'effect'
         self.__arrow.image.set_alpha(0)
-        group_manager.add_to_persistent(self.__arrow)
+        self.__group_manager.add_to_persistent(self.__arrow)
 
     def run(self):
+        # caso seja um novo jogo, limpar o save
+        if self.__new_game:
+            self.__new_game = False
+            self.__level_scene_dao.clear_all()
+            self.__room.__group_manager.player.__player_dao.clear_all()
+            self.__current_room_index = 0
+            
         # sair
         if self.__room.exit_clicked:
             self.change_to_scene('start')
@@ -65,6 +78,7 @@ class LevelScene(ILevelScene):
             self.__current_room_index += 1
             self.__room.change_to(self.__rooms[self.__current_room_index])
             self.__fade.fade_out()
+            self.save()
         else:
             self.end()
 
@@ -73,3 +87,11 @@ class LevelScene(ILevelScene):
 
     def toggle_menu(self):
         self.__room.toggle_menu()
+
+    def save(self):
+        self.__level_scene_dao.add('current_room_index', self.__current_room_index)
+        self.__group_manager.player.save()
+
+    @property
+    def current_room_index(self):
+        return self.__current_room_index

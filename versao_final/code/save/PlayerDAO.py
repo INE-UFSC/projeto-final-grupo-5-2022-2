@@ -1,20 +1,19 @@
 from code.save.DAO import DAO
-from code.level.Player import Player
 
 
 class PlayerDAO(DAO):
-    def __init__(self, save_name):
-        super().__init__(f'{save_name}.pkl')
+    def __init__(self):
+        super().__init__('player.pkl')
 
-    def add(self, player):
-        if player is not None and isinstance(player, Player):
-            super().add('player', player)
+    def add(self, key, obj):
+        if obj is not None:
+            super().add(f'{key}', obj)
 
-    def get(self) -> Player:
-        return super().get('player')
+    def get(self, key):
+        return super().get(f'{key}')
 
-    def remove(self):
-        super().remove('player')
+    def remove(self, key):
+        super().remove(f'{key}')
 
     def get_all(self):
         return super().get_all()
