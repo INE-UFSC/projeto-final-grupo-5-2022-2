@@ -10,9 +10,12 @@ class EndMenu(Menu):
     def __init__(self, change_to_scene, message):
         super().__init__()
         self.__settings = Settings()
+
+        self.__change_to_scene = change_to_scene
+
         center_x = self.display_surface.get_width() // 2
 
-        buttons = [TextButton(0, 416, 'Reiniciar', on_click=change_to_scene, on_click_args='new_level'),
+        buttons = [TextButton(0, 416, 'Reiniciar', on_click=self.new_level, on_click_args=None),
                    TextButton(0, 512, 'Voltar ao Menu', on_click=change_to_scene, on_click_args='start')]
 
         for button in buttons:
@@ -20,3 +23,8 @@ class EndMenu(Menu):
 
         self.components = [Image({'centerx': center_x, 'top': self.__settings.MENU_LOGO_TOP}, '/logo.png'),
                            Label({'centerx': center_x, 'top': 320}, message, self.font, "#ff5f4f"), *buttons, Cursor()]
+    
+    def new_level(self):
+        self.__settings.new_game = True
+        self.__change_to_scene('level')
+        

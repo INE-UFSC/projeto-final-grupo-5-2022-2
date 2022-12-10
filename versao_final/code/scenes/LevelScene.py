@@ -9,12 +9,11 @@ from code.save.LevelSceneDAO import LevelSceneDAO
 
 
 class LevelScene(ILevelScene):
-    def __init__(self, change_to_scene, new_game=False):
+    def __init__(self, change_to_scene):
         super().__init__(change_to_scene)
         self.__group_manager = GroupManager()
         self.__group_manager.nuke()  # limpar os sprites persistentes também
         self.__settings = Settings()
-        self.__new_game = new_game
         self.__level_scene_dao = LevelSceneDAO()
 
         # carregar o save, ou criar a sala inicial
@@ -43,11 +42,12 @@ class LevelScene(ILevelScene):
 
     def run(self):
         # caso seja um novo jogo, limpar o save
-        if self.__new_game:
+        if self.__settings.new_game:
             print("Novo jogo")
-            self.__new_game = False
+            self.__settings.new_game = False
             self.__level_scene_dao.clear_all()
             self.__group_manager.player.player_dao.clear_all()
+            self.__group_manager.player.load_save()
             # vai para a primeira sala
             self.__current_room_index = -1
             self.go_to_next_room()

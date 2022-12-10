@@ -18,8 +18,8 @@ class StartMenu(Menu):
         center_x = self.display_surface.get_width() // 2
         self.__change_to_scene = change_to_scene
 
-        buttons = [TextButton(0, 320, 'NOVO JOGO', on_click=self.to_level, on_click_args='new_level'),
-                   TextButton(0, 416, 'CONTINUAR', on_click=self.to_level, on_click_args='continue_level'),
+        buttons = [TextButton(0, 320, 'NOVO JOGO', on_click=self.new_level, on_click_args=None),
+                   TextButton(0, 416, 'CONTINUAR', on_click=self.to_level, on_click_args='level'),
                    TextButton(0, 512, 'SAIR', on_click=self.quit_game, on_click_args=None)]
         for button in buttons:
             button.rect.centerx = center_x
@@ -30,6 +30,10 @@ class StartMenu(Menu):
 
     def to_level(self, key):
         self.__change_to_scene(key)
+
+    def new_level(self):
+        self.__settings.new_game = True
+        self.__change_to_scene('level')
 
     def quit_game(self):
         pygame.quit()

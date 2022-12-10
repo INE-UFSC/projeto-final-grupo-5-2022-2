@@ -7,6 +7,8 @@ class Settings(Singleton):
     def __init__(self) -> None:
         super().__init__()
         if not self._initialized:
+            self._initialized = True
+
             self.__WIDTH = 1280
             self.__HEIGHT = 720
             self.__FPS = 60
@@ -18,6 +20,7 @@ class Settings(Singleton):
             
             self.__SAVE_PATH = f'{self.__GAME_PATH}/saves'
             self.__save_name = 'save'
+            self.__new_game = False
 
             self.__COLOR_BLACK = (0, 0, 0)
             self.__WHITE = '#ffffff'
@@ -86,6 +89,18 @@ class Settings(Singleton):
     @property
     def save_name(self) -> str:
         return self.__save_name
+
+    @save_name.setter
+    def save_name(self, value: str) -> None:
+        self.__save_name = value
+
+    @property
+    def new_game(self) -> bool:
+        return self.__new_game
+
+    @new_game.setter
+    def new_game(self, value: bool) -> None:
+        self.__new_game = value
 
     @property
     def COLOR_BLACK(self) -> tuple:

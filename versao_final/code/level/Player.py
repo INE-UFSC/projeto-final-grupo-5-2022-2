@@ -153,6 +153,7 @@ class Player(Entity):
     def save(self):
         save_data = {
             'exp': self.__exp,
+            'level': self.__current_level,
             'health': self.__health,
             'upgrades': self.__upgrade_list
         }
@@ -161,11 +162,18 @@ class Player(Entity):
     
     def load_save(self):
         save_data = self.__player_dao.get_all()
-        self.__exp = save_data['exp']
-        self.__health = save_data['health']
-        self.__upgrade_list = save_data['upgrades']
-        for upgrade in self.__upgrade_list:
-            upgrade.apply()
+        try:
+            self.__exp = save_data['exp']
+            self.__current_level = save_data['level']
+            self.__health = save_data['health']
+            self.__upgrade_list = save_data['upgrades']
+            for upgrade in self.__upgrade_list:
+                upgrade.apply()
+        except KeyError:
+            self.__exp = 0
+            self.__current_level = 1
+            self.__health = 7
+            self.__upgrade_list = []
 
     @property
     def is_dead(self):

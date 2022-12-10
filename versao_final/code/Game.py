@@ -21,8 +21,8 @@ class Game:
         Resources()  # carregar os sprites
 
         self.__scenes = {'start': StartMenuScene(self.change_to_scene),
-                         'new_level': LevelScene(self.change_to_scene, new_game=True),
-                         'continue_level': LevelScene(self.change_to_scene),
+                         'level': LevelScene(self.change_to_scene),
+                         'level': LevelScene(self.change_to_scene),
                          'death': DeathMenuScene(self.change_to_scene),
                          'win': WinMenuScene(self.change_to_scene)}
         self.__current_scene_key = 'start'
