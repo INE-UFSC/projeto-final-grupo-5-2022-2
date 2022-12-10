@@ -57,7 +57,7 @@ class Settings(Singleton):
             self.__Y_OFFSET = {'': 0, '0': -40}
             self.__SMALL_HITBOX_OFFSET = {'': -50}
 
-            self.__WAVE_TIME = 600  # 1 minuto e 30 segundos
+            self.__WAVE_TIME = 5400  # 1 minuto e 30 segundos
 
             self.__LEVEL_CHANGE_DISTANCE = 64
 
